@@ -32,4 +32,15 @@ const licenseSchema = new mongoose.Schema({
   }
 });
 
+licenseSchema.pre('save', async function(next) {
+  if (this.isModified('domain')) {
+    // Valideer domein formaat
+    const domainRegex = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
+    if (!domainRegex.test(this.domain)) {
+      throw new Error('Ongeldig domein formaat');
+    }
+  }
+  next();
+});
+
 export default mongoose.model('License', licenseSchema); 

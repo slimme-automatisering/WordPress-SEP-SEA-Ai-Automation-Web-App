@@ -1,4 +1,4 @@
-# SEO & SEA Automatiseringssysteem
+# SEO & SEA Automatiseringssysteem v1.1.0
 
 ## 🚀 Overzicht
 Een geavanceerd automatiseringssysteem voor Search Engine Optimization (SEO) en Search Engine Advertising (SEA) dat uitgebreide tools biedt voor digitale marketing optimalisatie.
@@ -96,3 +96,5 @@ Een geavanceerd automatiseringssysteem voor Search Engine Optimization (SEO) en 
 ---
 
 *Dit systeem is deployment-ready en volgt moderne beveiligingspraktijken voor het beheer van gevoelige gegevens zoals API-sleutels en credentials.*
+
+## 📦 Installatie

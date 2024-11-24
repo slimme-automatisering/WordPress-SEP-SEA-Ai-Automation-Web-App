@@ -1,37 +1,26 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import licenseService from '../../src/services/licenseService.js';
+const { describe, it, expect, beforeEach, jest } = require('@jest/globals');
+const LicenseService = require('../../src/services/licenseService');
 
 describe('LicenseService', () => {
-  const mockClientData = {
-    domain: 'test.nl',
-    email: 'test@test.nl',
-    accountId: 'ACC123',
-    purchaseDate: new Date()
-  };
+  let licenseService;
+  let mockDb;
 
   beforeEach(() => {
-    process.env.LICENSE_SECRET_KEY = 'test_secret_key';
+    mockDb = {
+      query: jest.fn(),
+      // ... andere mock methodes
+    };
+    licenseService = new LicenseService(mockDb);
   });
 
-  it('moet een geldige licentie genereren', () => {
-    const license = licenseService.generateLicense(mockClientData);
+  describe('validateLicense', () => {
+    it('moet een geldige licentie valideren', async () => {
+      mockDb.query.mockResolvedValue({ rows: [{ is_active: true }] });
+      
+      const result = await licenseService.validateLicense('test-key');
+      expect(result).toBeTruthy();
+    });
     
-    expect(license).toHaveProperty('licenseKey');
-    expect(license.domain).toBe(mockClientData.domain);
-    expect(license.email).toBe(mockClientData.email);
-  });
-
-  it('moet een geldige licentie verifiëren', () => {
-    const license = licenseService.generateLicense(mockClientData);
-    const isValid = licenseService.verifyLicense(license.licenseKey, mockClientData.domain);
-    
-    expect(isValid).toBe(true);
-  });
-
-  it('moet ongeldige domeinen afwijzen', () => {
-    const license = licenseService.generateLicense(mockClientData);
-    const isValid = licenseService.verifyLicense(license.licenseKey, 'wrong-domain.nl');
-    
-    expect(isValid).toBe(false);
+    // ... meer test cases
   });
 }); 

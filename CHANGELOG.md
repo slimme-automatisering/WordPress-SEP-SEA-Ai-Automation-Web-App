@@ -1,17 +1,18 @@
 # Changelog
 
-## [1.0.0] - 2023-12-14
-### Added
-- Initiële release
-- SEO audit functionaliteit
-- SEA integratie
-- WooCommerce synchronisatie (Pro)
-- PWA support
-- Responsive design
-- Test suite
-- GitHub Actions workflow
+## [1.0.0] - 2024-03-XX
 
-### Security
-- JWT authenticatie
-- Licentie verificatie systeem
-- Environment variabelen beveiliging 
+### Toegevoegd
+- Verbeterde error handling met custom AppError klasse
+- Gestructureerde test setup met Jest
+- WooCommerce integratie service
+- Licentie validatie service
+
+### Gewijzigd
+- Gerefactorde project structuur
+- Verbeterde environment variabelen configuratie
+- Geoptimaliseerde database queries
+
+### Verwijderd
+- Verouderde test implementaties
+- Ongebruikte dependencies 

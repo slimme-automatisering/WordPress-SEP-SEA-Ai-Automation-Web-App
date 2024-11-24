@@ -93,6 +93,46 @@ Een geavanceerd automatiseringssysteem voor Search Engine Optimization (SEO) en 
   - Lokale data synchronisatie
   - Automatische updates
 
+## 🆕 Nieuwe Features (v1.1.0)
+
+### 1. Geavanceerde SEA Integratie
+- **Google Ads API Management**
+  - Campagne beheer
+  - Budget controle
+  - Keyword performance tracking
+  - Geautomatiseerde rapportages
+
+### 2. Email Automatisering
+- **Outreach Systeem**
+  - Template management
+  - Geautomatiseerde verzending
+  - Tracking & analytics
+  - Campagne scheduling
+
+### 3. Analytics & Reporting
+- **Google Analytics Integratie**
+  - Search Console data
+  - Performance metrics
+  - Core Web Vitals monitoring
+  - Custom rapportages
+
+### 4. Verbeterde Beveiliging
+- **Rate Limiting**
+  - API bescherming
+  - DDoS preventie
+  - IP-gebaseerde restricties
+
+- **Security Headers**
+  - CSP implementatie
+  - XSS bescherming
+  - CORS configuratie
+
+### 5. Pro Abonnement Features
+- **Gebruikersniveaus**
+  - Free tier functionaliteit
+  - Pro tier voordelen
+  - Enterprise opties
+
 ---
 
 *Dit systeem is deployment-ready en volgt moderne beveiligingspraktijken voor het beheer van gevoelige gegevens zoals API-sleutels en credentials.*
