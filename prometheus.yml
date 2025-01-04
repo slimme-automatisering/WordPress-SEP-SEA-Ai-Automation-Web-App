@@ -1,0 +1,58 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "app"
+    static_configs:
+      - targets: ["app:3000"]
+
+  - job_name: "seo-crawler"
+    static_configs:
+      - targets: ["seo-crawler:3000"]
+
+  - job_name: "keyword-research"
+    static_configs:
+      - targets: ["keyword-research:5000"]
+
+  - job_name: "backlink-monitor"
+    static_configs:
+      - targets: ["backlink-monitor:3000"]
+
+  - job_name: "sitemap-generator"
+    static_configs:
+      - targets: ["sitemap-generator:3000"]
+
+  - job_name: "redis"
+    static_configs:
+      - targets: ["redis:6379"]
+
+  - job_name: "mongodb"
+    static_configs:
+      - targets: ["mongodb:27017"]
+
+  - job_name: "elasticsearch"
+    static_configs:
+      - targets: ["elasticsearch:9200"]
+
+  - job_name: "kibana"
+    static_configs:
+      - targets: ["kibana:5601"]
+
+  - job_name: "node"
+    static_configs:
+      - targets: ["app:9100"]

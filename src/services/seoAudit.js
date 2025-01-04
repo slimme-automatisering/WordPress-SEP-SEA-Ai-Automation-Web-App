@@ -4,7 +4,15 @@ import { logger } from '../utils/logger.js';
 export class SeoAuditService {
   async performSiteAudit(url) {
     try {
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        executablePath: '/usr/bin/chromium-browser',
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu'
+        ]
+      });
       const page = await browser.newPage();
       await page.goto(url);
 
@@ -19,9 +27,10 @@ export class SeoAuditService {
       });
 
       await browser.close();
+      logger.info(`SEO audit completed for ${url}`, { seoData });
       return seoData;
     } catch (error) {
-      logger.error('Site audit failed:', error);
+      logger.error(`Error performing SEO audit for ${url}:`, error);
       throw error;
     }
   }

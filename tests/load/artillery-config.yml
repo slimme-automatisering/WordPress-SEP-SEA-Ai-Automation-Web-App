@@ -1,0 +1,76 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 10
+      name: "Sustained load"
+    - duration: 60
+      arrivalRate: 20
+      name: "Peak load"
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Budget Management Flow"
+    flow:
+      - get:
+          url: "/api/google-ads/123/campaigns/456/budget"
+          expect:
+            - statusCode: 200
+      - think: 2
+      - put:
+          url: "/api/google-ads/123/campaigns/456/budget"
+          json:
+            amount_micros: 1000000000
+            delivery_method: "STANDARD"
+          expect:
+            - statusCode: 200
+
+  - name: "A/B Testing Flow"
+    flow:
+      - get:
+          url: "/api/google-ads/123/experiments"
+          expect:
+            - statusCode: 200
+      - think: 2
+      - post:
+          url: "/api/google-ads/123/experiments"
+          json:
+            name: "Test Experiment"
+            type: "SEARCH_CUSTOM"
+            status: "ENABLED"
+          expect:
+            - statusCode: 201
+
+  - name: "Automation Rules Flow"
+    flow:
+      - get:
+          url: "/api/google-ads/123/automation/rules"
+          expect:
+            - statusCode: 200
+      - think: 2
+      - post:
+          url: "/api/google-ads/123/automation/rules"
+          json:
+            name: "Test Rule"
+            conditions:
+              - metric: "CPC"
+                operator: "GREATER_THAN"
+                value: "1.00"
+            actions:
+              - type: "ADJUST_BUDGET"
+                value: "-10%"
+          expect:
+            - statusCode: 201
+
+  - name: "ROI Calculator Flow"
+    flow:
+      - get:
+          url: "/api/google-ads/123/campaigns/456/roi"
+          expect:
+            - statusCode: 200
+      - think: 2

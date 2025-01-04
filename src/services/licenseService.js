@@ -1,7 +1,7 @@
 import crypto from 'crypto-js';
 import jwt from 'jsonwebtoken';
 
-class LicenseService {
+export class LicenseService {
   constructor() {
     this.secretKey = process.env.LICENSE_SECRET_KEY;
   }
@@ -19,39 +19,36 @@ class LicenseService {
       email,
       accountId,
       purchaseDate,
-      expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 jaar
+      expiryDate: new Date(purchaseDate).setFullYear(new Date(purchaseDate).getFullYear() + 1)
     };
 
-    // Genereer unieke license key
-    const licenseKey = crypto.AES.encrypt(
+    const encryptedData = crypto.AES.encrypt(
       JSON.stringify(licenseData),
       this.secretKey
     ).toString();
 
-    return {
-      licenseKey,
-      ...licenseData
-    };
+    return encryptedData;
   }
 
-  verifyLicense(licenseKey, domain) {
+  validateLicense(licenseKey) {
     try {
       const decrypted = crypto.AES.decrypt(licenseKey, this.secretKey);
       const licenseData = JSON.parse(decrypted.toString(crypto.enc.Utf8));
 
-      if (licenseData.domain !== domain) {
-        throw new Error('Ongeldige domeinnaam voor deze licentie');
-      }
+      const now = new Date();
+      const expiryDate = new Date(licenseData.expiryDate);
 
-      if (new Date(licenseData.expiryDate) < new Date()) {
-        throw new Error('Verlopen licentie');
-      }
-
-      return true;
+      return {
+        isValid: now < expiryDate,
+        licenseData
+      };
     } catch (error) {
-      return false;
+      return {
+        isValid: false,
+        error: 'Invalid license key'
+      };
     }
   }
 }
 
-export default new LicenseService(); 
+export const licenseService = new LicenseService();

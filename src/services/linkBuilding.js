@@ -1,19 +1,28 @@
 import axios from 'axios';
-import cheerio from 'cheerio';
-import nodemailer from 'nodemailer';
+import * as cheerio from 'cheerio';
 import { logger } from '../utils/logger.js';
+import nodemailer from 'nodemailer';
 
 export class LinkBuildingService {
   constructor() {
-    this.mailer = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      secure: true,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-      }
-    });
+    this.mailer = null;
+    this.initializeMailer();
+  }
+
+  async initializeMailer() {
+    try {
+      this.mailer = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: true,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS
+        }
+      });
+    } catch (error) {
+      logger.error('Fout bij het initialiseren van de mailer:', error);
+    }
   }
 
   async analyzeBacklinks(url) {
@@ -42,6 +51,10 @@ export class LinkBuildingService {
 
   async sendOutreachEmail(contact, template) {
     try {
+      if (!this.mailer) {
+        await this.initializeMailer();
+      }
+
       const mailOptions = {
         from: process.env.SMTP_FROM,
         to: contact.email,

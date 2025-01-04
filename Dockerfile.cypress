@@ -1,0 +1,30 @@
+FROM cypress/included:13.6.1
+
+# Basis tools installeren
+RUN apt-get update && \
+    apt-get install -y python3 build-essential && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Werkdirectory instellen
+WORKDIR /app
+
+# Package files kopiëren
+COPY package*.json ./
+COPY cypress.config.js ./
+
+# Debug informatie tonen
+RUN node --version && \
+    npm --version && \
+    echo "NODE_ENV: $NODE_ENV"
+
+# Dependencies installeren met debug output
+RUN set -x && \
+    npm install --no-audit --no-fund && \
+    npm list || true
+
+# Cypress en test bestanden kopiëren
+COPY cypress/ ./cypress/
+
+# Test commando instellen
+CMD ["cypress", "run"]

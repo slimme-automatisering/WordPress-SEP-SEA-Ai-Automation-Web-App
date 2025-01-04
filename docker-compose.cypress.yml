@@ -1,0 +1,83 @@
+name: seo-sea-automation-e2e
+
+services:
+  # API service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - MONGODB_URI=mongodb://mongodb:27017/seo-sea-test
+      - SESSION_SECRET=test-secret
+      - DEBUG=express:*,app:*
+      - NODE_DEBUG=module
+      - NODE_OPTIONS=--trace-warnings
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # MongoDB service
+  mongodb:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+  # Redis service
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    command: redis-server --appendonly yes
+
+  # Cypress tests
+  cypress:
+    build:
+      context: .
+      dockerfile: Dockerfile.cypress
+    environment:
+      - CYPRESS_baseUrl=http://api:3000
+      - CYPRESS_VIDEO=false
+      - NODE_ENV=development
+      - DEBUG=cypress:*
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - ./cypress/results:/app/cypress/results
+      - ./cypress/screenshots:/app/cypress/screenshots
+      - ./cypress/videos:/app/cypress/videos
+      - ./cypress/downloads:/app/cypress/downloads
+
+networks:
+  default:
+    name: seo-sea-automation-e2e-network

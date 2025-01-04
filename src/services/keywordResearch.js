@@ -1,44 +1,44 @@
-import { GoogleAdsApi } from 'google-ads-api';
+// keywordResearch.js
 import { logger } from '../utils/logger.js';
 
 export class KeywordResearchService {
   constructor() {
-    this.client = new GoogleAdsApi({
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      developer_token: process.env.GOOGLE_DEVELOPER_TOKEN
-    });
-    this.customer = this.client.Customer({
-      customer_id: process.env.GOOGLE_CUSTOMER_ID
-    });
+    this.isGoogleAdsEnabled = false;
   }
 
   async analyzeKeywords(keywords) {
     try {
-      const results = await Promise.all(keywords.map(async (keyword) => {
-        const response = await this.customer.keywordPlanIdeas.generate({
-          keyword: keyword,
-          language: 'en',
-          geo_target: 'US'
-        });
-
-        const suggestions = response.map(result => ({
-          text: result.text,
-          avgMonthlySearches: result.avgMonthlySearches,
-          competition: result.competition,
-          competitionIndex: result.competitionIndex
-        }));
-
-        return {
-          keyword,
-          suggestions
-        };
+      logger.info('Using mock implementation for keyword analysis');
+      return keywords.map(keyword => ({
+        keyword,
+        suggestions: [
+          {
+            text: keyword,
+            avgMonthlySearches: Math.floor(Math.random() * 10000),
+            competition: ['LOW', 'MEDIUM', 'HIGH'][Math.floor(Math.random() * 3)],
+            competitionIndex: Math.floor(Math.random() * 100)
+          },
+          {
+            text: `${keyword} online`,
+            avgMonthlySearches: Math.floor(Math.random() * 5000),
+            competition: ['LOW', 'MEDIUM', 'HIGH'][Math.floor(Math.random() * 3)],
+            competitionIndex: Math.floor(Math.random() * 100)
+          },
+          {
+            text: `best ${keyword}`,
+            avgMonthlySearches: Math.floor(Math.random() * 3000),
+            competition: ['LOW', 'MEDIUM', 'HIGH'][Math.floor(Math.random() * 3)],
+            competitionIndex: Math.floor(Math.random() * 100)
+          }
+        ]
       }));
-
-      return results;
     } catch (error) {
       logger.error('Keyword analysis failed:', error);
       throw error;
     }
+  }
+
+  async analyzeKeywordsWithGoogleAds(keywords) {
+    throw new Error('Google Ads API implementation not yet available');
   }
 }

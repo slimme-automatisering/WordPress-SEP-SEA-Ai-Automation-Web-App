@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import licenseService from '../services/licenseService.js';
+import { licenseService } from '../services/licenseService.js';
 
-export const authenticateUser = (req, res, next) => {
+export const authMiddleware = (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {

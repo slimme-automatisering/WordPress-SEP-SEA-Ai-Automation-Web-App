@@ -1,37 +1,55 @@
-# Dependencies
+# Node.js
 node_modules/
-package-lock.json
-
-# Environment
-.env
-.env.local
-.env.*.local
-
-# Logs
-logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Testing
-coverage/
-.nyc_output/
+# Environment
+.env
+.env.prod
+.env.local
+.env.*.local
 
-# Production build
+# Logs
+logs/*
+!logs/.gitkeep
+*.log
+combined.log
+error.log
+
+# Build
 dist/
 build/
+coverage/
 
-# IDE/Editor
+# Docker
+.docker/
+docker-compose.override.yml
+
+# IDE
 .idea/
 .vscode/
 *.swp
 *.swo
 
-# OS
+# Operating System
 .DS_Store
 Thumbs.db
+
+# Data directories
+data/*
+!data/.gitkeep
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Cache
+.cache/
+.npm/
+.eslintcache
 
 # Temporary files
 *.tmp
 *.temp
+temp/

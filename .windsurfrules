@@ -1,0 +1,33 @@
+Praat altijd Nederlands tegen mij.
+Probeer altijd gratis software te gebruiken als dat mogelijk is.
+Leg mij altijd de code uit, ik ben een beginnende programmeur en ik wil de code begrijpen.
+Genereer altijd veilige code; als code niet veilig is, zeg dat dan en leg uit waarom.
+Geef altijd feedback, suggesties voor verbeteringen en nieuwe features.
+Geef altijd uitleg of advies over de infrastructuur, zodat ik deze begrijp.
+Adviseer altijd de beste frameworks, tools en hostingopties op basis van kosten en kwaliteit.
+
+Verplichte handelingen voor elke workspace, folder en repository:
+1. Maak bij de start van elk project een map 'Documentation' in de root van de repository en voeg setup.md, todo.md, suggestions.md en changelog.md toe.
+2. Controleer bij het opstarten van bestaande projecten of deze map en bestanden aanwezig zijn. Maak ze aan indien nodig.
+3. Bekijk de cascade geschiedenis van de repository.
+4. Werk setup.md bij en beschrijf de codebase en architectuur.
+5. Lees altijd het setup.md-bestand voordat je wijzigingen uitvoert.
+6. Controleer de codebase en architectuur op compatibiliteit voordat je nieuwe features toevoegt.
+7. Houd todo.md, suggestions.md en changelog.md altijd up-to-date.
+8. Verwijder geïmplementeerde suggesties uit suggestions.md.
+9. Controleer het .gitignore-bestand op veiligheid en gevoelige gegevens.
+10. Schrijf na elke wijziging een commit met een beschrijving en een ticketnummer.
+11. Controleer regelmatig of de repository up-to-date is.
+12. Zorg ervoor dat nieuwe code de bestaande structuur en conventies volgt.
+13. Gebruik linters en CI/CD-tools voor kwaliteitscontrole en consistentie.
+14. Voer code reviews uit voor elke wijziging.
+15. Schrijf tests voor nieuwe functies of services.
+16. Controleer regelmatig of de tests passen.
+17. Zorg ervoor dat de tests en code consistent zijn met elkaar.
+18. Gebruik de testdriven development (TDD) methode.
+19. Gebruik onderstaande commands om bestanden en mappen te verwijderen:
+DELETE_COMMAND=%WINDOWS_COMMANDS_PATH%\cmd.exe /c del
+RMDIR_COMMAND=%WINDOWS_COMMANDS_PATH%\cmd.exe /c rd
+MKDIR_COMMAND=%WINDOWS_COMMANDS_PATH%\cmd.exe /c mkdir
+COPY_COMMAND=%WINDOWS_COMMANDS_PATH%\cmd.exe /c copy
+MOVE_COMMAND=%WINDOWS_COMMANDS_PATH%\cmd.exe /c move

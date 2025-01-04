@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO & SEA Automation Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen">
+        <!-- Sidebar -->
+        <nav class="fixed top-0 left-0 h-screen w-64 bg-gray-800 p-4">
+            <div class="flex items-center justify-center mb-8">
+                <h1 class="text-white text-xl font-bold">SEO Automation</h1>
+            </div>
+            <ul class="space-y-2">
+                <li>
+                    <a href="#dashboard" class="text-gray-300 hover:text-white block py-2 px-4 rounded transition-colors nav-link active" data-page="dashboard">
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="#optimization" class="text-gray-300 hover:text-white block py-2 px-4 rounded transition-colors nav-link" data-page="optimization">
+                        Optimization Status
+                    </a>
+                </li>
+                <li>
+                    <a href="#competitors" class="text-gray-300 hover:text-white block py-2 px-4 rounded transition-colors nav-link" data-page="competitors">
+                        Competitor Analysis
+                    </a>
+                </li>
+                <li>
+                    <a href="#settings" class="text-gray-300 hover:text-white block py-2 px-4 rounded transition-colors nav-link" data-page="settings">
+                        Settings
+                    </a>
+                </li>
+                <li>
+                    <a href="#logs" class="text-gray-300 hover:text-white block py-2 px-4 rounded transition-colors nav-link" data-page="logs">
+                        Activity Logs
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="ml-64 p-8">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+                
+                <!-- Overview Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">Total Content Items</h3>
+                        <div class="flex items-center">
+                            <span class="text-3xl font-bold" id="total-content">0</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">Optimized Today</h3>
+                        <div class="flex items-center">
+                            <span class="text-3xl font-bold" id="optimized-today">0</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">Average SEO Score</h3>
+                        <div class="flex items-center">
+                            <span class="text-3xl font-bold" id="avg-seo-score">0</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">Next Scheduled Run</h3>
+                        <div class="flex items-center">
+                            <span class="text-3xl font-bold" id="next-run">--:--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-gray-500 text-sm font-medium mb-4">SEO Score Trend</h3>
+                        <canvas id="seo-trend-chart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-gray-500 text-sm font-medium mb-4">Content Distribution</h3>
+                        <canvas id="content-distribution-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-gray-500 text-sm font-medium mb-4">Recent Activity</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full" id="recent-activity-table">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Time
+                                    </th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Action
+                                    </th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Content
+                                    </th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Status
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                <!-- Activity rows will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Optimization Status Page -->
+            <div id="optimization-page" class="page hidden">
+                <h2 class="text-2xl font-bold mb-6">Optimization Status</h2>
+                
+                <!-- Filters -->
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Content Type</label>
+                            <select id="content-type-filter" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <option value="all">All</option>
+                                <option value="posts">Posts</option>
+                                <option value="pages">Pages</option>
+                                <option value="products">Products</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Status</label>
+                            <select id="status-filter" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <option value="all">All</option>
+                                <option value="optimized">Optimized</option>
+                                <option value="pending">Pending</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Date Range</label>
+                            <select id="date-range-filter" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <option value="today">Today</option>
+                                <option value="week">Last 7 Days</option>
+                                <option value="month">Last 30 Days</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content List -->
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <table class="min-w-full" id="optimization-table">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Title
+                                </th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Type
+                                </th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Last Optimized
+                                </th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    SEO Score
+                                </th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            <!-- Content rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Competitor Analysis Page -->
+            <div id="competitors-page" class="page hidden">
+                <h2 class="text-2xl font-bold mb-6">Competitor Analysis</h2>
+                
+                <!-- Competitor Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-gray-500 text-sm font-medium mb-4">Competitor Rankings</h3>
+                        <canvas id="competitor-rankings-chart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-gray-500 text-sm font-medium mb-4">Content Length Comparison</h3>
+                        <canvas id="content-length-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Detailed Analysis -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-gray-500 text-sm font-medium mb-4">Detailed Analysis</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full" id="competitor-analysis-table">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Competitor
+                                    </th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Keyword Density
+                                    </th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Content Length
+                                    </th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Readability Score
+                                    </th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Internal Links
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                <!-- Competitor rows will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settings-page" class="page hidden">
+                <h2 class="text-2xl font-bold mb-6">Settings</h2>
+
+                <!-- WordPress Configuration -->
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">WordPress Configuration</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Site URL</label>
+                            <input type="text" id="site-url" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Username</label>
+                            <input type="text" id="wp-username" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Password</label>
+                            <input type="password" id="wp-password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optimization Settings -->
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Optimization Settings</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Minimum Content Length</label>
+                            <input type="number" id="min-content-length" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Optimal Content Length</label>
+                            <input type="number" id="optimal-content-length" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Minimum Keyword Density</label>
+                            <input type="number" step="0.1" id="min-keyword-density" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Maximum Keyword Density</label>
+                            <input type="number" step="0.1" id="max-keyword-density" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule Settings -->
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Schedule Settings</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Daily Optimization Time</label>
+                            <input type="time" id="daily-optimization-time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Weekly Analysis Day</label>
+                            <select id="weekly-analysis-day" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <option value="0">Sunday</option>
+                                <option value="1">Monday</option>
+                                <option value="2">Tuesday</option>
+                                <option value="3">Wednesday</option>
+                                <option value="4">Thursday</option>
+                                <option value="5">Friday</option>
+                                <option value="6">Saturday</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <div class="flex justify-end">
+                    <button id="save-settings" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                        Save Settings
+                    </button>
+                </div>
+            </div>
+
+            <!-- Logs Page -->
+            <div id="logs-page" class="page hidden">
+                <h2 class="text-2xl font-bold mb-6">Activity Logs</h2>
+                
+                <!-- Log Filters -->
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Log Level</label>
+                            <select id="log-level-filter" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <option value="all">All Levels</option>
+                                <option value="info">Info</option>
+                                <option value="warning">Warning</option>
+                                <option value="error">Error</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Date Range</label>
+                            <select id="log-date-filter" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <option value="today">Today</option>
+                                <option value="week">Last 7 Days</option>
+                                <option value="month">Last 30 Days</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Search</label>
+                            <input type="text" id="log-search" placeholder="Search logs..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Log Table -->
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full" id="logs-table">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Timestamp
+                                    </th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Level
+                                    </th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Message
+                                    </th>
+                                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        Details
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                <!-- Log entries will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/optimization.js"></script>
+    <script src="/js/competitors.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/logs.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

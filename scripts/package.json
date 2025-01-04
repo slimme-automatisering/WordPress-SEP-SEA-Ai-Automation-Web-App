@@ -1,0 +1,9 @@
+{
+  "name": "seo-sea-automation-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "glob": "^10.3.10"
+  }
+}
