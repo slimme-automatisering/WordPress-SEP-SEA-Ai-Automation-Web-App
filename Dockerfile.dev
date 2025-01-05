@@ -8,9 +8,7 @@ RUN apk add --no-cache \
     freetype-dev \
     harfbuzz \
     ca-certificates \
-    ttf-freefont \
-    nodejs \
-    yarn
+    ttf-freefont
 
 # Zet Puppeteer om Chromium te gebruiken
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
@@ -18,14 +16,12 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 
 WORKDIR /app
 
-# Kopieer package.json en .npmrc
-COPY package.json .npmrc ./
+# Kopieer package.json
+COPY package.json ./
 
-# Installeer dependencies in stappen
-RUN npm install --legacy-peer-deps && \
-    npm install puppeteer@21.6.1 --legacy-peer-deps && \
-    npm install openai@4.24.1 --legacy-peer-deps && \
-    npm audit fix --force
+# Schone installatie zonder package-lock
+RUN npm install --no-package-lock --production && \
+    npm install --no-package-lock --save-dev
 
 # Kopieer de rest van de applicatie
 COPY . .

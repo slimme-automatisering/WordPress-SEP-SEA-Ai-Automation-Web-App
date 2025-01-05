@@ -159,6 +159,8 @@ networks:
   web:
     external: true
   seo_sea_network:
+    driver: bridge
+    name: seo_sea_network
 
 volumes:
   mongodb_data:
