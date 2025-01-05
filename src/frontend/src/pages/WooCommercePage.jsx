@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography, Paper, Grid } from '@mui/material';
+import React from "react";
+import { Box, Typography, Paper, Grid } from "@mui/material";
 
 function WooCommercePage() {
   return (
@@ -14,7 +14,8 @@ function WooCommercePage() {
               WooCommerce Overview
             </Typography>
             <Typography>
-              Manage your WooCommerce integration and synchronize your product data.
+              Manage your WooCommerce integration and synchronize your product
+              data.
             </Typography>
           </Paper>
         </Grid>

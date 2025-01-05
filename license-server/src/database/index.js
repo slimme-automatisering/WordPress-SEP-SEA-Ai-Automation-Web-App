@@ -1,9 +1,12 @@
-const { Pool } = require('pg');
-const logger = require('../utils/logger');
+const { Pool } = require("pg");
+const logger = require("../utils/logger");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
 });
 
 async function setupDatabase() {
@@ -36,9 +39,9 @@ async function setupDatabase() {
       CREATE INDEX IF NOT EXISTS idx_license_key ON licenses(key);
       CREATE INDEX IF NOT EXISTS idx_license_usage_date ON license_usage(date);
     `);
-    logger.info('Database setup completed');
+    logger.info("Database setup completed");
   } catch (error) {
-    logger.error('Error setting up database:', error);
+    logger.error("Error setting up database:", error);
     throw error;
   } finally {
     client.release();
@@ -47,5 +50,5 @@ async function setupDatabase() {
 
 module.exports = {
   pool,
-  setupDatabase
+  setupDatabase,
 };

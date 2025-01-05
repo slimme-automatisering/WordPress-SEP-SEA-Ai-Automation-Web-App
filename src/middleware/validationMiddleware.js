@@ -1,5 +1,5 @@
-import { BaseMiddleware } from './baseMiddleware.js';
-import Joi from 'joi';
+import { BaseMiddleware } from "./baseMiddleware.js";
+import Joi from "joi";
 
 export class ValidationMiddleware extends BaseMiddleware {
   constructor() {
@@ -15,27 +15,27 @@ export class ValidationMiddleware extends BaseMiddleware {
       depth: Joi.number().integer().min(1).max(10).default(3),
       checkLinks: Joi.boolean().default(true),
       checkImages: Joi.boolean().default(true),
-      checkPerformance: Joi.boolean().default(true)
+      checkPerformance: Joi.boolean().default(true),
     }),
 
     keywords: Joi.object({
       query: Joi.string().required().min(2),
-      language: Joi.string().length(2).default('nl'),
-      location: Joi.string().default('NL'),
-      limit: Joi.number().integer().min(1).max(100).default(10)
+      language: Joi.string().length(2).default("nl"),
+      location: Joi.string().default("NL"),
+      limit: Joi.number().integer().min(1).max(100).default(10),
     }),
 
     content: Joi.object({
       text: Joi.string().required().min(10),
       keywords: Joi.array().items(Joi.string()).min(1).required(),
-      language: Joi.string().length(2).default('nl')
+      language: Joi.string().length(2).default("nl"),
     }),
 
     performance: Joi.object({
       url: Joi.string().uri().required(),
-      strategy: Joi.string().valid('mobile', 'desktop').default('mobile'),
-      locale: Joi.string().default('nl')
-    })
+      strategy: Joi.string().valid("mobile", "desktop").default("mobile"),
+      locale: Joi.string().default("nl"),
+    }),
   };
 
   /**
@@ -46,26 +46,30 @@ export class ValidationMiddleware extends BaseMiddleware {
       name: Joi.string().required().min(3),
       budget: Joi.number().positive().required(),
       startDate: Joi.date().iso().required(),
-      endDate: Joi.date().iso().min(Joi.ref('startDate')),
+      endDate: Joi.date().iso().min(Joi.ref("startDate")),
       targeting: Joi.object({
         locations: Joi.array().items(Joi.string()).min(1),
         languages: Joi.array().items(Joi.string()).min(1),
         devices: Joi.array().items(
-          Joi.string().valid('mobile', 'desktop', 'tablet')
-        )
-      }).required()
+          Joi.string().valid("mobile", "desktop", "tablet"),
+        ),
+      }).required(),
     }),
 
     adGroup: Joi.object({
       campaignId: Joi.string().required(),
       name: Joi.string().required().min(3),
       bidAmount: Joi.number().positive().required(),
-      keywords: Joi.array().items(
-        Joi.object({
-          text: Joi.string().required(),
-          matchType: Joi.string().valid('exact', 'phrase', 'broad').required()
-        })
-      ).min(1)
+      keywords: Joi.array()
+        .items(
+          Joi.object({
+            text: Joi.string().required(),
+            matchType: Joi.string()
+              .valid("exact", "phrase", "broad")
+              .required(),
+          }),
+        )
+        .min(1),
     }),
 
     ad: Joi.object({
@@ -73,8 +77,8 @@ export class ValidationMiddleware extends BaseMiddleware {
       headline: Joi.string().required().max(30),
       description: Joi.string().required().max(90),
       finalUrl: Joi.string().uri().required(),
-      displayUrl: Joi.string().required()
-    })
+      displayUrl: Joi.string().required(),
+    }),
   };
 
   /**
@@ -84,32 +88,35 @@ export class ValidationMiddleware extends BaseMiddleware {
     initialize: Joi.object({
       propertyId: Joi.string().required(),
       viewId: Joi.string().required(),
-      timezone: Joi.string().default('Europe/Amsterdam')
+      timezone: Joi.string().default("Europe/Amsterdam"),
     }),
 
     report: Joi.object({
       startDate: Joi.date().iso().required(),
-      endDate: Joi.date().iso().min(Joi.ref('startDate')).required(),
-      metrics: Joi.array().items(
-        Joi.string().valid(
-          'users',
-          'sessions',
-          'pageviews',
-          'bounceRate',
-          'avgSessionDuration'
+      endDate: Joi.date().iso().min(Joi.ref("startDate")).required(),
+      metrics: Joi.array()
+        .items(
+          Joi.string().valid(
+            "users",
+            "sessions",
+            "pageviews",
+            "bounceRate",
+            "avgSessionDuration",
+          ),
         )
-      ).min(1).required(),
+        .min(1)
+        .required(),
       dimensions: Joi.array().items(
         Joi.string().valid(
-          'date',
-          'source',
-          'medium',
-          'campaign',
-          'keyword',
-          'device'
-        )
-      )
-    })
+          "date",
+          "source",
+          "medium",
+          "campaign",
+          "keyword",
+          "device",
+        ),
+      ),
+    }),
   };
 
   /**
@@ -118,21 +125,21 @@ export class ValidationMiddleware extends BaseMiddleware {
   wooSchemas = {
     product: Joi.object({
       name: Joi.string().required(),
-      type: Joi.string().valid('simple', 'variable').default('simple'),
+      type: Joi.string().valid("simple", "variable").default("simple"),
       regular_price: Joi.number().positive().required(),
-      sale_price: Joi.number().positive().less(Joi.ref('regular_price')),
+      sale_price: Joi.number().positive().less(Joi.ref("regular_price")),
       description: Joi.string(),
       short_description: Joi.string(),
       categories: Joi.array().items(
         Joi.object({
-          id: Joi.number().integer().positive()
-        })
+          id: Joi.number().integer().positive(),
+        }),
       ),
       images: Joi.array().items(
         Joi.object({
-          src: Joi.string().uri()
-        })
-      )
+          src: Joi.string().uri(),
+        }),
+      ),
     }),
 
     order: Joi.object({
@@ -147,7 +154,7 @@ export class ValidationMiddleware extends BaseMiddleware {
         address_1: Joi.string().required(),
         city: Joi.string().required(),
         postcode: Joi.string().required(),
-        country: Joi.string().length(2).required()
+        country: Joi.string().length(2).required(),
       }).required(),
       shipping: Joi.object({
         first_name: Joi.string(),
@@ -155,15 +162,18 @@ export class ValidationMiddleware extends BaseMiddleware {
         address_1: Joi.string(),
         city: Joi.string(),
         postcode: Joi.string(),
-        country: Joi.string().length(2)
+        country: Joi.string().length(2),
       }),
-      line_items: Joi.array().items(
-        Joi.object({
-          product_id: Joi.number().integer().positive().required(),
-          quantity: Joi.number().integer().positive().required()
-        })
-      ).min(1).required()
-    })
+      line_items: Joi.array()
+        .items(
+          Joi.object({
+            product_id: Joi.number().integer().positive().required(),
+            quantity: Joi.number().integer().positive().required(),
+          }),
+        )
+        .min(1)
+        .required(),
+    }),
   };
 
   /**

@@ -1,16 +1,16 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  root: './src/frontend',
+  root: "./src/frontend",
   server: {
     port: 3000,
-    host: true
+    host: true,
   },
   build: {
-    outDir: '../../dist/frontend',
+    outDir: "../../dist/frontend",
     emptyOutDir: true,
-    sourcemap: true
-  }
+    sourcemap: true,
+  },
 });

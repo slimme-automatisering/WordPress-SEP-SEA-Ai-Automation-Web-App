@@ -1,6 +1,6 @@
-const express = require('express');
-const seaController = require('../controllers/seaController.js');
-const { analysisLimiter } = require('../middleware/rateLimiter.js');
+const express = require("express");
+const seaController = require("../controllers/seaController.js");
+const { analysisLimiter } = require("../middleware/rateLimiter.js");
 
 const router = express.Router();
 
@@ -51,7 +51,11 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/campaigns/:campaignId/analyze', analysisLimiter, seaController.analyzeCampaign.bind(seaController));
+router.get(
+  "/campaigns/:campaignId/analyze",
+  analysisLimiter,
+  seaController.analyzeCampaign.bind(seaController),
+);
 
 /**
  * @swagger
@@ -109,7 +113,11 @@ router.get('/campaigns/:campaignId/analyze', analysisLimiter, seaController.anal
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/ads/:adId/performance', analysisLimiter, seaController.getAdPerformance.bind(seaController));
+router.get(
+  "/ads/:adId/performance",
+  analysisLimiter,
+  seaController.getAdPerformance.bind(seaController),
+);
 
 /**
  * @swagger
@@ -158,6 +166,10 @@ router.get('/ads/:adId/performance', analysisLimiter, seaController.getAdPerform
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/campaigns/:campaignId/optimize', analysisLimiter, seaController.optimizeBudget.bind(seaController));
+router.post(
+  "/campaigns/:campaignId/optimize",
+  analysisLimiter,
+  seaController.optimizeBudget.bind(seaController),
+);
 
 module.exports = router;

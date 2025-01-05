@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -18,20 +18,20 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
-} from '@mui/material';
+  DialogActions,
+} from "@mui/material";
 import {
   Edit as EditIcon,
   TrendingUp as TrendingUpIcon,
-  History as HistoryIcon
-} from '@mui/icons-material';
-import { Line } from 'react-chartjs-2';
-import { useTheme } from '@mui/material/styles';
+  History as HistoryIcon,
+} from "@mui/icons-material";
+import { Line } from "react-chartjs-2";
+import { useTheme } from "@mui/material/styles";
 
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'currency',
-    currency: 'EUR'
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
   }).format(amount / 1000000); // Convert from micros
 };
 
@@ -43,7 +43,7 @@ const BudgetManagement = ({ accountId, campaignId }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [formData, setFormData] = useState({
     amount_micros: 0,
-    delivery_method: 'STANDARD'
+    delivery_method: "STANDARD",
   });
 
   const fetchBudget = async () => {
@@ -54,18 +54,18 @@ const BudgetManagement = ({ accountId, campaignId }) => {
 
     try {
       const response = await fetch(
-        `/api/google-ads/${accountId}/campaigns/${campaignId}/budget`
+        `/api/google-ads/${accountId}/campaigns/${campaignId}/budget`,
       );
 
       if (!response.ok) {
-        throw new Error('Kon budget informatie niet ophalen');
+        throw new Error("Kon budget informatie niet ophalen");
       }
 
       const data = await response.json();
       setBudget(data);
       setFormData({
         amount_micros: data.campaign_budget.amount_micros,
-        delivery_method: data.campaign_budget.delivery_method
+        delivery_method: data.campaign_budget.delivery_method,
       });
     } catch (err) {
       setError(err.message);
@@ -86,16 +86,16 @@ const BudgetManagement = ({ accountId, campaignId }) => {
       const response = await fetch(
         `/api/google-ads/${accountId}/campaigns/${campaignId}/budget`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
-        }
+        },
       );
 
       if (!response.ok) {
-        throw new Error('Kon budget niet bijwerken');
+        throw new Error("Kon budget niet bijwerken");
       }
 
       await fetchBudget();
@@ -128,38 +128,38 @@ const BudgetManagement = ({ accountId, campaignId }) => {
   }
 
   const spendingData = {
-    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+    labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
     datasets: [
       {
-        label: 'Budget',
+        label: "Budget",
         data: [
           budget.campaign_budget.amount_micros / 1000000,
           budget.campaign_budget.amount_micros / 1000000,
           budget.campaign_budget.amount_micros / 1000000,
-          budget.campaign_budget.amount_micros / 1000000
+          budget.campaign_budget.amount_micros / 1000000,
         ],
         borderColor: theme.palette.primary.main,
         backgroundColor: theme.palette.primary.light,
-        borderDash: [5, 5]
+        borderDash: [5, 5],
       },
       {
-        label: 'Uitgaven',
+        label: "Uitgaven",
         data: [
           budget.metrics.cost_micros / 1000000,
-          budget.metrics.cost_micros / 1000000 * 0.8,
-          budget.metrics.cost_micros / 1000000 * 1.2,
-          budget.metrics.cost_micros / 1000000
+          (budget.metrics.cost_micros / 1000000) * 0.8,
+          (budget.metrics.cost_micros / 1000000) * 1.2,
+          budget.metrics.cost_micros / 1000000,
         ],
         borderColor: theme.palette.secondary.main,
-        backgroundColor: theme.palette.secondary.light
-      }
-    ]
+        backgroundColor: theme.palette.secondary.light,
+      },
+    ],
   };
 
   const chartOptions = {
     responsive: true,
     interaction: {
-      mode: 'index',
+      mode: "index",
       intersect: false,
     },
     scales: {
@@ -167,10 +167,10 @@ const BudgetManagement = ({ accountId, campaignId }) => {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Budget (€)'
-        }
-      }
-    }
+          text: "Budget (€)",
+        },
+      },
+    },
   };
 
   return (
@@ -180,14 +180,14 @@ const BudgetManagement = ({ accountId, campaignId }) => {
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h6">
-                  Budget Overzicht
-                </Typography>
-                <IconButton
-                  onClick={() => setOpenDialog(true)}
-                  size="small"
-                >
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                mb={2}
+              >
+                <Typography variant="h6">Budget Overzicht</Typography>
+                <IconButton onClick={() => setOpenDialog(true)} size="small">
                   <EditIcon />
                 </IconButton>
               </Box>
@@ -252,32 +252,36 @@ const BudgetManagement = ({ accountId, campaignId }) => {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>
-          Budget Bewerken
-        </DialogTitle>
+        <DialogTitle>Budget Bewerken</DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2} pt={2}>
             <TextField
               label="Dagelijks Budget (€)"
               type="number"
               value={formData.amount_micros / 1000000}
-              onChange={(e) => setFormData({
-                ...formData,
-                amount_micros: Math.round(parseFloat(e.target.value) * 1000000)
-              })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  amount_micros: Math.round(
+                    parseFloat(e.target.value) * 1000000,
+                  ),
+                })
+              }
               fullWidth
               InputProps={{
-                startAdornment: '€'
+                startAdornment: "€",
               }}
             />
             <FormControl fullWidth>
               <InputLabel>Leveringsmethode</InputLabel>
               <Select
                 value={formData.delivery_method}
-                onChange={(e) => setFormData({
-                  ...formData,
-                  delivery_method: e.target.value
-                })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    delivery_method: e.target.value,
+                  })
+                }
                 label="Leveringsmethode"
               >
                 <MenuItem value="STANDARD">Standaard</MenuItem>
@@ -287,17 +291,9 @@ const BudgetManagement = ({ accountId, campaignId }) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => setOpenDialog(false)}
-          >
-            Annuleren
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleUpdate}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : 'Opslaan'}
+          <Button onClick={() => setOpenDialog(false)}>Annuleren</Button>
+          <Button variant="contained" onClick={handleUpdate} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : "Opslaan"}
           </Button>
         </DialogActions>
       </Dialog>

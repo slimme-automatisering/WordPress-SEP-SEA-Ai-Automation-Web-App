@@ -1,16 +1,16 @@
-const k8s = require('@kubernetes/client-node');
-const { logger } = require('../../utils/logger');
-const monitoringService = require('../monitoring/monitoringService');
+const k8s = require("@kubernetes/client-node");
+const { logger } = require("../../utils/logger");
+const monitoringService = require("../monitoring/monitoringService");
 
 class ScalingService {
   constructor() {
     this.kc = new k8s.KubeConfig();
     this.kc.loadFromDefault();
     this.k8sApi = this.kc.makeApiClient(k8s.AppsV1Api);
-    
+
     this.deploymentName = process.env.K8S_DEPLOYMENT_NAME;
     this.namespace = process.env.K8S_NAMESPACE;
-    
+
     this.metrics = {
       cpuThreshold: 80, // 80% CPU gebruik
       memoryThreshold: 85, // 85% geheugen gebruik
@@ -22,21 +22,23 @@ class ScalingService {
     try {
       const deployment = await this.k8sApi.readNamespacedDeployment(
         this.deploymentName,
-        this.namespace
+        this.namespace,
       );
-      
+
       deployment.body.spec.replicas = replicas;
-      
+
       await this.k8sApi.replaceNamespacedDeployment(
         this.deploymentName,
         this.namespace,
-        deployment.body
+        deployment.body,
       );
-      
-      logger.info(`Scaled deployment ${this.deploymentName} to ${replicas} replicas`);
+
+      logger.info(
+        `Scaled deployment ${this.deploymentName} to ${replicas} replicas`,
+      );
       return true;
     } catch (error) {
-      logger.error('Error scaling deployment:', error);
+      logger.error("Error scaling deployment:", error);
       throw error;
     }
   }
@@ -44,25 +46,25 @@ class ScalingService {
   async getCurrentMetrics() {
     try {
       const metricsResponse = await monitoringService.getMetrics();
-      
+
       // Parse metrics en bereken gemiddelden
       const metrics = {
         cpuUsage: 0,
         memoryUsage: 0,
         requestLatency: 0,
-        activeUsers: 0
+        activeUsers: 0,
       };
-      
+
       // Hier zouden we de prometheus metrics moeten parsen
       // Voor nu gebruiken we dummy data
       metrics.cpuUsage = Math.random() * 100;
       metrics.memoryUsage = Math.random() * 100;
       metrics.requestLatency = Math.random() * 1000;
       metrics.activeUsers = Math.floor(Math.random() * 1000);
-      
+
       return metrics;
     } catch (error) {
-      logger.error('Error getting current metrics:', error);
+      logger.error("Error getting current metrics:", error);
       throw error;
     }
   }
@@ -72,12 +74,12 @@ class ScalingService {
       const metrics = await this.getCurrentMetrics();
       const deployment = await this.k8sApi.readNamespacedDeployment(
         this.deploymentName,
-        this.namespace
+        this.namespace,
       );
-      
+
       const currentReplicas = deployment.body.spec.replicas;
       let newReplicas = currentReplicas;
-      
+
       // Scale up conditions
       if (
         metrics.cpuUsage > this.metrics.cpuThreshold ||
@@ -86,7 +88,7 @@ class ScalingService {
       ) {
         newReplicas = currentReplicas + 1;
       }
-      
+
       // Scale down conditions
       if (
         metrics.cpuUsage < this.metrics.cpuThreshold / 2 &&
@@ -95,20 +97,22 @@ class ScalingService {
       ) {
         newReplicas = Math.max(1, currentReplicas - 1);
       }
-      
+
       // Apply scaling if needed
       if (newReplicas !== currentReplicas) {
         await this.scaleDeployment(newReplicas);
-        logger.info(`Auto-scaled from ${currentReplicas} to ${newReplicas} replicas`);
+        logger.info(
+          `Auto-scaled from ${currentReplicas} to ${newReplicas} replicas`,
+        );
       }
-      
+
       return {
         currentReplicas,
         newReplicas,
-        metrics
+        metrics,
       };
     } catch (error) {
-      logger.error('Error checking scaling:', error);
+      logger.error("Error checking scaling:", error);
       throw error;
     }
   }
@@ -116,17 +120,17 @@ class ScalingService {
   async getScalingHistory() {
     try {
       const events = await this.k8sApi.listNamespacedEvent(this.namespace);
-      
+
       return events.body.items
-        .filter(event => event.involvedObject.name === this.deploymentName)
-        .map(event => ({
+        .filter((event) => event.involvedObject.name === this.deploymentName)
+        .map((event) => ({
           timestamp: event.lastTimestamp,
           type: event.type,
           reason: event.reason,
-          message: event.message
+          message: event.message,
         }));
     } catch (error) {
-      logger.error('Error getting scaling history:', error);
+      logger.error("Error getting scaling history:", error);
       throw error;
     }
   }
@@ -135,13 +139,13 @@ class ScalingService {
     try {
       this.metrics = {
         ...this.metrics,
-        ...thresholds
+        ...thresholds,
       };
-      
-      logger.info('Updated scaling thresholds:', this.metrics);
+
+      logger.info("Updated scaling thresholds:", this.metrics);
       return this.metrics;
     } catch (error) {
-      logger.error('Error setting scaling thresholds:', error);
+      logger.error("Error setting scaling thresholds:", error);
       throw error;
     }
   }

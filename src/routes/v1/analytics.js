@@ -1,6 +1,6 @@
-import express from 'express';
-import { authenticateUser } from '../../middleware/auth.js';
-import * as analyticsController from '../../controllers/analyticsController.js';
+import express from "express";
+import { authenticateUser } from "../../middleware/auth.js";
+import * as analyticsController from "../../controllers/analyticsController.js";
 
 const router = express.Router();
 
@@ -29,7 +29,11 @@ const router = express.Router();
  *       401:
  *         description: Niet geautoriseerd
  */
-router.post('/initialize', authenticateUser, analyticsController.initializeAnalytics);
+router.post(
+  "/initialize",
+  authenticateUser,
+  analyticsController.initializeAnalytics,
+);
 
 /**
  * @swagger
@@ -45,7 +49,7 @@ router.post('/initialize', authenticateUser, analyticsController.initializeAnaly
  *       401:
  *         description: Niet geautoriseerd
  */
-router.get('/realtime', authenticateUser, analyticsController.getRealtimeData);
+router.get("/realtime", authenticateUser, analyticsController.getRealtimeData);
 
 /**
  * @swagger
@@ -77,7 +81,7 @@ router.get('/realtime', authenticateUser, analyticsController.getRealtimeData);
  *       401:
  *         description: Niet geautoriseerd
  */
-router.post('/data', authenticateUser, analyticsController.getAnalyticsData);
+router.post("/data", authenticateUser, analyticsController.getAnalyticsData);
 
 /**
  * @swagger
@@ -105,6 +109,10 @@ router.post('/data', authenticateUser, analyticsController.getAnalyticsData);
  *       401:
  *         description: Niet geautoriseerd
  */
-router.post('/export', authenticateUser, analyticsController.exportAnalyticsData);
+router.post(
+  "/export",
+  authenticateUser,
+  analyticsController.exportAnalyticsData,
+);
 
 export default router;

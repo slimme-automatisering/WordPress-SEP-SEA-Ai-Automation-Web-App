@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -22,8 +22,8 @@ import {
   Switch,
   FormControlLabel,
   Tooltip,
-  Link
-} from '@mui/material';
+  Link,
+} from "@mui/material";
 import {
   Search as SearchIcon,
   Download as DownloadIcon,
@@ -31,25 +31,25 @@ import {
   CheckCircle as CheckCircleIcon,
   Error as ErrorIcon,
   Warning as WarningIcon,
-  Link as LinkIcon
-} from '@mui/icons-material';
+  Link as LinkIcon,
+} from "@mui/icons-material";
 
 const statusColors = {
-  200: 'success',
-  404: 'error',
-  301: 'warning',
-  302: 'warning'
+  200: "success",
+  404: "error",
+  301: "warning",
+  302: "warning",
 };
 
 const statusText = {
-  200: 'OK',
-  404: 'Niet gevonden',
-  301: 'Permanent redirect',
-  302: 'Tijdelijke redirect'
+  200: "OK",
+  404: "Niet gevonden",
+  301: "Permanent redirect",
+  302: "Tijdelijke redirect",
 };
 
 const SitemapGenerator = () => {
-  const [domain, setDomain] = useState('');
+  const [domain, setDomain] = useState("");
   const [urls, setUrls] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -61,7 +61,7 @@ const SitemapGenerator = () => {
 
   const generateSitemap = async () => {
     if (!domain) {
-      setError('Voer een domein in');
+      setError("Voer een domein in");
       return;
     }
 
@@ -69,19 +69,19 @@ const SitemapGenerator = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/sitemap/generate', {
-        method: 'POST',
+      const response = await fetch("/api/sitemap/generate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           domain,
-          crawl: crawlEnabled
+          crawl: crawlEnabled,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Sitemap generatie mislukt');
+        throw new Error("Sitemap generatie mislukt");
       }
 
       // De response is de sitemap XML
@@ -101,10 +101,12 @@ const SitemapGenerator = () => {
 
   const fetchUrls = async () => {
     try {
-      const response = await fetch(`/api/sitemap/${domain}/urls?page=${page + 1}&limit=${rowsPerPage}`);
-      
+      const response = await fetch(
+        `/api/sitemap/${domain}/urls?page=${page + 1}&limit=${rowsPerPage}`,
+      );
+
       if (!response.ok) {
-        throw new Error('Kon URLs niet ophalen');
+        throw new Error("Kon URLs niet ophalen");
       }
 
       const data = await response.json();
@@ -117,9 +119,9 @@ const SitemapGenerator = () => {
   const fetchStats = async () => {
     try {
       const response = await fetch(`/api/sitemap/${domain}/stats`);
-      
+
       if (!response.ok) {
-        throw new Error('Kon statistieken niet ophalen');
+        throw new Error("Kon statistieken niet ophalen");
       }
 
       const data = await response.json();
@@ -171,7 +173,9 @@ const SitemapGenerator = () => {
               />
               <Button
                 variant="contained"
-                startIcon={loading ? <CircularProgress size={20} /> : <SearchIcon />}
+                startIcon={
+                  loading ? <CircularProgress size={20} /> : <SearchIcon />
+                }
                 onClick={generateSitemap}
                 disabled={loading}
               >
@@ -200,9 +204,7 @@ const SitemapGenerator = () => {
                   <Typography color="textSecondary" gutterBottom>
                     Totaal URLs
                   </Typography>
-                  <Typography variant="h4">
-                    {stats.total}
-                  </Typography>
+                  <Typography variant="h4">{stats.total}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -237,7 +239,9 @@ const SitemapGenerator = () => {
                     Laatste Crawl
                   </Typography>
                   <Typography variant="h6">
-                    {stats.lastCrawled ? new Date(stats.lastCrawled).toLocaleString() : 'Nooit'}
+                    {stats.lastCrawled
+                      ? new Date(stats.lastCrawled).toLocaleString()
+                      : "Nooit"}
                   </Typography>
                 </CardContent>
               </Card>
@@ -263,15 +267,19 @@ const SitemapGenerator = () => {
                           <TableCell>
                             <Box display="flex" alignItems="center" gap={1}>
                               <LinkIcon fontSize="small" />
-                              <Link href={url.url} target="_blank" rel="noopener">
+                              <Link
+                                href={url.url}
+                                target="_blank"
+                                rel="noopener"
+                              >
                                 {url.url}
                               </Link>
                             </Box>
                           </TableCell>
                           <TableCell align="center">
                             <Chip
-                              label={`${url.status} ${statusText[url.status] || ''}`}
-                              color={statusColors[url.status] || 'default'}
+                              label={`${url.status} ${statusText[url.status] || ""}`}
+                              color={statusColors[url.status] || "default"}
                               size="small"
                             />
                           </TableCell>
@@ -285,9 +293,7 @@ const SitemapGenerator = () => {
                               variant="outlined"
                             />
                           </TableCell>
-                          <TableCell>
-                            {url.changefreq}
-                          </TableCell>
+                          <TableCell>{url.changefreq}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

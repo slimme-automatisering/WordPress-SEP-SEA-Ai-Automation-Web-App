@@ -1,7 +1,7 @@
-import { BaseService } from './baseService.js';
-import { SerpApi } from '../integrations/serpApi.js';
-import { GoogleSearchConsole } from '../integrations/googleSearchConsole.js';
-import { PageSpeedInsights } from '../integrations/pageSpeedInsights.js';
+import { BaseService } from "./baseService.js";
+import { SerpApi } from "../integrations/serpApi.js";
+import { GoogleSearchConsole } from "../integrations/googleSearchConsole.js";
+import { PageSpeedInsights } from "../integrations/pageSpeedInsights.js";
 
 export class SeoService extends BaseService {
   constructor() {
@@ -15,89 +15,108 @@ export class SeoService extends BaseService {
    * Voer een SEO audit uit voor een website
    */
   async runAudit(url, options = {}) {
-    const cacheKey = this.createCacheKey('seo:audit', { url, ...options });
+    const cacheKey = this.createCacheKey("seo:audit", { url, ...options });
 
-    return this.getCached(cacheKey, async () => {
-      // Parallel uitvoeren van verschillende checks
-      const [
-        rankings,
-        performance,
-        searchConsoleData,
-        backlinks
-      ] = await Promise.all([
-        this.getKeywordRankings(url),
-        this.getPerformanceMetrics(url),
-        this.getSearchConsoleData(url),
-        this.getBacklinks(url)
-      ]);
+    return this.getCached(
+      cacheKey,
+      async () => {
+        // Parallel uitvoeren van verschillende checks
+        const [rankings, performance, searchConsoleData, backlinks] =
+          await Promise.all([
+            this.getKeywordRankings(url),
+            this.getPerformanceMetrics(url),
+            this.getSearchConsoleData(url),
+            this.getBacklinks(url),
+          ]);
 
-      return {
-        url,
-        timestamp: new Date().toISOString(),
-        rankings,
-        performance,
-        searchConsole: searchConsoleData,
-        backlinks,
-        recommendations: this.generateRecommendations({
+        return {
+          url,
+          timestamp: new Date().toISOString(),
           rankings,
           performance,
-          searchConsoleData,
-          backlinks
-        })
-      };
-    }, 3600); // Cache voor 1 uur
+          searchConsole: searchConsoleData,
+          backlinks,
+          recommendations: this.generateRecommendations({
+            rankings,
+            performance,
+            searchConsoleData,
+            backlinks,
+          }),
+        };
+      },
+      3600,
+    ); // Cache voor 1 uur
   }
 
   /**
    * Haal keyword rankings op
    */
   async getKeywordRankings(url, options = {}) {
-    const cacheKey = this.createCacheKey('seo:rankings', { url, ...options });
+    const cacheKey = this.createCacheKey("seo:rankings", { url, ...options });
 
-    return this.getCached(cacheKey, async () => {
-      const response = await this.serpApi.searchKeywords(url);
-      return this.validateApiResponse(response, 'SERP');
-    }, 1800); // Cache voor 30 minuten
+    return this.getCached(
+      cacheKey,
+      async () => {
+        const response = await this.serpApi.searchKeywords(url);
+        return this.validateApiResponse(response, "SERP");
+      },
+      1800,
+    ); // Cache voor 30 minuten
   }
 
   /**
    * Haal performance metrics op
    */
   async getPerformanceMetrics(url) {
-    const cacheKey = this.createCacheKey('seo:performance', { url });
+    const cacheKey = this.createCacheKey("seo:performance", { url });
 
-    return this.getCached(cacheKey, async () => {
-      const response = await this.pageSpeed.analyze(url);
-      return this.validateApiResponse(response, 'PageSpeed');
-    }, 86400); // Cache voor 24 uur
+    return this.getCached(
+      cacheKey,
+      async () => {
+        const response = await this.pageSpeed.analyze(url);
+        return this.validateApiResponse(response, "PageSpeed");
+      },
+      86400,
+    ); // Cache voor 24 uur
   }
 
   /**
    * Haal Search Console data op
    */
   async getSearchConsoleData(url, dateRange = { days: 28 }) {
-    const cacheKey = this.createCacheKey('seo:searchconsole', {
+    const cacheKey = this.createCacheKey("seo:searchconsole", {
       url,
       startDate: dateRange.startDate,
-      endDate: dateRange.endDate
+      endDate: dateRange.endDate,
     });
 
-    return this.getCached(cacheKey, async () => {
-      const response = await this.searchConsole.getSearchAnalytics(url, dateRange);
-      return this.validateApiResponse(response, 'Search Console');
-    }, 3600); // Cache voor 1 uur
+    return this.getCached(
+      cacheKey,
+      async () => {
+        const response = await this.searchConsole.getSearchAnalytics(
+          url,
+          dateRange,
+        );
+        return this.validateApiResponse(response, "Search Console");
+      },
+      3600,
+    ); // Cache voor 1 uur
   }
 
   /**
    * Haal backlink data op
    */
   async getBacklinks(url) {
-    const cacheKey = this.createCacheKey('seo:backlinks', { url });
+    const cacheKey = this.createCacheKey("seo:backlinks", { url });
 
-    return this.getCached(cacheKey, async () => {
-      const response = await this.serpApi.getBacklinks(url);
-      return this.validateApiResponse(response, 'Backlinks');
-    }, 86400); // Cache voor 24 uur
+    return this.getCached(
+      cacheKey,
+      async () => {
+        const response = await this.serpApi.getBacklinks(url);
+        return this.validateApiResponse(response, "Backlinks");
+      },
+      86400,
+    ); // Cache voor 24 uur
   }
 
   /**
@@ -105,18 +124,21 @@ export class SeoService extends BaseService {
    */
   async optimizeContent(content, targetKeywords) {
     // Rate limiting voor content optimalisatie
-    await this.checkRateLimit('seo:optimize', 100); // 100 requests per minuut
+    await this.checkRateLimit("seo:optimize", 100); // 100 requests per minuut
 
     const suggestions = await this.serpApi.getContentSuggestions(
       content,
-      targetKeywords
+      targetKeywords,
     );
 
     return {
       originalContent: content,
       targetKeywords,
-      suggestions: this.validateApiResponse(suggestions, 'Content Optimization'),
-      timestamp: new Date().toISOString()
+      suggestions: this.validateApiResponse(
+        suggestions,
+        "Content Optimization",
+      ),
+      timestamp: new Date().toISOString(),
     };
   }
 
@@ -130,23 +152,23 @@ export class SeoService extends BaseService {
     if (data.performance) {
       if (data.performance.score < 90) {
         recommendations.push({
-          type: 'performance',
-          priority: 'high',
-          message: 'Verbeter de laadtijd van de pagina',
-          details: data.performance.opportunities
+          type: "performance",
+          priority: "high",
+          message: "Verbeter de laadtijd van de pagina",
+          details: data.performance.opportunities,
         });
       }
     }
 
     // Keyword aanbevelingen
     if (data.rankings) {
-      const lowRankingKeywords = data.rankings.filter(k => k.position > 10);
+      const lowRankingKeywords = data.rankings.filter((k) => k.position > 10);
       if (lowRankingKeywords.length > 0) {
         recommendations.push({
-          type: 'keywords',
-          priority: 'medium',
-          message: 'Optimaliseer content voor keywords met lage rankings',
-          details: lowRankingKeywords
+          type: "keywords",
+          priority: "medium",
+          message: "Optimaliseer content voor keywords met lage rankings",
+          details: lowRankingKeywords,
         });
       }
     }
@@ -155,10 +177,10 @@ export class SeoService extends BaseService {
     if (data.searchConsole) {
       if (data.searchConsole.clickRate < 2) {
         recommendations.push({
-          type: 'searchConsole',
-          priority: 'high',
-          message: 'Verbeter CTR in zoekresultaten',
-          details: data.searchConsole.queries
+          type: "searchConsole",
+          priority: "high",
+          message: "Verbeter CTR in zoekresultaten",
+          details: data.searchConsole.queries,
         });
       }
     }
@@ -167,10 +189,10 @@ export class SeoService extends BaseService {
     if (data.backlinks) {
       if (data.backlinks.total < 100) {
         recommendations.push({
-          type: 'backlinks',
-          priority: 'medium',
-          message: 'Bouw meer kwalitatieve backlinks op',
-          details: data.backlinks.opportunities
+          type: "backlinks",
+          priority: "medium",
+          message: "Bouw meer kwalitatieve backlinks op",
+          details: data.backlinks.opportunities,
         });
       }
     }

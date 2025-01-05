@@ -1,13 +1,13 @@
-import React from 'react';
-import { Grid, Typography, Box } from '@mui/material';
+import React from "react";
+import { Grid, Typography, Box } from "@mui/material";
 import {
   Search as SearchIcon,
   Campaign as CampaignIcon,
   Analytics as AnalyticsIcon,
   ShoppingCart as ShoppingCartIcon,
-} from '@mui/icons-material';
-import StatCard from '../components/StatCard';
-import { Line } from 'react-chartjs-2';
+} from "@mui/icons-material";
+import StatCard from "../components/StatCard";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -17,7 +17,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 // Registreer Chart.js componenten
 ChartJS.register(
@@ -27,23 +27,23 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 // Voorbeeld data voor de grafieken
 const trafficData = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
   datasets: [
     {
-      label: 'Organisch Verkeer',
+      label: "Organisch Verkeer",
       data: [1200, 1900, 3000, 5000, 4000, 6000],
-      borderColor: 'rgb(75, 192, 192)',
+      borderColor: "rgb(75, 192, 192)",
       tension: 0.1,
     },
     {
-      label: 'Betaald Verkeer',
+      label: "Betaald Verkeer",
       data: [1000, 2000, 2500, 3500, 3000, 4500],
-      borderColor: 'rgb(255, 99, 132)',
+      borderColor: "rgb(255, 99, 132)",
       tension: 0.1,
     },
   ],
@@ -53,11 +53,11 @@ const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'top',
+      position: "top",
     },
     title: {
       display: true,
-      text: 'Website Verkeer',
+      text: "Website Verkeer",
     },
   },
   scales: {
@@ -113,7 +113,7 @@ function Dashboard() {
         <Grid item xs={12}>
           <Box
             sx={{
-              backgroundColor: 'background.paper',
+              backgroundColor: "background.paper",
               p: 3,
               borderRadius: 2,
               boxShadow: 1,

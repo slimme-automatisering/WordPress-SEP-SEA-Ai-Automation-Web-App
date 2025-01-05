@@ -1,9 +1,9 @@
-const request = require('supertest');
-const { v4: uuidv4 } = require('uuid');
-const app = require('../index');
-const { pool } = require('../database');
+const request = require("supertest");
+const { v4: uuidv4 } = require("uuid");
+const app = require("../index");
+const { pool } = require("../database");
 
-describe('License API Tests', () => {
+describe("License API Tests", () => {
   let testLicenseKey;
   let testToken;
 
@@ -39,105 +39,119 @@ describe('License API Tests', () => {
     // Maak een test licentie aan
     testLicenseKey = uuidv4();
     const result = await pool.query(
-      'INSERT INTO licenses (id, type, key, company_name, valid_until, max_api_calls) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [uuidv4(), 'trial', testLicenseKey, 'Test Company', new Date(Date.now() + 86400000), 1000]
+      "INSERT INTO licenses (id, type, key, company_name, valid_until, max_api_calls) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [
+        uuidv4(),
+        "trial",
+        testLicenseKey,
+        "Test Company",
+        new Date(Date.now() + 86400000),
+        1000,
+      ],
     );
 
     // Verkrijg een test token
     const response = await request(app)
-      .post('/api/v1/licenses/verify')
+      .post("/api/v1/licenses/verify")
       .send({ key: testLicenseKey });
-    
+
     testToken = response.body.token;
   });
 
   afterEach(async () => {
     // Verwijder test data
-    await pool.query('DELETE FROM license_usage');
-    await pool.query('DELETE FROM licenses');
+    await pool.query("DELETE FROM license_usage");
+    await pool.query("DELETE FROM licenses");
   });
 
-  describe('POST /api/v1/licenses/verify', () => {
-    it('should verify a valid license', async () => {
+  describe("POST /api/v1/licenses/verify", () => {
+    it("should verify a valid license", async () => {
       const response = await request(app)
-        .post('/api/v1/licenses/verify')
+        .post("/api/v1/licenses/verify")
         .send({ key: testLicenseKey });
 
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('valid', true);
-      expect(response.body).toHaveProperty('token');
+      expect(response.body).toHaveProperty("valid", true);
+      expect(response.body).toHaveProperty("token");
     });
 
-    it('should reject an invalid license', async () => {
+    it("should reject an invalid license", async () => {
       const response = await request(app)
-        .post('/api/v1/licenses/verify')
-        .send({ key: 'invalid-key' });
+        .post("/api/v1/licenses/verify")
+        .send({ key: "invalid-key" });
 
       expect(response.status).toBe(404);
     });
   });
 
-  describe('GET /api/v1/licenses/status/:key', () => {
-    it('should return license status', async () => {
-      const response = await request(app)
-        .get(`/api/v1/licenses/status/${testLicenseKey}`);
+  describe("GET /api/v1/licenses/status/:key", () => {
+    it("should return license status", async () => {
+      const response = await request(app).get(
+        `/api/v1/licenses/status/${testLicenseKey}`,
+      );
 
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('type', 'trial');
-      expect(response.body).toHaveProperty('is_active', true);
+      expect(response.body).toHaveProperty("type", "trial");
+      expect(response.body).toHaveProperty("is_active", true);
     });
   });
 
-  describe('POST /api/v1/licenses/activate', () => {
-    it('should activate a new license', async () => {
+  describe("POST /api/v1/licenses/activate", () => {
+    it("should activate a new license", async () => {
       const newKey = uuidv4();
       const response = await request(app)
-        .post('/api/v1/licenses/activate')
-        .set('Authorization', `Bearer ${testToken}`)
+        .post("/api/v1/licenses/activate")
+        .set("Authorization", `Bearer ${testToken}`)
         .send({
           key: newKey,
-          companyName: 'New Company',
-          domains: ['example.com']
+          companyName: "New Company",
+          domains: ["example.com"],
         });
 
       expect(response.status).toBe(201);
-      expect(response.body).toHaveProperty('message', 'Licentie succesvol geactiveerd');
+      expect(response.body).toHaveProperty(
+        "message",
+        "Licentie succesvol geactiveerd",
+      );
     });
   });
 
-  describe('PUT /api/v1/licenses/deactivate', () => {
-    it('should deactivate a license', async () => {
+  describe("PUT /api/v1/licenses/deactivate", () => {
+    it("should deactivate a license", async () => {
       const response = await request(app)
-        .put('/api/v1/licenses/deactivate')
-        .set('Authorization', `Bearer ${testToken}`)
+        .put("/api/v1/licenses/deactivate")
+        .set("Authorization", `Bearer ${testToken}`)
         .send({ key: testLicenseKey });
 
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('message', 'Licentie succesvol gedeactiveerd');
+      expect(response.body).toHaveProperty(
+        "message",
+        "Licentie succesvol gedeactiveerd",
+      );
     });
   });
 
-  describe('POST /api/v1/licenses/upgrade', () => {
-    it('should upgrade a license', async () => {
+  describe("POST /api/v1/licenses/upgrade", () => {
+    it("should upgrade a license", async () => {
       const response = await request(app)
-        .post('/api/v1/licenses/upgrade')
-        .set('Authorization', `Bearer ${testToken}`)
+        .post("/api/v1/licenses/upgrade")
+        .set("Authorization", `Bearer ${testToken}`)
         .send({
           key: testLicenseKey,
-          newType: 'professional'
+          newType: "professional",
         });
 
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('type', 'professional');
+      expect(response.body).toHaveProperty("type", "professional");
     });
 
-    it('should reject invalid upgrade type', async () => {
+    it("should reject invalid upgrade type", async () => {
       const response = await request(app)
-        .post('/api/v1/licenses/upgrade')
-        .set('Authorization', `Bearer ${testToken}`)
+        .post("/api/v1/licenses/upgrade")
+        .set("Authorization", `Bearer ${testToken}`)
         .send({
           key: testLicenseKey,
-          newType: 'invalid-type'
+          newType: "invalid-type",
         });
 
       expect(response.status).toBe(400);

@@ -16,44 +16,37 @@ services:
     networks:
       - seo_sea_network
 
-  frontend:
+  app:
     build:
       context: .
-      dockerfile: frontend.Dockerfile.dev
+      dockerfile: Dockerfile.dev
     volumes:
-      - ./src/frontend:/app/src/frontend
-      - ./public:/app/public
-      - frontend_node_modules:/app/node_modules
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - api_node_modules:/app/node_modules
     environment:
       - NODE_ENV=development
-      - VITE_API_URL=http://api.localhost
+      - MONGODB_URI=mongodb://root:example@mongodb:27017/seo-sea?authSource=admin
+      - REDIS_URI=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`app.localhost`)"
-      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+      - "traefik.http.routers.app.rule=Host(`app.localhost`)"
+      - "traefik.http.services.app.loadbalancer.server.port=3000"
     networks:
       - seo_sea_network
     depends_on:
-      - api
-
-  dashboard:
-    build:
-      context: .
-      dockerfile: dashboard.Dockerfile.dev
-    volumes:
-      - ./src/dashboard:/app/src/dashboard
-      - dashboard_node_modules:/app/node_modules
-    environment:
-      - NODE_ENV=development
-      - VITE_API_URL=http://api.localhost
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`dashboard.localhost`)"
-      - "traefik.http.services.dashboard.loadbalancer.server.port=3001"
-    networks:
-      - seo_sea_network
-    depends_on:
-      - api
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
 
   api:
     build:
@@ -80,12 +73,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 1G
 
   mongodb:
     image: mongo:6

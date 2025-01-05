@@ -1,6 +1,6 @@
-import nodemailer from 'nodemailer';
-import logger from '../utils/logger.js';
-import AppError from '../utils/errorHandler.js';
+import nodemailer from "nodemailer";
+import logger from "../utils/logger.js";
+import AppError from "../utils/errorHandler.js";
 
 class EmailService {
   constructor() {
@@ -10,8 +10,8 @@ class EmailService {
       secure: true,
       auth: {
         user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-      }
+        pass: process.env.SMTP_PASS,
+      },
     });
   }
 
@@ -21,21 +21,21 @@ class EmailService {
         from: process.env.SMTP_FROM,
         to: recipient,
         subject: template.subject,
-        html: this.compileTemplate(template.body, data)
+        html: this.compileTemplate(template.body, data),
       };
 
       const info = await this.transporter.sendMail(mailOptions);
       logger.info(`Email verzonden: ${info.messageId}`);
       return info;
     } catch (error) {
-      logger.error('Email sending error:', error);
-      throw new AppError('Email verzenden mislukt', 500);
+      logger.error("Email sending error:", error);
+      throw new AppError("Email verzenden mislukt", 500);
     }
   }
 
   compileTemplate(template, data) {
-    return template.replace(/\${(\w+)}/g, (match, key) => data[key] || '');
+    return template.replace(/\${(\w+)}/g, (match, key) => data[key] || "");
   }
 }
 
-export default new EmailService(); 
+export default new EmailService();

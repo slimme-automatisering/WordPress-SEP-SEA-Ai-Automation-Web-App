@@ -1,5 +1,5 @@
-import crypto from 'crypto-js';
-import jwt from 'jsonwebtoken';
+import crypto from "crypto-js";
+import jwt from "jsonwebtoken";
 
 export class LicenseService {
   constructor() {
@@ -7,24 +7,21 @@ export class LicenseService {
   }
 
   generateLicense(clientData) {
-    const {
-      domain,
-      email,
-      accountId,
-      purchaseDate
-    } = clientData;
+    const { domain, email, accountId, purchaseDate } = clientData;
 
     const licenseData = {
       domain,
       email,
       accountId,
       purchaseDate,
-      expiryDate: new Date(purchaseDate).setFullYear(new Date(purchaseDate).getFullYear() + 1)
+      expiryDate: new Date(purchaseDate).setFullYear(
+        new Date(purchaseDate).getFullYear() + 1,
+      ),
     };
 
     const encryptedData = crypto.AES.encrypt(
       JSON.stringify(licenseData),
-      this.secretKey
+      this.secretKey,
     ).toString();
 
     return encryptedData;
@@ -40,12 +37,12 @@ export class LicenseService {
 
       return {
         isValid: now < expiryDate,
-        licenseData
+        licenseData,
       };
     } catch (error) {
       return {
         isValid: false,
-        error: 'Invalid license key'
+        error: "Invalid license key",
       };
     }
   }

@@ -1,14 +1,14 @@
-import React from 'react';
-import { Card, CardContent, Typography, Box } from '@mui/material';
-import { TrendingUp, TrendingDown } from '@mui/icons-material';
+import React from "react";
+import { Card, CardContent, Typography, Box } from "@mui/material";
+import { TrendingUp, TrendingDown } from "@mui/icons-material";
 
 function StatCard({ title, value, change, icon: Icon }) {
   const isPositive = change >= 0;
 
   return (
-    <Card sx={{ height: '100%' }}>
+    <Card sx={{ height: "100%" }}>
       <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
           <Typography variant="h6" color="text.secondary">
             {title}
           </Typography>
@@ -19,7 +19,7 @@ function StatCard({ title, value, change, icon: Icon }) {
           {value}
         </Typography>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           {isPositive ? (
             <TrendingUp color="success" />
           ) : (
@@ -27,9 +27,9 @@ function StatCard({ title, value, change, icon: Icon }) {
           )}
           <Typography
             variant="body2"
-            color={isPositive ? 'success.main' : 'error.main'}
+            color={isPositive ? "success.main" : "error.main"}
           >
-            {Math.abs(change)}% {isPositive ? 'stijging' : 'daling'}
+            {Math.abs(change)}% {isPositive ? "stijging" : "daling"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             vs vorige periode

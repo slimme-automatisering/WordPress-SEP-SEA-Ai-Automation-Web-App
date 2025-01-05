@@ -1,10 +1,11 @@
-import OpenAI from 'openai';
-import { logger } from '../utils/logger.js';
+import OpenAI from "openai";
+import { logger } from "../utils/logger.js";
 
 export class ContentOptimizationService {
   constructor() {
     this.openai = new OpenAI({
-      apiKey: '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'
+      apiKey:
+        "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",
     });
   }
 
@@ -16,30 +17,34 @@ export class ContentOptimizationService {
         messages: [
           {
             role: "system",
-            content: "You are an SEO expert specialized in content optimization. Optimize content while maintaining readability and natural flow."
+            content:
+              "You are an SEO expert specialized in content optimization. Optimize content while maintaining readability and natural flow.",
           },
           {
             role: "user",
-            content: prompt
-          }
+            content: prompt,
+          },
         ],
         temperature: 0.7,
-        max_tokens: 1500
+        max_tokens: 1500,
       });
 
       return {
         optimizedContent: completion.choices[0].message.content,
-        keywordDensity: this.calculateKeywordDensity(completion.choices[0].message.content, keywords)
+        keywordDensity: this.calculateKeywordDensity(
+          completion.choices[0].message.content,
+          keywords,
+        ),
       };
     } catch (error) {
-      logger.error('Content optimization failed:', error);
+      logger.error("Content optimization failed:", error);
       throw error;
     }
   }
 
   buildOptimizationPrompt(content, keywords) {
     return `
-Please optimize the following content for SEO using these target keywords: ${keywords.join(', ')}
+Please optimize the following content for SEO using these target keywords: ${keywords.join(", ")}
 
 Content to optimize:
 ${content}
@@ -57,8 +62,8 @@ Requirements:
     const wordCount = content.split(/\s+/).length;
     const keywordDensity = {};
 
-    keywords.forEach(keyword => {
-      const regex = new RegExp(keyword, 'gi');
+    keywords.forEach((keyword) => {
+      const regex = new RegExp(keyword, "gi");
       const matches = content.match(regex) || [];
       keywordDensity[keyword] = (matches.length / wordCount) * 100;
     });

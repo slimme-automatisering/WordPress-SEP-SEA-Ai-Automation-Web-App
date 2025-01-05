@@ -1,6 +1,6 @@
-import { logger } from '../utils/logger.js';
-import { AppError } from '../utils/errorHandler.js';
-import { redisClient } from '../config/redis.js';
+import { logger } from "../utils/logger.js";
+import { AppError } from "../utils/errorHandler.js";
+import { redisClient } from "../config/redis.js";
 
 export class BaseService {
   constructor() {
@@ -19,22 +19,22 @@ export class BaseService {
       // Check cache
       const cached = await this.cache.get(key);
       if (cached) {
-        this.logger.debug('Cache hit:', { key });
+        this.logger.debug("Cache hit:", { key });
         return JSON.parse(cached);
       }
 
       // Cache miss, fetch data
-      this.logger.debug('Cache miss:', { key });
+      this.logger.debug("Cache miss:", { key });
       const data = await fetchData();
 
       // Store in cache
       await this.cache.setex(key, ttl, JSON.stringify(data));
       return data;
     } catch (error) {
-      this.logger.error('Cache error:', {
+      this.logger.error("Cache error:", {
         key,
         error: error.message,
-        stack: error.stack
+        stack: error.stack,
       });
       throw error;
     }
@@ -47,14 +47,14 @@ export class BaseService {
   async invalidateCache(keys) {
     try {
       const keyArray = Array.isArray(keys) ? keys : [keys];
-      await Promise.all(keyArray.map(key => this.cache.del(key)));
-      
-      this.logger.debug('Cache invalidated:', { keys: keyArray });
+      await Promise.all(keyArray.map((key) => this.cache.del(key)));
+
+      this.logger.debug("Cache invalidated:", { keys: keyArray });
     } catch (error) {
-      this.logger.error('Cache invalidation error:', {
+      this.logger.error("Cache invalidation error:", {
         keys,
         error: error.message,
-        stack: error.stack
+        stack: error.stack,
       });
     }
   }
@@ -67,18 +67,18 @@ export class BaseService {
    */
   async checkRateLimit(key, limit, window = 60) {
     const count = await this.cache.incr(key);
-    
+
     if (count === 1) {
       await this.cache.expire(key, window);
     }
 
     if (count > limit) {
-      throw new AppError('Rate limit overschreden', 429);
+      throw new AppError("Rate limit overschreden", 429);
     }
 
     return {
       remaining: Math.max(0, limit - count),
-      reset: await this.cache.ttl(key)
+      reset: await this.cache.ttl(key),
     };
   }
 
@@ -92,38 +92,38 @@ export class BaseService {
     const results = {
       successful: [],
       failed: [],
-      total: items.length
+      total: items.length,
     };
 
     // Verwerk items in batches
     for (let i = 0; i < items.length; i += batchSize) {
       const batch = items.slice(i, i + batchSize);
-      
+
       const batchResults = await Promise.allSettled(
-        batch.map(item => processItem(item))
+        batch.map((item) => processItem(item)),
       );
 
       // Verwerk resultaten
       batchResults.forEach((result, index) => {
-        if (result.status === 'fulfilled') {
+        if (result.status === "fulfilled") {
           results.successful.push({
             item: batch[index],
-            result: result.value
+            result: result.value,
           });
         } else {
           results.failed.push({
             item: batch[index],
-            error: result.reason
+            error: result.reason,
           });
         }
       });
 
       // Log voortgang
-      this.logger.debug('Batch verwerkt:', {
+      this.logger.debug("Batch verwerkt:", {
         processed: Math.min(i + batchSize, items.length),
         total: items.length,
         successful: results.successful.length,
-        failed: results.failed.length
+        failed: results.failed.length,
       });
     }
 
@@ -138,8 +138,8 @@ export class BaseService {
   createCacheKey(prefix, params = {}) {
     const sortedParams = Object.keys(params)
       .sort()
-      .map(key => `${key}:${params[key]}`)
-      .join(':');
+      .map((key) => `${key}:${params[key]}`)
+      .join(":");
 
     return `${prefix}:${sortedParams}`;
   }
@@ -152,18 +152,18 @@ export class BaseService {
   validateApiResponse(response, service) {
     if (!response || response.error) {
       const error = new AppError(
-        `${service} API fout: ${response?.error?.message || 'Onbekende fout'}`,
-        response?.error?.status || 500
+        `${service} API fout: ${response?.error?.message || "Onbekende fout"}`,
+        response?.error?.status || 500,
       );
-      
+
       this.logger.error(`${service} API fout:`, {
         error: response?.error,
-        response
+        response,
       });
-      
+
       throw error;
     }
-    
+
     return response;
   }
 }

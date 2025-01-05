@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -21,18 +21,18 @@ import {
   FormControl,
   InputLabel,
   Typography,
-  Alert
-} from '@mui/material';
+  Alert,
+} from "@mui/material";
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
-  Add as AddIcon
-} from '@mui/icons-material';
+  Add as AddIcon,
+} from "@mui/icons-material";
 
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'currency',
-    currency: 'EUR'
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
   }).format(amount / 1000000); // Convert from micros
 };
 
@@ -42,9 +42,9 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedAdGroup, setSelectedAdGroup] = useState(null);
   const [formData, setFormData] = useState({
-    name: '',
-    status: 'ENABLED',
-    type: 'SEARCH_STANDARD'
+    name: "",
+    status: "ENABLED",
+    type: "SEARCH_STANDARD",
   });
 
   const fetchAdGroups = async () => {
@@ -53,10 +53,12 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/campaigns/${campaignId}/adgroups`);
-      
+      const response = await fetch(
+        `/api/google-ads/${accountId}/campaigns/${campaignId}/adgroups`,
+      );
+
       if (!response.ok) {
-        throw new Error('Kon advertentiegroepen niet ophalen');
+        throw new Error("Kon advertentiegroepen niet ophalen");
       }
 
       const data = await response.json();
@@ -76,16 +78,19 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/campaigns/${campaignId}/adgroups`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `/api/google-ads/${accountId}/campaigns/${campaignId}/adgroups`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error('Kon advertentiegroep niet aanmaken');
+        throw new Error("Kon advertentiegroep niet aanmaken");
       }
 
       await fetchAdGroups();
@@ -104,16 +109,19 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/adgroups/${selectedAdGroup.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `/api/google-ads/${accountId}/adgroups/${selectedAdGroup.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error('Kon advertentiegroep niet bijwerken');
+        throw new Error("Kon advertentiegroep niet bijwerken");
       }
 
       await fetchAdGroups();
@@ -127,19 +135,26 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
   };
 
   const handleDelete = async (adGroupId) => {
-    if (!window.confirm('Weet je zeker dat je deze advertentiegroep wilt verwijderen?')) {
+    if (
+      !window.confirm(
+        "Weet je zeker dat je deze advertentiegroep wilt verwijderen?",
+      )
+    ) {
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/adgroups/${adGroupId}`, {
-        method: 'DELETE'
-      });
+      const response = await fetch(
+        `/api/google-ads/${accountId}/adgroups/${adGroupId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
-        throw new Error('Kon advertentiegroep niet verwijderen');
+        throw new Error("Kon advertentiegroep niet verwijderen");
       }
 
       await fetchAdGroups();
@@ -152,9 +167,9 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      status: 'ENABLED',
-      type: 'SEARCH_STANDARD'
+      name: "",
+      status: "ENABLED",
+      type: "SEARCH_STANDARD",
     });
     setSelectedAdGroup(null);
   };
@@ -164,7 +179,7 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
     setFormData({
       name: adGroup.name,
       status: adGroup.status,
-      type: adGroup.type
+      type: adGroup.type,
     });
     setOpenDialog(true);
   };
@@ -213,7 +228,7 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
                 <TableCell>
                   <Chip
                     label={adGroup.status}
-                    color={adGroup.status === 'ENABLED' ? 'success' : 'default'}
+                    color={adGroup.status === "ENABLED" ? "success" : "default"}
                     size="small"
                   />
                 </TableCell>
@@ -231,10 +246,7 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
                   {adGroup.metrics.conversions.toLocaleString()}
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton
-                    onClick={() => handleEdit(adGroup)}
-                    size="small"
-                  >
+                  <IconButton onClick={() => handleEdit(adGroup)} size="small">
                     <EditIcon />
                   </IconButton>
                   <IconButton
@@ -261,21 +273,27 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
         fullWidth
       >
         <DialogTitle>
-          {selectedAdGroup ? 'Advertentiegroep Bewerken' : 'Nieuwe Advertentiegroep'}
+          {selectedAdGroup
+            ? "Advertentiegroep Bewerken"
+            : "Nieuwe Advertentiegroep"}
         </DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2} pt={2}>
             <TextField
               label="Naam"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               fullWidth
             />
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
               <Select
                 value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
                 label="Status"
               >
                 <MenuItem value="ENABLED">Actief</MenuItem>
@@ -287,12 +305,18 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
               <InputLabel>Type</InputLabel>
               <Select
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
                 label="Type"
               >
                 <MenuItem value="SEARCH_STANDARD">Zoeken - Standaard</MenuItem>
-                <MenuItem value="DISPLAY_STANDARD">Display - Standaard</MenuItem>
-                <MenuItem value="SHOPPING_PRODUCT_ADS">Shopping - Product</MenuItem>
+                <MenuItem value="DISPLAY_STANDARD">
+                  Display - Standaard
+                </MenuItem>
+                <MenuItem value="SHOPPING_PRODUCT_ADS">
+                  Shopping - Product
+                </MenuItem>
                 <MenuItem value="VIDEO_STANDARD">Video - Standaard</MenuItem>
               </Select>
             </FormControl>
@@ -312,7 +336,7 @@ const AdGroupList = ({ accountId, campaignId, onError }) => {
             onClick={selectedAdGroup ? handleUpdate : handleCreate}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Opslaan'}
+            {loading ? <CircularProgress size={24} /> : "Opslaan"}
           </Button>
         </DialogActions>
       </Dialog>

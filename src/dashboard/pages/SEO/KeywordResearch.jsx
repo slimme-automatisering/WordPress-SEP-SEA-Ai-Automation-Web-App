@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Paper,
@@ -18,35 +18,35 @@ import {
   TableRow,
   CircularProgress,
   Alert,
-  MenuItem
-} from '@mui/material';
+  MenuItem,
+} from "@mui/material";
 import {
   Search as SearchIcon,
   Download as DownloadIcon,
   Refresh as RefreshIcon,
   TrendingUp as TrendingUpIcon,
-  Assignment as AssignmentIcon
-} from '@mui/icons-material';
-import { useTheme } from '@mui/material/styles';
-import { Line } from 'react-chartjs-2';
+  Assignment as AssignmentIcon,
+} from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
+import { Line } from "react-chartjs-2";
 
 const difficultyColor = (score) => {
-  if (score < 30) return 'success';
-  if (score < 60) return 'warning';
-  return 'error';
+  if (score < 30) return "success";
+  if (score < 60) return "warning";
+  return "error";
 };
 
 const KeywordResearch = () => {
   const theme = useTheme();
-  const [keywords, setKeywords] = useState('');
+  const [keywords, setKeywords] = useState("");
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [exportFormat, setExportFormat] = useState('csv');
+  const [exportFormat, setExportFormat] = useState("csv");
 
   const analyzeKeywords = async () => {
     if (!keywords.trim()) {
-      setError('Voer minimaal één keyword in');
+      setError("Voer minimaal één keyword in");
       return;
     }
 
@@ -54,18 +54,21 @@ const KeywordResearch = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/keywords/analyze', {
-        method: 'POST',
+      const response = await fetch("/api/keywords/analyze", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          keywords: keywords.split('\n').map(k => k.trim()).filter(k => k)
+          keywords: keywords
+            .split("\n")
+            .map((k) => k.trim())
+            .filter((k) => k),
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Keyword analyse mislukt');
+        throw new Error("Keyword analyse mislukt");
       }
 
       const data = await response.json();
@@ -81,50 +84,52 @@ const KeywordResearch = () => {
     if (!results) return;
 
     try {
-      const response = await fetch('/api/keywords/export', {
-        method: 'POST',
+      const response = await fetch("/api/keywords/export", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           keywords: results,
-          format: exportFormat
+          format: exportFormat,
         }),
       });
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `keyword-analysis-${new Date().toISOString().split('T')[0]}.${exportFormat}`;
+      a.download = `keyword-analysis-${new Date().toISOString().split("T")[0]}.${exportFormat}`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (err) {
-      setError('Export mislukt');
+      setError("Export mislukt");
     }
   };
 
-  const chartData = results ? {
-    labels: results.map(r => r.keyword),
-    datasets: [
-      {
-        label: 'Zoekvolume',
-        data: results.map(r => r.search_volume),
-        borderColor: theme.palette.primary.main,
-        backgroundColor: theme.palette.primary.light,
-        fill: true
-      },
-      {
-        label: 'Moeilijkheid',
-        data: results.map(r => r.difficulty),
-        borderColor: theme.palette.secondary.main,
-        backgroundColor: theme.palette.secondary.light,
-        fill: true
+  const chartData = results
+    ? {
+        labels: results.map((r) => r.keyword),
+        datasets: [
+          {
+            label: "Zoekvolume",
+            data: results.map((r) => r.search_volume),
+            borderColor: theme.palette.primary.main,
+            backgroundColor: theme.palette.primary.light,
+            fill: true,
+          },
+          {
+            label: "Moeilijkheid",
+            data: results.map((r) => r.difficulty),
+            borderColor: theme.palette.secondary.main,
+            backgroundColor: theme.palette.secondary.light,
+            fill: true,
+          },
+        ],
       }
-    ]
-  } : null;
+    : null;
 
   return (
     <Box>
@@ -158,7 +163,9 @@ const KeywordResearch = () => {
             <Box display="flex" gap={2}>
               <Button
                 variant="contained"
-                startIcon={loading ? <CircularProgress size={20} /> : <SearchIcon />}
+                startIcon={
+                  loading ? <CircularProgress size={20} /> : <SearchIcon />
+                }
                 onClick={analyzeKeywords}
                 disabled={loading}
               >
@@ -196,9 +203,7 @@ const KeywordResearch = () => {
                     <Typography color="textSecondary" gutterBottom>
                       Totaal Keywords
                     </Typography>
-                    <Typography variant="h5">
-                      {results.length}
-                    </Typography>
+                    <Typography variant="h5">{results.length}</Typography>
                   </CardContent>
                 </Card>
               </Grid>
@@ -209,7 +214,10 @@ const KeywordResearch = () => {
                       Gem. Zoekvolume
                     </Typography>
                     <Typography variant="h5">
-                      {Math.round(results.reduce((acc, r) => acc + r.search_volume, 0) / results.length)}
+                      {Math.round(
+                        results.reduce((acc, r) => acc + r.search_volume, 0) /
+                          results.length,
+                      )}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -235,7 +243,9 @@ const KeywordResearch = () => {
                   {results.map((result) => (
                     <TableRow key={result.keyword}>
                       <TableCell>{result.keyword}</TableCell>
-                      <TableCell align="right">{result.search_volume}</TableCell>
+                      <TableCell align="right">
+                        {result.search_volume}
+                      </TableCell>
                       <TableCell align="right">
                         <Chip
                           label={`${result.difficulty}%`}
@@ -278,13 +288,13 @@ const KeywordResearch = () => {
                     maintainAspectRatio: false,
                     interaction: {
                       intersect: false,
-                      mode: 'index'
+                      mode: "index",
                     },
                     scales: {
                       y: {
-                        beginAtZero: true
-                      }
-                    }
+                        beginAtZero: true,
+                      },
+                    },
                   }}
                 />
               </Box>

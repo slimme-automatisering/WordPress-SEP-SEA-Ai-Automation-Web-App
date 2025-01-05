@@ -1,7 +1,7 @@
-import React from 'react'
-import Grid from '@mui/material/Grid'
-import Paper from '@mui/material/Paper'
-import Typography from '@mui/material/Typography'
+import React from "react";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 
 function Campaigns() {
   return (
@@ -17,7 +17,7 @@ function Campaigns() {
         </Paper>
       </Grid>
     </Grid>
-  )
+  );
 }
 
-export default Campaigns
+export default Campaigns;

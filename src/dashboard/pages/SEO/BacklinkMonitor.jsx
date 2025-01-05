@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -23,8 +23,8 @@ import {
   Select,
   FormControl,
   InputLabel,
-  Tooltip
-} from '@mui/material';
+  Tooltip,
+} from "@mui/material";
 import {
   Search as SearchIcon,
   Download as DownloadIcon,
@@ -34,28 +34,28 @@ import {
   Link as LinkIcon,
   CheckCircle as CheckCircleIcon,
   Error as ErrorIcon,
-  Warning as WarningIcon
-} from '@mui/icons-material';
-import { Line } from 'react-chartjs-2';
-import { useTheme } from '@mui/material/styles';
+  Warning as WarningIcon,
+} from "@mui/icons-material";
+import { Line } from "react-chartjs-2";
+import { useTheme } from "@mui/material/styles";
 
 const statusColors = {
-  active: 'success',
-  lost: 'error',
-  new: 'info'
+  active: "success",
+  lost: "error",
+  new: "info",
 };
 
 const BacklinkMonitor = () => {
   const theme = useTheme();
-  const [domain, setDomain] = useState('');
+  const [domain, setDomain] = useState("");
   const [backlinks, setBacklinks] = useState([]);
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [status, setStatus] = useState('all');
-  const [exportFormat, setExportFormat] = useState('csv');
+  const [status, setStatus] = useState("all");
+  const [exportFormat, setExportFormat] = useState("csv");
 
   const fetchBacklinks = async () => {
     if (!domain) return;
@@ -64,10 +64,12 @@ const BacklinkMonitor = () => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/backlinks/${domain}?page=${page + 1}&limit=${rowsPerPage}&status=${status}`);
-      
+      const response = await fetch(
+        `/api/backlinks/${domain}?page=${page + 1}&limit=${rowsPerPage}&status=${status}`,
+      );
+
       if (!response.ok) {
-        throw new Error('Kon backlinks niet ophalen');
+        throw new Error("Kon backlinks niet ophalen");
       }
 
       const data = await response.json();
@@ -82,7 +84,7 @@ const BacklinkMonitor = () => {
 
   const handleCheck = async () => {
     if (!domain) {
-      setError('Voer een domein in');
+      setError("Voer een domein in");
       return;
     }
 
@@ -90,16 +92,16 @@ const BacklinkMonitor = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/backlinks/check', {
-        method: 'POST',
+      const response = await fetch("/api/backlinks/check", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ domain }),
       });
 
       if (!response.ok) {
-        throw new Error('Backlink check mislukt');
+        throw new Error("Backlink check mislukt");
       }
 
       const data = await response.json();
@@ -114,19 +116,21 @@ const BacklinkMonitor = () => {
 
   const handleExport = async () => {
     try {
-      const response = await fetch(`/api/backlinks/${domain}/export?format=${exportFormat}`);
-      
+      const response = await fetch(
+        `/api/backlinks/${domain}/export?format=${exportFormat}`,
+      );
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `backlinks-${domain}-${new Date().toISOString().split('T')[0]}.${exportFormat}`;
+      a.download = `backlinks-${domain}-${new Date().toISOString().split("T")[0]}.${exportFormat}`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (err) {
-      setError('Export mislukt');
+      setError("Export mislukt");
     }
   };
 
@@ -136,26 +140,28 @@ const BacklinkMonitor = () => {
     }
   }, [page, rowsPerPage, status]);
 
-  const chartData = metrics ? {
-    labels: ['Actief', 'Verloren', 'Nieuw'],
-    datasets: [
-      {
-        label: 'Backlinks per Status',
-        data: [metrics.active, metrics.lost, metrics.new],
-        backgroundColor: [
-          theme.palette.success.light,
-          theme.palette.error.light,
-          theme.palette.info.light
+  const chartData = metrics
+    ? {
+        labels: ["Actief", "Verloren", "Nieuw"],
+        datasets: [
+          {
+            label: "Backlinks per Status",
+            data: [metrics.active, metrics.lost, metrics.new],
+            backgroundColor: [
+              theme.palette.success.light,
+              theme.palette.error.light,
+              theme.palette.info.light,
+            ],
+            borderColor: [
+              theme.palette.success.main,
+              theme.palette.error.main,
+              theme.palette.info.main,
+            ],
+            borderWidth: 1,
+          },
         ],
-        borderColor: [
-          theme.palette.success.main,
-          theme.palette.error.main,
-          theme.palette.info.main
-        ],
-        borderWidth: 1
       }
-    ]
-  } : null;
+    : null;
 
   return (
     <Box>
@@ -184,7 +190,9 @@ const BacklinkMonitor = () => {
               />
               <Button
                 variant="contained"
-                startIcon={loading ? <CircularProgress size={20} /> : <SearchIcon />}
+                startIcon={
+                  loading ? <CircularProgress size={20} /> : <SearchIcon />
+                }
                 onClick={handleCheck}
                 disabled={loading}
               >
@@ -222,9 +230,7 @@ const BacklinkMonitor = () => {
                   <Typography color="textSecondary" gutterBottom>
                     Totaal Backlinks
                   </Typography>
-                  <Typography variant="h4">
-                    {metrics.total}
-                  </Typography>
+                  <Typography variant="h4">{metrics.total}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -279,9 +285,9 @@ const BacklinkMonitor = () => {
                       maintainAspectRatio: false,
                       plugins: {
                         legend: {
-                          position: 'top',
-                        }
-                      }
+                          position: "top",
+                        },
+                      },
                     }}
                   />
                 </Box>
@@ -292,9 +298,7 @@ const BacklinkMonitor = () => {
             <Grid item xs={12}>
               <Paper>
                 <Box p={2} display="flex" alignItems="center" gap={2}>
-                  <Typography variant="h6">
-                    Backlinks
-                  </Typography>
+                  <Typography variant="h6">Backlinks</Typography>
                   <FormControl sx={{ minWidth: 120 }}>
                     <InputLabel>Status</InputLabel>
                     <Select

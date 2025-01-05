@@ -1,84 +1,86 @@
-import mongoose from 'mongoose';
-import { BaseModel } from './baseModel.js';
+import mongoose from "mongoose";
+import { BaseModel } from "./baseModel.js";
 
 const keywordSchema = new mongoose.Schema({
   text: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   volume: {
     type: Number,
-    default: 0
+    default: 0,
   },
   difficulty: {
     type: Number,
     min: 0,
     max: 100,
-    default: 50
+    default: 50,
   },
   position: {
     type: Number,
-    min: 1
+    min: 1,
   },
   url: {
     type: String,
-    trim: true
+    trim: true,
   },
   lastChecked: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 const auditSchema = new mongoose.Schema({
   url: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   score: {
     type: Number,
     min: 0,
     max: 100,
-    required: true
+    required: true,
   },
-  issues: [{
-    type: {
-      type: String,
-      enum: ['error', 'warning', 'info'],
-      required: true
+  issues: [
+    {
+      type: {
+        type: String,
+        enum: ["error", "warning", "info"],
+        required: true,
+      },
+      message: {
+        type: String,
+        required: true,
+      },
+      code: String,
+      impact: {
+        type: String,
+        enum: ["high", "medium", "low"],
+      },
+      details: mongoose.Schema.Types.Mixed,
     },
-    message: {
-      type: String,
-      required: true
-    },
-    code: String,
-    impact: {
-      type: String,
-      enum: ['high', 'medium', 'low']
-    },
-    details: mongoose.Schema.Types.Mixed
-  }],
+  ],
   performance: {
     score: {
       type: Number,
       min: 0,
-      max: 100
+      max: 100,
     },
     metrics: {
       fcp: Number, // First Contentful Paint
       lcp: Number, // Largest Contentful Paint
       cls: Number, // Cumulative Layout Shift
       fid: Number, // First Input Delay
-      ttfb: Number // Time to First Byte
-    }
+      ttfb: Number, // Time to First Byte
+    },
   },
   seo: {
     score: {
       type: Number,
       min: 0,
-      max: 100
+      max: 100,
     },
     title: String,
     description: String,
@@ -86,144 +88,154 @@ const auditSchema = new mongoose.Schema({
     headings: {
       h1: [String],
       h2: [String],
-      h3: [String]
-    }
+      h3: [String],
+    },
   },
   accessibility: {
     score: {
       type: Number,
       min: 0,
-      max: 100
+      max: 100,
     },
-    issues: [{
-      type: String,
-      message: String,
-      impact: String
-    }]
+    issues: [
+      {
+        type: String,
+        message: String,
+        impact: String,
+      },
+    ],
   },
   bestPractices: {
     score: {
       type: Number,
       min: 0,
-      max: 100
+      max: 100,
     },
-    issues: [{
-      type: String,
-      message: String,
-      impact: String
-    }]
-  }
+    issues: [
+      {
+        type: String,
+        message: String,
+        impact: String,
+      },
+    ],
+  },
 });
 
 const contentSchema = new mongoose.Schema({
   url: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   type: {
     type: String,
-    enum: ['page', 'post', 'product'],
-    required: true
+    enum: ["page", "post", "product"],
+    required: true,
   },
   title: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   content: {
     type: String,
-    required: true
+    required: true,
   },
-  keywords: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Keyword'
-  }],
+  keywords: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Keyword",
+    },
+  ],
   readability: {
     score: {
       type: Number,
       min: 0,
-      max: 100
+      max: 100,
     },
-    issues: [{
-      type: String,
-      message: String,
-      suggestion: String
-    }]
+    issues: [
+      {
+        type: String,
+        message: String,
+        suggestion: String,
+      },
+    ],
   },
   optimization: {
     score: {
       type: Number,
       min: 0,
-      max: 100
+      max: 100,
     },
-    suggestions: [{
-      type: String,
-      message: String,
-      priority: {
+    suggestions: [
+      {
         type: String,
-        enum: ['high', 'medium', 'low']
-      }
-    }]
-  }
+        message: String,
+        priority: {
+          type: String,
+          enum: ["high", "medium", "low"],
+        },
+      },
+    ],
+  },
 });
 
 const backlinksSchema = new mongoose.Schema({
   sourceUrl: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   targetUrl: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   anchor: {
     type: String,
-    trim: true
+    trim: true,
   },
   type: {
     type: String,
-    enum: ['follow', 'nofollow'],
-    default: 'follow'
+    enum: ["follow", "nofollow"],
+    default: "follow",
   },
   firstSeen: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   lastSeen: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   status: {
     type: String,
-    enum: ['active', 'lost', 'broken'],
-    default: 'active'
+    enum: ["active", "lost", "broken"],
+    default: "active",
   },
   domainAuthority: {
     type: Number,
     min: 0,
-    max: 100
+    max: 100,
   },
   pageAuthority: {
     type: Number,
     min: 0,
-    max: 100
-  }
+    max: 100,
+  },
 });
 
 // Schemadefinities
 const schema = new mongoose.Schema({
   projectId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Project',
-    required: true
+    ref: "Project",
+    required: true,
   },
   domain: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   keywords: [keywordSchema],
   audits: [auditSchema],
@@ -235,36 +247,36 @@ const schema = new mongoose.Schema({
     excludedUrls: [String],
     crawlFrequency: {
       type: String,
-      enum: ['daily', 'weekly', 'monthly'],
-      default: 'weekly'
+      enum: ["daily", "weekly", "monthly"],
+      default: "weekly",
     },
     notifications: {
       rankingChanges: {
         type: Boolean,
-        default: true
+        default: true,
       },
       issuesFound: {
         type: Boolean,
-        default: true
+        default: true,
       },
       newBacklinks: {
         type: Boolean,
-        default: true
-      }
-    }
-  }
+        default: true,
+      },
+    },
+  },
 });
 
 // Indexes
 schema.index({ projectId: 1, domain: 1 }, { unique: true });
-schema.index({ 'keywords.text': 1 });
-schema.index({ 'audits.url': 1 });
-schema.index({ 'content.url': 1 });
-schema.index({ 'backlinks.sourceUrl': 1, 'backlinks.targetUrl': 1 });
+schema.index({ "keywords.text": 1 });
+schema.index({ "audits.url": 1 });
+schema.index({ "content.url": 1 });
+schema.index({ "backlinks.sourceUrl": 1, "backlinks.targetUrl": 1 });
 
 export class SeoModel extends BaseModel {
   constructor() {
-    super('Seo', schema);
+    super("Seo", schema);
   }
 
   /**
@@ -283,8 +295,13 @@ export class SeoModel extends BaseModel {
    */
   async updateKeywordPosition(projectId, keywordId, position) {
     return this.model.updateOne(
-      { projectId, 'keywords._id': keywordId },
-      { $set: { 'keywords.$.position': position, 'keywords.$.lastChecked': new Date() } }
+      { projectId, "keywords._id": keywordId },
+      {
+        $set: {
+          "keywords.$.position": position,
+          "keywords.$.lastChecked": new Date(),
+        },
+      },
     );
   }
 
@@ -307,7 +324,7 @@ export class SeoModel extends BaseModel {
     if (!doc) return null;
 
     return doc.audits
-      .filter(audit => audit.url === url)
+      .filter((audit) => audit.url === url)
       .sort((a, b) => b.createdAt - a.createdAt)[0];
   }
 
@@ -327,8 +344,8 @@ export class SeoModel extends BaseModel {
    */
   async updateContentOptimization(projectId, contentId, optimization) {
     return this.model.updateOne(
-      { projectId, 'content._id': contentId },
-      { $set: { 'content.$.optimization': optimization } }
+      { projectId, "content._id": contentId },
+      { $set: { "content.$.optimization": optimization } },
     );
   }
 
@@ -348,13 +365,13 @@ export class SeoModel extends BaseModel {
    */
   async updateBacklinkStatus(projectId, backlinkId, status) {
     return this.model.updateOne(
-      { projectId, 'backlinks._id': backlinkId },
-      { 
-        $set: { 
-          'backlinks.$.status': status,
-          'backlinks.$.lastSeen': new Date()
-        } 
-      }
+      { projectId, "backlinks._id": backlinkId },
+      {
+        $set: {
+          "backlinks.$.status": status,
+          "backlinks.$.lastSeen": new Date(),
+        },
+      },
     );
   }
 }

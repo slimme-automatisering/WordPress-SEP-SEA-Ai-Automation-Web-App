@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -30,8 +30,8 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel
-} from '@mui/material';
+  InputLabel,
+} from "@mui/material";
 import {
   Add as AddIcon,
   Edit as EditIcon,
@@ -40,17 +40,17 @@ import {
   TrendingUp as TrendingUpIcon,
   Campaign as CampaignIcon,
   Group as GroupIcon,
-  Ads as AdsIcon
-} from '@mui/icons-material';
-import { Line, Bar } from 'react-chartjs-2';
-import { useTheme } from '@mui/material/styles';
+  Ads as AdsIcon,
+} from "@mui/icons-material";
+import { Line, Bar } from "react-chartjs-2";
+import { useTheme } from "@mui/material/styles";
 
 // Componenten
-import CampaignList from './components/CampaignList';
-import AdGroupList from './components/AdGroupList';
-import AdList from './components/AdList';
-import MetricsOverview from './components/MetricsOverview';
-import CampaignForm from './components/CampaignForm';
+import CampaignList from "./components/CampaignList";
+import AdGroupList from "./components/AdGroupList";
+import AdList from "./components/AdList";
+import MetricsOverview from "./components/MetricsOverview";
+import CampaignForm from "./components/CampaignForm";
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -63,11 +63,7 @@ const TabPanel = (props) => {
       aria-labelledby={`google-ads-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 };
@@ -80,18 +76,20 @@ const GoogleAds = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const [dialogType, setDialogType] = useState('');
+  const [dialogType, setDialogType] = useState("");
   const [dateRange, setDateRange] = useState({
-    startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    endDate: new Date().toISOString().split('T')[0]
+    startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0],
+    endDate: new Date().toISOString().split("T")[0],
   });
 
   // Account connectie states
-  const [clientId, setClientId] = useState('');
-  const [clientSecret, setClientSecret] = useState('');
-  const [developerToken, setDeveloperToken] = useState('');
-  const [refreshToken, setRefreshToken] = useState('');
-  const [loginCustomerId, setLoginCustomerId] = useState('');
+  const [clientId, setClientId] = useState("");
+  const [clientSecret, setClientSecret] = useState("");
+  const [developerToken, setDeveloperToken] = useState("");
+  const [refreshToken, setRefreshToken] = useState("");
+  const [loginCustomerId, setLoginCustomerId] = useState("");
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -102,22 +100,22 @@ const GoogleAds = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/google-ads/connect', {
-        method: 'POST',
+      const response = await fetch("/api/google-ads/connect", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           clientId,
           clientSecret,
           developerToken,
           refreshToken,
-          loginCustomerId
+          loginCustomerId,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Verbinding mislukt');
+        throw new Error("Verbinding mislukt");
       }
 
       const data = await response.json();
@@ -151,7 +149,7 @@ const GoogleAds = () => {
               <FormControl fullWidth>
                 <InputLabel>Google Ads Account</InputLabel>
                 <Select
-                  value={selectedAccount || ''}
+                  value={selectedAccount || ""}
                   onChange={(e) => setSelectedAccount(e.target.value)}
                   label="Google Ads Account"
                 >
@@ -159,7 +157,10 @@ const GoogleAds = () => {
                     <em>Selecteer een account</em>
                   </MenuItem>
                   {accounts.map((account) => (
-                    <MenuItem key={account.loginCustomerId} value={account.loginCustomerId}>
+                    <MenuItem
+                      key={account.loginCustomerId}
+                      value={account.loginCustomerId}
+                    >
                       {account.loginCustomerId}
                     </MenuItem>
                   ))}
@@ -169,7 +170,7 @@ const GoogleAds = () => {
                 variant="contained"
                 startIcon={<AddIcon />}
                 onClick={() => {
-                  setDialogType('connect');
+                  setDialogType("connect");
                   setOpenDialog(true);
                 }}
               >
@@ -213,17 +214,11 @@ const GoogleAds = () => {
                 </TabPanel>
 
                 <TabPanel value={activeTab} index={1}>
-                  <AdGroupList
-                    accountId={selectedAccount}
-                    onError={setError}
-                  />
+                  <AdGroupList accountId={selectedAccount} onError={setError} />
                 </TabPanel>
 
                 <TabPanel value={activeTab} index={2}>
-                  <AdList
-                    accountId={selectedAccount}
-                    onError={setError}
-                  />
+                  <AdList accountId={selectedAccount} onError={setError} />
                 </TabPanel>
               </Paper>
             </Grid>
@@ -233,14 +228,12 @@ const GoogleAds = () => {
 
       {/* Connect Dialog */}
       <Dialog
-        open={openDialog && dialogType === 'connect'}
+        open={openDialog && dialogType === "connect"}
         onClose={() => setOpenDialog(false)}
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle>
-          Google Ads Account Verbinden
-        </DialogTitle>
+        <DialogTitle>Google Ads Account Verbinden</DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2} pt={2}>
             <TextField
@@ -277,15 +270,13 @@ const GoogleAds = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>
-            Annuleren
-          </Button>
+          <Button onClick={() => setOpenDialog(false)}>Annuleren</Button>
           <Button
             variant="contained"
             onClick={handleConnect}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Verbinden'}
+            {loading ? <CircularProgress size={24} /> : "Verbinden"}
           </Button>
         </DialogActions>
       </Dialog>

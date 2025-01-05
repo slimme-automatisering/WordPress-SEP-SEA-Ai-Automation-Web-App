@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   Paper,
@@ -8,16 +8,16 @@ import {
   Switch,
   FormControlLabel,
   Alert,
-  CircularProgress
-} from '@mui/material';
+  CircularProgress,
+} from "@mui/material";
 
 export default function Settings() {
   const [settings, setSettings] = useState({
-    wordpressUrl: '',
-    wordpressApiKey: '',
-    googleAdsId: '',
+    wordpressUrl: "",
+    wordpressApiKey: "",
+    googleAdsId: "",
     emailNotifications: true,
-    automaticOptimization: false
+    automaticOptimization: false,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -26,14 +26,15 @@ export default function Settings() {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch('/api/settings');
+        const response = await fetch("/api/settings");
         const data = await response.json();
         setSettings(data);
       } catch (error) {
-        console.error('Error fetching settings:', error);
+        console.error("Error fetching settings:", error);
         setAlert({
-          type: 'error',
-          message: 'Er is een fout opgetreden bij het ophalen van de instellingen'
+          type: "error",
+          message:
+            "Er is een fout opgetreden bij het ophalen van de instellingen",
         });
       } finally {
         setLoading(false);
@@ -45,9 +46,9 @@ export default function Settings() {
 
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
-    setSettings(prev => ({
+    setSettings((prev) => ({
       ...prev,
-      [name]: event.target.type === 'checkbox' ? checked : value
+      [name]: event.target.type === "checkbox" ? checked : value,
     }));
   };
 
@@ -55,27 +56,28 @@ export default function Settings() {
     event.preventDefault();
     setSaving(true);
     try {
-      const response = await fetch('/api/settings', {
-        method: 'POST',
+      const response = await fetch("/api/settings", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(settings),
       });
 
       if (response.ok) {
         setAlert({
-          type: 'success',
-          message: 'Instellingen succesvol opgeslagen'
+          type: "success",
+          message: "Instellingen succesvol opgeslagen",
         });
       } else {
-        throw new Error('Fout bij opslaan');
+        throw new Error("Fout bij opslaan");
       }
     } catch (error) {
-      console.error('Error saving settings:', error);
+      console.error("Error saving settings:", error);
       setAlert({
-        type: 'error',
-        message: 'Er is een fout opgetreden bij het opslaan van de instellingen'
+        type: "error",
+        message:
+          "Er is een fout opgetreden bij het opslaan van de instellingen",
       });
     } finally {
       setSaving(false);
@@ -93,8 +95,8 @@ export default function Settings() {
       </Typography>
 
       {alert && (
-        <Alert 
-          severity={alert.type} 
+        <Alert
+          severity={alert.type}
           sx={{ mb: 2 }}
           onClose={() => setAlert(null)}
         >
@@ -181,7 +183,7 @@ export default function Settings() {
           disabled={saving}
           sx={{ mt: 3 }}
         >
-          {saving ? 'Opslaan...' : 'Instellingen Opslaan'}
+          {saving ? "Opslaan..." : "Instellingen Opslaan"}
           {saving && <CircularProgress size={24} sx={{ ml: 1 }} />}
         </Button>
       </form>

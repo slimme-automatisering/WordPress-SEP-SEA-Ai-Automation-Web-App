@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -23,19 +23,19 @@ import {
   Typography,
   Alert,
   Card,
-  CardContent
-} from '@mui/material';
+  CardContent,
+} from "@mui/material";
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Add as AddIcon,
-  Preview as PreviewIcon
-} from '@mui/icons-material';
+  Preview as PreviewIcon,
+} from "@mui/icons-material";
 
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'currency',
-    currency: 'EUR'
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
   }).format(amount / 1000000); // Convert from micros
 };
 
@@ -46,12 +46,12 @@ const AdList = ({ accountId, adGroupId, onError }) => {
   const [selectedAd, setSelectedAd] = useState(null);
   const [previewAd, setPreviewAd] = useState(null);
   const [formData, setFormData] = useState({
-    type: 'EXPANDED_TEXT_AD',
-    headlinesParts: ['', '', ''],
-    descriptions: ['', ''],
-    path1: '',
-    path2: '',
-    finalUrl: ''
+    type: "EXPANDED_TEXT_AD",
+    headlinesParts: ["", "", ""],
+    descriptions: ["", ""],
+    path1: "",
+    path2: "",
+    finalUrl: "",
   });
 
   const fetchAds = async () => {
@@ -60,10 +60,12 @@ const AdList = ({ accountId, adGroupId, onError }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/adgroups/${adGroupId}/ads`);
-      
+      const response = await fetch(
+        `/api/google-ads/${accountId}/adgroups/${adGroupId}/ads`,
+      );
+
       if (!response.ok) {
-        throw new Error('Kon advertenties niet ophalen');
+        throw new Error("Kon advertenties niet ophalen");
       }
 
       const data = await response.json();
@@ -83,16 +85,19 @@ const AdList = ({ accountId, adGroupId, onError }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/adgroups/${adGroupId}/ads`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `/api/google-ads/${accountId}/adgroups/${adGroupId}/ads`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error('Kon advertentie niet aanmaken');
+        throw new Error("Kon advertentie niet aanmaken");
       }
 
       await fetchAds();
@@ -111,16 +116,19 @@ const AdList = ({ accountId, adGroupId, onError }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/ads/${selectedAd.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `/api/google-ads/${accountId}/ads/${selectedAd.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error('Kon advertentie niet bijwerken');
+        throw new Error("Kon advertentie niet bijwerken");
       }
 
       await fetchAds();
@@ -134,7 +142,9 @@ const AdList = ({ accountId, adGroupId, onError }) => {
   };
 
   const handleDelete = async (adId) => {
-    if (!window.confirm('Weet je zeker dat je deze advertentie wilt verwijderen?')) {
+    if (
+      !window.confirm("Weet je zeker dat je deze advertentie wilt verwijderen?")
+    ) {
       return;
     }
 
@@ -142,11 +152,11 @@ const AdList = ({ accountId, adGroupId, onError }) => {
 
     try {
       const response = await fetch(`/api/google-ads/${accountId}/ads/${adId}`, {
-        method: 'DELETE'
+        method: "DELETE",
       });
 
       if (!response.ok) {
-        throw new Error('Kon advertentie niet verwijderen');
+        throw new Error("Kon advertentie niet verwijderen");
       }
 
       await fetchAds();
@@ -159,12 +169,12 @@ const AdList = ({ accountId, adGroupId, onError }) => {
 
   const resetForm = () => {
     setFormData({
-      type: 'EXPANDED_TEXT_AD',
-      headlinesParts: ['', '', ''],
-      descriptions: ['', ''],
-      path1: '',
-      path2: '',
-      finalUrl: ''
+      type: "EXPANDED_TEXT_AD",
+      headlinesParts: ["", "", ""],
+      descriptions: ["", ""],
+      path1: "",
+      path2: "",
+      finalUrl: "",
     });
     setSelectedAd(null);
   };
@@ -177,7 +187,7 @@ const AdList = ({ accountId, adGroupId, onError }) => {
       descriptions: ad.descriptions,
       path1: ad.path1,
       path2: ad.path2,
-      finalUrl: ad.finalUrl
+      finalUrl: ad.finalUrl,
     });
     setOpenDialog(true);
   };
@@ -226,7 +236,7 @@ const AdList = ({ accountId, adGroupId, onError }) => {
                 <TableCell>
                   <Chip
                     label={ad.status}
-                    color={ad.status === 'ENABLED' ? 'success' : 'default'}
+                    color={ad.status === "ENABLED" ? "success" : "default"}
                     size="small"
                   />
                 </TableCell>
@@ -238,22 +248,19 @@ const AdList = ({ accountId, adGroupId, onError }) => {
                   {ad.metrics.clicks.toLocaleString()}
                 </TableCell>
                 <TableCell align="right">
-                  {((ad.metrics.clicks / ad.metrics.impressions) * 100).toFixed(2)}%
+                  {((ad.metrics.clicks / ad.metrics.impressions) * 100).toFixed(
+                    2,
+                  )}
+                  %
                 </TableCell>
                 <TableCell align="right">
                   {formatCurrency(ad.metrics.cost_micros)}
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton
-                    onClick={() => setPreviewAd(ad)}
-                    size="small"
-                  >
+                  <IconButton onClick={() => setPreviewAd(ad)} size="small">
                     <PreviewIcon />
                   </IconButton>
-                  <IconButton
-                    onClick={() => handleEdit(ad)}
-                    size="small"
-                  >
+                  <IconButton onClick={() => handleEdit(ad)} size="small">
                     <EditIcon />
                   </IconButton>
                   <IconButton
@@ -298,9 +305,7 @@ const AdList = ({ accountId, adGroupId, onError }) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setPreviewAd(null)}>
-            Sluiten
-          </Button>
+          <Button onClick={() => setPreviewAd(null)}>Sluiten</Button>
         </DialogActions>
       </Dialog>
 
@@ -315,7 +320,7 @@ const AdList = ({ accountId, adGroupId, onError }) => {
         fullWidth
       >
         <DialogTitle>
-          {selectedAd ? 'Advertentie Bewerken' : 'Nieuwe Advertentie'}
+          {selectedAd ? "Advertentie Bewerken" : "Nieuwe Advertentie"}
         </DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2} pt={2}>
@@ -323,11 +328,17 @@ const AdList = ({ accountId, adGroupId, onError }) => {
               <InputLabel>Type</InputLabel>
               <Select
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
                 label="Type"
               >
-                <MenuItem value="EXPANDED_TEXT_AD">Uitgebreide Tekstadvertentie</MenuItem>
-                <MenuItem value="RESPONSIVE_SEARCH_AD">Responsieve Zoekadvertentie</MenuItem>
+                <MenuItem value="EXPANDED_TEXT_AD">
+                  Uitgebreide Tekstadvertentie
+                </MenuItem>
+                <MenuItem value="RESPONSIVE_SEARCH_AD">
+                  Responsieve Zoekadvertentie
+                </MenuItem>
               </Select>
             </FormControl>
 
@@ -368,13 +379,17 @@ const AdList = ({ accountId, adGroupId, onError }) => {
               <TextField
                 label="Pad 1"
                 value={formData.path1}
-                onChange={(e) => setFormData({ ...formData, path1: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, path1: e.target.value })
+                }
                 fullWidth
               />
               <TextField
                 label="Pad 2"
                 value={formData.path2}
-                onChange={(e) => setFormData({ ...formData, path2: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, path2: e.target.value })
+                }
                 fullWidth
               />
             </Box>
@@ -382,7 +397,9 @@ const AdList = ({ accountId, adGroupId, onError }) => {
             <TextField
               label="Bestemmings-URL"
               value={formData.finalUrl}
-              onChange={(e) => setFormData({ ...formData, finalUrl: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, finalUrl: e.target.value })
+              }
               fullWidth
             />
           </Box>
@@ -401,7 +418,7 @@ const AdList = ({ accountId, adGroupId, onError }) => {
             onClick={selectedAd ? handleUpdate : handleCreate}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Opslaan'}
+            {loading ? <CircularProgress size={24} /> : "Opslaan"}
           </Button>
         </DialogActions>
       </Dialog>

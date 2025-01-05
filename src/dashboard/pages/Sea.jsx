@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Paper,
@@ -10,8 +10,8 @@ import {
   TableHead,
   TableRow,
   Button,
-  CircularProgress
-} from '@mui/material';
+  CircularProgress,
+} from "@mui/material";
 
 export default function Sea() {
   const [campaigns, setCampaigns] = useState([]);
@@ -20,11 +20,11 @@ export default function Sea() {
   useEffect(() => {
     const fetchCampaigns = async () => {
       try {
-        const response = await fetch('/api/ads/campaigns');
+        const response = await fetch("/api/ads/campaigns");
         const data = await response.json();
         setCampaigns(data);
       } catch (error) {
-        console.error('Error fetching campaigns:', error);
+        console.error("Error fetching campaigns:", error);
       } finally {
         setLoading(false);
       }
@@ -46,11 +46,7 @@ export default function Sea() {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              sx={{ mb: 2 }}
-            >
+            <Button variant="contained" color="primary" sx={{ mb: 2 }}>
               Nieuwe Campagne
             </Button>
 
@@ -76,10 +72,14 @@ export default function Sea() {
                       </TableCell>
                       <TableCell align="right">€{campaign.budget}</TableCell>
                       <TableCell align="right">{campaign.clicks}</TableCell>
-                      <TableCell align="right">{campaign.impressions}</TableCell>
+                      <TableCell align="right">
+                        {campaign.impressions}
+                      </TableCell>
                       <TableCell align="right">{campaign.ctr}%</TableCell>
                       <TableCell align="right">€{campaign.cost}</TableCell>
-                      <TableCell align="right">{campaign.conversions}</TableCell>
+                      <TableCell align="right">
+                        {campaign.conversions}
+                      </TableCell>
                       <TableCell>{campaign.status}</TableCell>
                     </TableRow>
                   ))}

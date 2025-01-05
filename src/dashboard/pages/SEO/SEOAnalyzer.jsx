@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Paper,
@@ -19,8 +19,8 @@ import {
   Alert,
   Chip,
   IconButton,
-  Tooltip
-} from '@mui/material';
+  Tooltip,
+} from "@mui/material";
 import {
   Search as SearchIcon,
   ExpandMore as ExpandMoreIcon,
@@ -32,24 +32,24 @@ import {
   Link as LinkIcon,
   Phone as PhoneIcon,
   Share as ShareIcon,
-  Info as InfoIcon
-} from '@mui/icons-material';
+  Info as InfoIcon,
+} from "@mui/icons-material";
 
 const scoreColor = (score) => {
-  if (score >= 80) return 'success';
-  if (score >= 60) return 'warning';
-  return 'error';
+  if (score >= 80) return "success";
+  if (score >= 60) return "warning";
+  return "error";
 };
 
 const SEOAnalyzer = () => {
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState("");
   const [analysis, setAnalysis] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const analyzePage = async () => {
     if (!url.trim()) {
-      setError('Voer een URL in');
+      setError("Voer een URL in");
       return;
     }
 
@@ -57,16 +57,16 @@ const SEOAnalyzer = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
+      const response = await fetch("/api/analyze", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ url }),
       });
 
       if (!response.ok) {
-        throw new Error('Analyse mislukt');
+        throw new Error("Analyse mislukt");
       }
 
       const data = await response.json();
@@ -84,12 +84,15 @@ const SEOAnalyzer = () => {
     const scores = {
       meta: analysis.metaTags.title && analysis.metaTags.description ? 100 : 50,
       headings: analysis.headings.h1.length === 1 ? 100 : 50,
-      images: analysis.images.every(img => img.alt) ? 100 : 50,
+      images: analysis.images.every((img) => img.alt) ? 100 : 50,
       performance: analysis.performance.loadTime < 3000 ? 100 : 50,
-      mobile: analysis.mobileOptimized.hasMobileViewport ? 100 : 0
+      mobile: analysis.mobileOptimized.hasMobileViewport ? 100 : 0,
     };
 
-    return Math.round(Object.values(scores).reduce((a, b) => a + b) / Object.keys(scores).length);
+    return Math.round(
+      Object.values(scores).reduce((a, b) => a + b) /
+        Object.keys(scores).length,
+    );
   };
 
   return (
@@ -119,7 +122,9 @@ const SEOAnalyzer = () => {
               />
               <Button
                 variant="contained"
-                startIcon={loading ? <LinearProgress size={20} /> : <SearchIcon />}
+                startIcon={
+                  loading ? <LinearProgress size={20} /> : <SearchIcon />
+                }
                 onClick={analyzePage}
                 disabled={loading}
               >
@@ -143,7 +148,11 @@ const SEOAnalyzer = () => {
                       {calculateOverallScore()}%
                     </Typography>
                     <Chip
-                      label={scoreColor(calculateOverallScore()) === 'success' ? 'Goed' : 'Verbetering nodig'}
+                      label={
+                        scoreColor(calculateOverallScore()) === "success"
+                          ? "Goed"
+                          : "Verbetering nodig"
+                      }
                       color={scoreColor(calculateOverallScore())}
                     />
                   </Box>
@@ -180,7 +189,10 @@ const SEOAnalyzer = () => {
                         JS Heap Size
                       </Typography>
                       <Typography variant="h6">
-                        {Math.round(analysis.performance.jsHeapSize / 1024 / 1024)}MB
+                        {Math.round(
+                          analysis.performance.jsHeapSize / 1024 / 1024,
+                        )}
+                        MB
                       </Typography>
                     </Grid>
                     <Grid item xs={6} sm={3}>
@@ -188,7 +200,9 @@ const SEOAnalyzer = () => {
                         Mobile Viewport
                       </Typography>
                       <Typography variant="h6">
-                        {analysis.mobileOptimized.hasMobileViewport ? 'Ja' : 'Nee'}
+                        {analysis.mobileOptimized.hasMobileViewport
+                          ? "Ja"
+                          : "Nee"}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -206,9 +220,9 @@ const SEOAnalyzer = () => {
                       <ListItemIcon>
                         <InfoIcon />
                       </ListItemIcon>
-                      <ListItemText 
+                      <ListItemText
                         primary="Meta Tags"
-                        secondary={`${analysis.metaTags.title ? 'Title aanwezig' : 'Title ontbreekt'}, ${analysis.metaTags.description ? 'Description aanwezig' : 'Description ontbreekt'}`}
+                        secondary={`${analysis.metaTags.title ? "Title aanwezig" : "Title ontbreekt"}, ${analysis.metaTags.description ? "Description aanwezig" : "Description ontbreekt"}`}
                       />
                     </AccordionSummary>
                     <AccordionDetails>
@@ -216,19 +230,24 @@ const SEOAnalyzer = () => {
                         <ListItem>
                           <ListItemText
                             primary="Title"
-                            secondary={analysis.metaTags.title || 'Ontbreekt'}
+                            secondary={analysis.metaTags.title || "Ontbreekt"}
                           />
                         </ListItem>
                         <ListItem>
                           <ListItemText
                             primary="Description"
-                            secondary={analysis.metaTags.description || 'Ontbreekt'}
+                            secondary={
+                              analysis.metaTags.description || "Ontbreekt"
+                            }
                           />
                         </ListItem>
                         <ListItem>
                           <ListItemText
                             primary="Keywords"
-                            secondary={analysis.metaTags.keywords || 'Niet gespecificeerd'}
+                            secondary={
+                              analysis.metaTags.keywords ||
+                              "Niet gespecificeerd"
+                            }
                           />
                         </ListItem>
                       </List>
@@ -241,21 +260,23 @@ const SEOAnalyzer = () => {
                       <ListItemIcon>
                         <ShareIcon />
                       </ListItemIcon>
-                      <ListItemText 
+                      <ListItemText
                         primary="Heading Structuur"
                         secondary={`${analysis.headings.h1.length} H1, ${analysis.headings.h2.length} H2, ${analysis.headings.h3.length} H3`}
                       />
                     </AccordionSummary>
                     <AccordionDetails>
                       <List>
-                        {Object.entries(analysis.headings).map(([tag, headings]) => (
-                          <ListItem key={tag}>
-                            <ListItemText
-                              primary={`${tag.toUpperCase()} Tags (${headings.length})`}
-                              secondary={headings.join(', ')}
-                            />
-                          </ListItem>
-                        ))}
+                        {Object.entries(analysis.headings).map(
+                          ([tag, headings]) => (
+                            <ListItem key={tag}>
+                              <ListItemText
+                                primary={`${tag.toUpperCase()} Tags (${headings.length})`}
+                                secondary={headings.join(", ")}
+                              />
+                            </ListItem>
+                          ),
+                        )}
                       </List>
                     </AccordionDetails>
                   </Accordion>
@@ -266,7 +287,7 @@ const SEOAnalyzer = () => {
                       <ListItemIcon>
                         <ImageIcon />
                       </ListItemIcon>
-                      <ListItemText 
+                      <ListItemText
                         primary="Afbeeldingen"
                         secondary={`${analysis.images.length} afbeeldingen gevonden`}
                       />
@@ -276,7 +297,7 @@ const SEOAnalyzer = () => {
                         {analysis.images.map((img, index) => (
                           <ListItem key={index}>
                             <ListItemText
-                              primary={img.alt || 'Geen alt text'}
+                              primary={img.alt || "Geen alt text"}
                               secondary={img.src}
                             />
                             {!img.alt && (
@@ -296,7 +317,7 @@ const SEOAnalyzer = () => {
                       <ListItemIcon>
                         <LinkIcon />
                       </ListItemIcon>
-                      <ListItemText 
+                      <ListItemText
                         primary="Links"
                         secondary={`${analysis.links.internal.length} interne, ${analysis.links.external.length} externe links`}
                       />
@@ -337,9 +358,13 @@ const SEOAnalyzer = () => {
                       <ListItemIcon>
                         <PhoneIcon />
                       </ListItemIcon>
-                      <ListItemText 
+                      <ListItemText
                         primary="Mobile Optimalisatie"
-                        secondary={analysis.mobileOptimized.hasMobileViewport ? 'Mobile-friendly' : 'Niet mobile-friendly'}
+                        secondary={
+                          analysis.mobileOptimized.hasMobileViewport
+                            ? "Mobile-friendly"
+                            : "Niet mobile-friendly"
+                        }
                       />
                     </AccordionSummary>
                     <AccordionDetails>
@@ -347,7 +372,11 @@ const SEOAnalyzer = () => {
                         <ListItem>
                           <ListItemText
                             primary="Viewport Meta Tag"
-                            secondary={analysis.mobileOptimized.hasMobileViewport ? 'Aanwezig' : 'Ontbreekt'}
+                            secondary={
+                              analysis.mobileOptimized.hasMobileViewport
+                                ? "Aanwezig"
+                                : "Ontbreekt"
+                            }
                           />
                           {analysis.mobileOptimized.hasMobileViewport ? (
                             <CheckCircleIcon color="success" />
@@ -360,7 +389,8 @@ const SEOAnalyzer = () => {
                             primary="Touch Targets"
                             secondary={`${analysis.mobileOptimized.touchable.smallTouchTargets} van de ${analysis.mobileOptimized.touchable.totalLinks} links zijn te klein`}
                           />
-                          {analysis.mobileOptimized.touchable.smallTouchTargets === 0 ? (
+                          {analysis.mobileOptimized.touchable
+                            .smallTouchTargets === 0 ? (
                             <CheckCircleIcon color="success" />
                           ) : (
                             <WarningIcon color="warning" />

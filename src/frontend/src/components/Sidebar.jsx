@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Drawer,
   List,
@@ -9,7 +9,7 @@ import {
   ListItemButton,
   Box,
   Divider,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Dashboard as DashboardIcon,
   Search as SearchIcon,
@@ -17,17 +17,17 @@ import {
   Analytics as AnalyticsIcon,
   ShoppingCart as ShoppingCartIcon,
   Settings as SettingsIcon,
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 
 const drawerWidth = 240;
 
 const menuItems = [
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
-  { text: 'SEO', icon: <SearchIcon />, path: '/seo' },
-  { text: 'SEA', icon: <CampaignIcon />, path: '/sea' },
-  { text: 'Analytics', icon: <AnalyticsIcon />, path: '/analytics' },
-  { text: 'WooCommerce', icon: <ShoppingCartIcon />, path: '/woocommerce' },
-  { text: 'Instellingen', icon: <SettingsIcon />, path: '/settings' },
+  { text: "Dashboard", icon: <DashboardIcon />, path: "/" },
+  { text: "SEO", icon: <SearchIcon />, path: "/seo" },
+  { text: "SEA", icon: <CampaignIcon />, path: "/sea" },
+  { text: "Analytics", icon: <AnalyticsIcon />, path: "/analytics" },
+  { text: "WooCommerce", icon: <ShoppingCartIcon />, path: "/woocommerce" },
+  { text: "Instellingen", icon: <SettingsIcon />, path: "/settings" },
 ];
 
 function Sidebar() {
@@ -40,16 +40,16 @@ function Sidebar() {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        '& .MuiDrawer-paper': {
+        "& .MuiDrawer-paper": {
           width: drawerWidth,
-          boxSizing: 'border-box',
-          backgroundColor: 'background.paper',
-          borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+          boxSizing: "border-box",
+          backgroundColor: "background.paper",
+          borderRight: "1px solid rgba(0, 0, 0, 0.12)",
         },
       }}
     >
       <Box sx={{ height: 64 }} /> {/* Toolbar spacer */}
-      <Box sx={{ overflow: 'auto', mt: 2 }}>
+      <Box sx={{ overflow: "auto", mt: 2 }}>
         <List>
           {menuItems.map((item, index) => (
             <React.Fragment key={item.text}>
@@ -59,18 +59,18 @@ function Sidebar() {
                   selected={location.pathname === item.path}
                   onClick={() => navigate(item.path)}
                   sx={{
-                    '&.Mui-selected': {
-                      backgroundColor: 'primary.light',
-                      color: 'primary.contrastText',
-                      '& .MuiListItemIcon-root': {
-                        color: 'primary.contrastText',
+                    "&.Mui-selected": {
+                      backgroundColor: "primary.light",
+                      color: "primary.contrastText",
+                      "& .MuiListItemIcon-root": {
+                        color: "primary.contrastText",
                       },
                     },
-                    '&:hover': {
-                      backgroundColor: 'primary.light',
-                      color: 'primary.contrastText',
-                      '& .MuiListItemIcon-root': {
-                        color: 'primary.contrastText',
+                    "&:hover": {
+                      backgroundColor: "primary.light",
+                      color: "primary.contrastText",
+                      "& .MuiListItemIcon-root": {
+                        color: "primary.contrastText",
                       },
                     },
                     borderRadius: 2,
@@ -81,9 +81,10 @@ function Sidebar() {
                   <ListItemIcon
                     sx={{
                       minWidth: 40,
-                      color: location.pathname === item.path
-                        ? 'primary.contrastText'
-                        : 'inherit',
+                      color:
+                        location.pathname === item.path
+                          ? "primary.contrastText"
+                          : "inherit",
                     }}
                   >
                     {item.icon}

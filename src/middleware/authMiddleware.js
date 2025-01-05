@@ -1,12 +1,12 @@
-import { BaseMiddleware } from './baseMiddleware.js';
-import jwt from 'jsonwebtoken';
-import { AppError } from '../utils/errorHandler.js';
+import { BaseMiddleware } from "./baseMiddleware.js";
+import jwt from "jsonwebtoken";
+import { AppError } from "../utils/errorHandler.js";
 
 export class AuthMiddleware extends BaseMiddleware {
   constructor() {
     super();
     this.JWT_SECRET = process.env.JWT_SECRET;
-    this.JWT_EXPIRES = process.env.JWT_EXPIRES || '24h';
+    this.JWT_EXPIRES = process.env.JWT_EXPIRES || "24h";
   }
 
   /**
@@ -17,23 +17,23 @@ export class AuthMiddleware extends BaseMiddleware {
       try {
         // Check authorization header
         const authHeader = req.headers.authorization;
-        if (!authHeader?.startsWith('Bearer ')) {
-          throw new AppError('Geen token gevonden', 401);
+        if (!authHeader?.startsWith("Bearer ")) {
+          throw new AppError("Geen token gevonden", 401);
         }
 
         // Verify token
-        const token = authHeader.split(' ')[1];
+        const token = authHeader.split(" ")[1];
         const decoded = jwt.verify(token, this.JWT_SECRET);
 
         // Add user to request
         req.user = decoded;
         next();
       } catch (error) {
-        if (error.name === 'JsonWebTokenError') {
-          throw new AppError('Ongeldige token', 401);
+        if (error.name === "JsonWebTokenError") {
+          throw new AppError("Ongeldige token", 401);
         }
-        if (error.name === 'TokenExpiredError') {
-          throw new AppError('Token verlopen', 401);
+        if (error.name === "TokenExpiredError") {
+          throw new AppError("Token verlopen", 401);
         }
         throw error;
       }
@@ -46,12 +46,12 @@ export class AuthMiddleware extends BaseMiddleware {
   checkRoles(roles = []) {
     return (req, res, next) => {
       if (!req.user) {
-        throw new AppError('Niet geautoriseerd', 401);
+        throw new AppError("Niet geautoriseerd", 401);
       }
 
-      const hasRole = roles.some(role => req.user.roles.includes(role));
+      const hasRole = roles.some((role) => req.user.roles.includes(role));
       if (!hasRole) {
-        throw new AppError('Onvoldoende rechten', 403);
+        throw new AppError("Onvoldoende rechten", 403);
       }
 
       next();
@@ -64,9 +64,9 @@ export class AuthMiddleware extends BaseMiddleware {
   verifyApiKey() {
     return async (req, res, next) => {
       try {
-        const apiKey = req.headers['x-api-key'];
+        const apiKey = req.headers["x-api-key"];
         if (!apiKey) {
-          throw new AppError('Geen API key gevonden', 401);
+          throw new AppError("Geen API key gevonden", 401);
         }
 
         // Check cache first
@@ -76,7 +76,7 @@ export class AuthMiddleware extends BaseMiddleware {
         if (!apiKeyData) {
           // Verify with database/service
           apiKeyData = await this.verifyApiKeyWithService(apiKey);
-          
+
           // Cache result
           if (apiKeyData) {
             await this.cache.setex(cacheKey, 3600, JSON.stringify(apiKeyData));
@@ -86,7 +86,7 @@ export class AuthMiddleware extends BaseMiddleware {
         }
 
         if (!apiKeyData) {
-          throw new AppError('Ongeldige API key', 401);
+          throw new AppError("Ongeldige API key", 401);
         }
 
         // Add API key data to request
@@ -96,8 +96,8 @@ export class AuthMiddleware extends BaseMiddleware {
         if (error instanceof AppError) {
           throw error;
         }
-        this.logger.error('API key verificatie fout:', error);
-        throw new AppError('API key verificatie mislukt', 500);
+        this.logger.error("API key verificatie fout:", error);
+        throw new AppError("API key verificatie mislukt", 500);
       }
     };
   }
@@ -108,15 +108,15 @@ export class AuthMiddleware extends BaseMiddleware {
   verifyCsrfToken() {
     return (req, res, next) => {
       // Skip voor GET en HEAD requests
-      if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
+      if (["GET", "HEAD", "OPTIONS"].includes(req.method)) {
         return next();
       }
 
-      const token = req.headers['csrf-token'] || req.body._csrf;
-      const cookieToken = req.cookies['XSRF-TOKEN'];
+      const token = req.headers["csrf-token"] || req.body._csrf;
+      const cookieToken = req.cookies["XSRF-TOKEN"];
 
       if (!token || !cookieToken || token !== cookieToken) {
-        throw new AppError('Ongeldige CSRF token', 403);
+        throw new AppError("Ongeldige CSRF token", 403);
       }
 
       next();
@@ -128,7 +128,7 @@ export class AuthMiddleware extends BaseMiddleware {
    */
   generateToken(payload) {
     return jwt.sign(payload, this.JWT_SECRET, {
-      expiresIn: this.JWT_EXPIRES
+      expiresIn: this.JWT_EXPIRES,
     });
   }
 
@@ -140,28 +140,28 @@ export class AuthMiddleware extends BaseMiddleware {
       try {
         const token = req.body.refreshToken;
         if (!token) {
-          throw new AppError('Geen refresh token gevonden', 400);
+          throw new AppError("Geen refresh token gevonden", 400);
         }
 
         // Verify refresh token
         const decoded = jwt.verify(token, this.JWT_SECRET);
-        
+
         // Generate new access token
         const accessToken = this.generateToken({
           id: decoded.id,
-          roles: decoded.roles
+          roles: decoded.roles,
         });
 
         res.json({
           success: true,
-          data: { accessToken }
+          data: { accessToken },
         });
       } catch (error) {
-        if (error.name === 'JsonWebTokenError') {
-          throw new AppError('Ongeldige refresh token', 401);
+        if (error.name === "JsonWebTokenError") {
+          throw new AppError("Ongeldige refresh token", 401);
         }
-        if (error.name === 'TokenExpiredError') {
-          throw new AppError('Refresh token verlopen', 401);
+        if (error.name === "TokenExpiredError") {
+          throw new AppError("Refresh token verlopen", 401);
         }
         throw error;
       }

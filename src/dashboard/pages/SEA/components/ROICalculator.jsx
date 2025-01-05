@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -18,23 +18,23 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
-} from '@mui/material';
-import { Pie, Line } from 'react-chartjs-2';
-import { useTheme } from '@mui/material/styles';
+  TableRow,
+} from "@mui/material";
+import { Pie, Line } from "react-chartjs-2";
+import { useTheme } from "@mui/material/styles";
 
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'currency',
-    currency: 'EUR'
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
   }).format(amount);
 };
 
 const formatPercentage = (value) => {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'percent',
+  return new Intl.NumberFormat("nl-NL", {
+    style: "percent",
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
   }).format(value);
 };
 
@@ -44,8 +44,10 @@ const ROICalculator = ({ accountId, campaignId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [dateRange, setDateRange] = useState({
-    startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    endDate: new Date().toISOString().split('T')[0]
+    startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0],
+    endDate: new Date().toISOString().split("T")[0],
   });
 
   const fetchROI = async () => {
@@ -57,14 +59,14 @@ const ROICalculator = ({ accountId, campaignId }) => {
     try {
       const response = await fetch(
         `/api/google-ads/${accountId}/campaigns/${campaignId}/roi?` +
-        new URLSearchParams({
-          startDate: dateRange.startDate,
-          endDate: dateRange.endDate
-        })
+          new URLSearchParams({
+            startDate: dateRange.startDate,
+            endDate: dateRange.endDate,
+          }),
       );
 
       if (!response.ok) {
-        throw new Error('Kon ROI gegevens niet ophalen');
+        throw new Error("Kon ROI gegevens niet ophalen");
       }
 
       const data = await response.json();
@@ -101,35 +103,35 @@ const ROICalculator = ({ accountId, campaignId }) => {
   }
 
   const costBreakdownData = {
-    labels: ['Kosten', 'Winst'],
+    labels: ["Kosten", "Winst"],
     datasets: [
       {
-        data: [roi.metrics.cost, Math.max(0, roi.metrics.value - roi.metrics.cost)],
-        backgroundColor: [
-          theme.palette.error.main,
-          theme.palette.success.main
-        ]
-      }
-    ]
+        data: [
+          roi.metrics.cost,
+          Math.max(0, roi.metrics.value - roi.metrics.cost),
+        ],
+        backgroundColor: [theme.palette.error.main, theme.palette.success.main],
+      },
+    ],
   };
 
   const performanceData = {
-    labels: ['Impressies', 'Clicks', 'Conversies'],
+    labels: ["Impressies", "Clicks", "Conversies"],
     datasets: [
       {
-        label: 'Prestaties',
+        label: "Prestaties",
         data: [
           roi.metrics.impressions,
           roi.metrics.clicks,
-          roi.metrics.conversions
+          roi.metrics.conversions,
         ],
         backgroundColor: [
           theme.palette.primary.main,
           theme.palette.secondary.main,
-          theme.palette.success.main
-        ]
-      }
-    ]
+          theme.palette.success.main,
+        ],
+      },
+    ],
   };
 
   return (
@@ -140,10 +142,12 @@ const ROICalculator = ({ accountId, campaignId }) => {
           label="Start Datum"
           type="date"
           value={dateRange.startDate}
-          onChange={(e) => setDateRange({
-            ...dateRange,
-            startDate: e.target.value
-          })}
+          onChange={(e) =>
+            setDateRange({
+              ...dateRange,
+              startDate: e.target.value,
+            })
+          }
           InputLabelProps={{
             shrink: true,
           }}
@@ -152,10 +156,12 @@ const ROICalculator = ({ accountId, campaignId }) => {
           label="Eind Datum"
           type="date"
           value={dateRange.endDate}
-          onChange={(e) => setDateRange({
-            ...dateRange,
-            endDate: e.target.value
-          })}
+          onChange={(e) =>
+            setDateRange({
+              ...dateRange,
+              endDate: e.target.value,
+            })
+          }
           InputLabelProps={{
             shrink: true,
           }}
@@ -191,7 +197,10 @@ const ROICalculator = ({ accountId, campaignId }) => {
                   <Typography color="textSecondary" gutterBottom>
                     ROI
                   </Typography>
-                  <Typography variant="h4" color={roi.metrics.roi > 0 ? 'success.main' : 'error.main'}>
+                  <Typography
+                    variant="h4"
+                    color={roi.metrics.roi > 0 ? "success.main" : "error.main"}
+                  >
                     {formatPercentage(roi.metrics.roi / 100)}
                   </Typography>
                 </Grid>
@@ -199,7 +208,14 @@ const ROICalculator = ({ accountId, campaignId }) => {
                   <Typography color="textSecondary" gutterBottom>
                     Winst
                   </Typography>
-                  <Typography variant="h4" color={roi.metrics.value - roi.metrics.cost > 0 ? 'success.main' : 'error.main'}>
+                  <Typography
+                    variant="h4"
+                    color={
+                      roi.metrics.value - roi.metrics.cost > 0
+                        ? "success.main"
+                        : "error.main"
+                    }
+                  >
                     {formatCurrency(roi.metrics.value - roi.metrics.cost)}
                   </Typography>
                 </Grid>
@@ -252,7 +268,9 @@ const ROICalculator = ({ accountId, campaignId }) => {
                         {roi.metrics.clicks.toLocaleString()}
                       </TableCell>
                       <TableCell align="right">
-                        {formatPercentage(roi.metrics.clicks / roi.metrics.impressions)}
+                        {formatPercentage(
+                          roi.metrics.clicks / roi.metrics.impressions,
+                        )}
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -261,7 +279,9 @@ const ROICalculator = ({ accountId, campaignId }) => {
                         {roi.metrics.conversions.toLocaleString()}
                       </TableCell>
                       <TableCell align="right">
-                        {formatPercentage(roi.metrics.conversions / roi.metrics.clicks)}
+                        {formatPercentage(
+                          roi.metrics.conversions / roi.metrics.clicks,
+                        )}
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -274,14 +294,18 @@ const ROICalculator = ({ accountId, campaignId }) => {
                     <TableRow>
                       <TableCell>Kosten per Conversie</TableCell>
                       <TableCell align="right">
-                        {formatCurrency(roi.metrics.cost / roi.metrics.conversions)}
+                        {formatCurrency(
+                          roi.metrics.cost / roi.metrics.conversions,
+                        )}
                       </TableCell>
                       <TableCell align="right">-</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell>Waarde per Conversie</TableCell>
                       <TableCell align="right">
-                        {formatCurrency(roi.metrics.value / roi.metrics.conversions)}
+                        {formatCurrency(
+                          roi.metrics.value / roi.metrics.conversions,
+                        )}
                       </TableCell>
                       <TableCell align="right">-</TableCell>
                     </TableRow>

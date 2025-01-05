@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography, Paper, Grid } from '@mui/material';
+import React from "react";
+import { Box, Typography, Paper, Grid } from "@mui/material";
 
 function AnalyticsPage() {
   return (
@@ -14,7 +14,8 @@ function AnalyticsPage() {
               Performance Analytics
             </Typography>
             <Typography>
-              View detailed analytics and insights for your SEO and SEA campaigns.
+              View detailed analytics and insights for your SEO and SEA
+              campaigns.
             </Typography>
           </Paper>
         </Grid>

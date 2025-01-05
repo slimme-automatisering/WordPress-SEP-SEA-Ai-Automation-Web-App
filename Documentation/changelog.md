@@ -1,7 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+
 ### Toegevoegd
+
 - Systeem configuratie geïntegreerd in .env en .env.prod
 - Uitgebreide .env.example met development en productie voorbeelden
 - Nieuwe gestructureerde test directory met Jest integratie tests
@@ -109,9 +111,10 @@
 - Uitgebreide security middleware stack
 
 ### Gewijzigd
+
 - Geconsolideerde .env bestanden voor betere configuratie beheer
 - Verbeterde documentatie voor development en productie setups
-- Verplaatste en verbeterde mail tests naar __tests__/integration
+- Verplaatste en verbeterde mail tests naar **tests**/integration
 - Test setup geconsolideerd naar één locatie
 - Geherstructureerde test directories voor betere organisatie
 - Verbeterde test setup met database connecties
@@ -162,6 +165,7 @@
 - Verbeterde error handling
 
 ### Verwijderd
+
 - Dubbele configuratie bestanden (compose-dev.yaml, newrelic.cjs)
 - Overbodige .env bestanden (.env.system, .env.prod.example)
 - Oude test directories en dubbele test setups
@@ -194,6 +198,7 @@
 - Inconsistente logging middleware
 
 ### Geverifieerd
+
 - Docker volume directories aanwezig en correct geconfigureerd
 - Service dependencies en imports up-to-date
 - Mapnaam 'seo-sea-automation' correct doorgevoerd
@@ -230,25 +235,33 @@
 - Cache monitoring werkend
 
 ## [1.1.2] - 2025-01-02
+
 ### Toegevoegd
+
 - Joi validatiebibliotheek voor veilige input validatie
 - Verbeterde request validatie in controllers
 
 ### Beveiliging
+
 - Input validatie toegevoegd voor alle API endpoints
 - Schema-gebaseerde validatie geïmplementeerd
 
 ## [1.1.1] - 2025-01-02
+
 ### Toegevoegd
+
 - Jsonwebtoken pakket voor veilige authenticatie
 - Verbeterde JWT implementatie in auth middleware
 
 ### Beveiliging
+
 - Geüpgrade authenticatie systeem met JWT tokens
 - Verbeterde token validatie en verificatie
 
 ## [1.0.2] - 2025-01-03
+
 ### Changed
+
 - Verouderde packages vervangen:
   - `natives` vervangen door `graceful-fs@4.2.11`
   - `request` vervangen door `node-fetch@3.3.2`
@@ -260,6 +273,7 @@
   - TypeScript ondersteuning toegevoegd met @types/node en @types/jest
 
 ### Security
+
 - Alle kritieke kwetsbaarheden opgelost:
   - protobufjs kwetsbaarheid opgelost in Google Ads service
   - semver kwetsbaarheid opgelost in SEO service
@@ -268,7 +282,9 @@
   - 2 lage severity kwetsbaarheden in hoofdproject (niet-exploiteerbaar)
 
 ## [1.0.1] - 2025-01-03
+
 ### Fixed
+
 - Gecorrigeerde import paden in controllers:
   - `KeywordService` import in seoController.js nu correct verwijzend naar keywordResearch.js
   - `ContentService` import in seoController.js nu correct verwijzend naar contentOptimization.js
@@ -281,6 +297,7 @@
   - npm-check geüpgraded naar 3.2.10 (got kwetsbaarheid)
 
 ### Added
+
 - Nieuwe dependencies toegevoegd:
   - cheerio@1.0.0-rc.12 voor HTML parsing
   - nodemailer@6.9.16 voor email functionaliteit
@@ -289,27 +306,32 @@
   - protobufjs@7.2.5 voor protocol buffers
 
 ### Changed
+
 - Versies van cheerio gestandaardiseerd naar 1.0.0-rc.12 in alle services voor betere compatibiliteit
 - google-ads-api geüpgraded naar 12.0.1 voor verbeterde stabiliteit en Google Ads API v13 ondersteuning
 
 ## [1.0.1] - 2024-12-31
 
 ### Gewijzigd
+
 - Projectstructuur verplaatst naar map zonder spaties voor betere compatibiliteit
 - Bcrypt vervangen door Argon2 voor verbeterde wachtwoordbeveiliging en Windows-compatibiliteit
 - Test setup verbeterd met betere database handling
 - Database connectie problemen opgelost
 
 ### Technische Wijzigingen
+
 - Docker setup opnieuw geconfigureerd voor nieuwe mapstructuur
 - Test database configuratie verbeterd
 - Dubbele database pool sluiting probleem opgelost
 - Server startup logica aangepast voor test omgeving
 
 ### Beveiliging
+
 - Upgrade naar Argon2 voor state-of-the-art wachtwoordhashing
 - Verbeterde error handling in database connecties
 
 ### Documentatie
+
 - Documentatie bijgewerkt voor nieuwe mapstructuur
 - Test instructies bijgewerkt

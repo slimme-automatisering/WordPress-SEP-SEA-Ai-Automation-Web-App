@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography, Paper, Grid } from '@mui/material';
+import React from "react";
+import { Box, Typography, Paper, Grid } from "@mui/material";
 
 function SeaPage() {
   return (
@@ -14,7 +14,8 @@ function SeaPage() {
               SEA Overview
             </Typography>
             <Typography>
-              Manage your search engine advertising campaigns and track your ad performance.
+              Manage your search engine advertising campaigns and track your ad
+              performance.
             </Typography>
           </Paper>
         </Grid>

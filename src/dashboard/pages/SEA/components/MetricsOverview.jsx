@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -7,23 +7,23 @@ import {
   Typography,
   TextField,
   CircularProgress,
-  Alert
-} from '@mui/material';
-import { Line } from 'react-chartjs-2';
-import { useTheme } from '@mui/material/styles';
+  Alert,
+} from "@mui/material";
+import { Line } from "react-chartjs-2";
+import { useTheme } from "@mui/material/styles";
 
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'currency',
-    currency: 'EUR'
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
   }).format(amount / 1000000); // Convert from micros
 };
 
 const formatPercentage = (value) => {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'percent',
+  return new Intl.NumberFormat("nl-NL", {
+    style: "percent",
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
   }).format(value);
 };
 
@@ -42,11 +42,11 @@ const MetricsOverview = ({ accountId, dateRange, onDateRangeChange }) => {
 
       try {
         const response = await fetch(
-          `/api/google-ads/${accountId}/metrics?startDate=${dateRange.startDate}&endDate=${dateRange.endDate}`
+          `/api/google-ads/${accountId}/metrics?startDate=${dateRange.startDate}&endDate=${dateRange.endDate}`,
         );
 
         if (!response.ok) {
-          throw new Error('Kon metrics niet ophalen');
+          throw new Error("Kon metrics niet ophalen");
         }
 
         const data = await response.json();
@@ -70,11 +70,7 @@ const MetricsOverview = ({ accountId, dateRange, onDateRangeChange }) => {
   }
 
   if (error) {
-    return (
-      <Alert severity="error">
-        {error}
-      </Alert>
-    );
+    return <Alert severity="error">{error}</Alert>;
   }
 
   if (!metrics) {
@@ -82,74 +78,77 @@ const MetricsOverview = ({ accountId, dateRange, onDateRangeChange }) => {
   }
 
   const chartData = {
-    labels: metrics.map(m => m.date),
+    labels: metrics.map((m) => m.date),
     datasets: [
       {
-        label: 'Kosten',
-        data: metrics.map(m => m.cost_micros / 1000000),
+        label: "Kosten",
+        data: metrics.map((m) => m.cost_micros / 1000000),
         borderColor: theme.palette.primary.main,
         backgroundColor: theme.palette.primary.light,
-        yAxisID: 'y1'
+        yAxisID: "y1",
       },
       {
-        label: 'Clicks',
-        data: metrics.map(m => m.clicks),
+        label: "Clicks",
+        data: metrics.map((m) => m.clicks),
         borderColor: theme.palette.secondary.main,
         backgroundColor: theme.palette.secondary.light,
-        yAxisID: 'y2'
-      }
-    ]
+        yAxisID: "y2",
+      },
+    ],
   };
 
   const chartOptions = {
     responsive: true,
     interaction: {
-      mode: 'index',
+      mode: "index",
       intersect: false,
     },
     scales: {
       y1: {
-        type: 'linear',
+        type: "linear",
         display: true,
-        position: 'left',
+        position: "left",
         title: {
           display: true,
-          text: 'Kosten (€)'
-        }
+          text: "Kosten (€)",
+        },
       },
       y2: {
-        type: 'linear',
+        type: "linear",
         display: true,
-        position: 'right',
+        position: "right",
         title: {
           display: true,
-          text: 'Clicks'
+          text: "Clicks",
         },
         grid: {
-          drawOnChartArea: false
-        }
-      }
-    }
+          drawOnChartArea: false,
+        },
+      },
+    },
   };
 
   // Bereken totalen
-  const totals = metrics.reduce((acc, m) => ({
-    impressions: acc.impressions + m.impressions,
-    clicks: acc.clicks + m.clicks,
-    cost_micros: acc.cost_micros + m.cost_micros,
-    conversions: acc.conversions + m.conversions
-  }), {
-    impressions: 0,
-    clicks: 0,
-    cost_micros: 0,
-    conversions: 0
-  });
+  const totals = metrics.reduce(
+    (acc, m) => ({
+      impressions: acc.impressions + m.impressions,
+      clicks: acc.clicks + m.clicks,
+      cost_micros: acc.cost_micros + m.cost_micros,
+      conversions: acc.conversions + m.conversions,
+    }),
+    {
+      impressions: 0,
+      clicks: 0,
+      cost_micros: 0,
+      conversions: 0,
+    },
+  );
 
   // Bereken gemiddelden
   const averages = {
     ctr: totals.clicks / totals.impressions,
     cpc: totals.cost_micros / totals.clicks,
-    conversionRate: totals.conversions / totals.clicks
+    conversionRate: totals.conversions / totals.clicks,
   };
 
   return (
@@ -160,10 +159,12 @@ const MetricsOverview = ({ accountId, dateRange, onDateRangeChange }) => {
           label="Start Datum"
           type="date"
           value={dateRange.startDate}
-          onChange={(e) => onDateRangeChange({
-            ...dateRange,
-            startDate: e.target.value
-          })}
+          onChange={(e) =>
+            onDateRangeChange({
+              ...dateRange,
+              startDate: e.target.value,
+            })
+          }
           InputLabelProps={{
             shrink: true,
           }}
@@ -172,10 +173,12 @@ const MetricsOverview = ({ accountId, dateRange, onDateRangeChange }) => {
           label="Eind Datum"
           type="date"
           value={dateRange.endDate}
-          onChange={(e) => onDateRangeChange({
-            ...dateRange,
-            endDate: e.target.value
-          })}
+          onChange={(e) =>
+            onDateRangeChange({
+              ...dateRange,
+              endDate: e.target.value,
+            })
+          }
           InputLabelProps={{
             shrink: true,
           }}

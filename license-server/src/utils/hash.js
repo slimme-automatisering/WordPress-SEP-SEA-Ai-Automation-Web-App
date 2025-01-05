@@ -1,4 +1,4 @@
-const argon2 = require('argon2');
+const argon2 = require("argon2");
 
 /**
  * Hash een wachtwoord met Argon2
@@ -9,7 +9,7 @@ async function hashPassword(password) {
   try {
     return await argon2.hash(password);
   } catch (error) {
-    throw new Error('Fout bij het hashen van wachtwoord');
+    throw new Error("Fout bij het hashen van wachtwoord");
   }
 }
 
@@ -23,11 +23,11 @@ async function verifyPassword(hash, password) {
   try {
     return await argon2.verify(hash, password);
   } catch (error) {
-    throw new Error('Fout bij het verifiëren van wachtwoord');
+    throw new Error("Fout bij het verifiëren van wachtwoord");
   }
 }
 
 module.exports = {
   hashPassword,
-  verifyPassword
+  verifyPassword,
 };

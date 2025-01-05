@@ -1,16 +1,16 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import Drawer from '@mui/material/Drawer'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import CampaignIcon from '@mui/icons-material/Campaign'
-import AnalyticsIcon from '@mui/icons-material/Analytics'
-import SettingsIcon from '@mui/icons-material/Settings'
+import React from "react";
+import { Link } from "react-router-dom";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import CampaignIcon from "@mui/icons-material/Campaign";
+import AnalyticsIcon from "@mui/icons-material/Analytics";
+import SettingsIcon from "@mui/icons-material/Settings";
 
-const drawerWidth = 240
+const drawerWidth = 240;
 
 function Sidebar() {
   return (
@@ -19,10 +19,10 @@ function Sidebar() {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        '& .MuiDrawer-paper': {
+        "& .MuiDrawer-paper": {
           width: drawerWidth,
-          boxSizing: 'border-box',
-          marginTop: '64px',
+          boxSizing: "border-box",
+          marginTop: "64px",
         },
       }}
     >
@@ -53,7 +53,7 @@ function Sidebar() {
         </ListItem>
       </List>
     </Drawer>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;

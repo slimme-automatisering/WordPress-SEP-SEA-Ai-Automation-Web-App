@@ -3,6 +3,7 @@
 ![SEO & SEA Automation Web App](../public/images/logo.png)
 
 ## Table of Contents / Inhoudsopgave
+
 1. [Introduction / Introductie](#introduction--introductie)
 2. [Installation / Installatie](#installation--installatie)
 3. [Getting Started / Aan de slag](#getting-started--aan-de-slag)
@@ -26,6 +27,7 @@ The SEO & SEA Automation Web App is a powerful enterprise tool for managing and 
 De SEO & SEA Automation Web App is een krachtige enterprise tool voor het beheren en optimaliseren van uw online marketing campagnes. Deze handleiding zal u door alle features leiden en uitleggen hoe u ze effectief kunt gebruiken.
 
 ### Key Benefits / Belangrijkste Voordelen
+
 - Automated SEO optimization / Geautomatiseerde SEO optimalisatie
 - Real-time competitor analysis / Real-time concurrent analyse
 - Smart content improvements / Slimme content verbeteringen
@@ -38,6 +40,7 @@ De SEO & SEA Automation Web App is een krachtige enterprise tool voor het behere
 ## Installation / Installatie
 
 ### System Requirements / Systeem Vereisten
+
 - Node.js v14 or higher / Node.js v14 of hoger
 - WordPress website with REST API enabled / WordPress website met REST API enabled
 - WooCommerce (for product optimization) / WooCommerce (voor product optimalisatie)
@@ -49,22 +52,25 @@ De SEO & SEA Automation Web App is een krachtige enterprise tool voor het behere
 ### Installation Steps / Installatie Stappen
 
 1. **Request Access / Toegang Aanvragen**
-   Contact our sales team for repository access and license key / 
+   Contact our sales team for repository access and license key /
    Neem contact op met ons sales team voor repository toegang en licentiesleutel
 
 2. **Clone the Private Repository / Clone de Private Repository**
+
    ```bash
    git clone https://[private-repository-url]
    cd seo-sea-automation-webapp
    ```
 
 3. **Install Dependencies / Installeer Dependencies**
+
    ```bash
    npm install
    ```
 
 4. **Configure Environment / Configureer Environment**
    Create a `.env` file in the root directory / Maak een `.env` bestand in de root directory:
+
    ```env
    WORDPRESS_URL=https://your-site.com
    WORDPRESS_USERNAME=your-username
@@ -75,6 +81,7 @@ De SEO & SEA Automation Web App is een krachtige enterprise tool voor het behere
    ```
 
 5. **Start the Application / Start de Applicatie**
+
    ```bash
    npm start
    ```
@@ -87,17 +94,20 @@ De SEO & SEA Automation Web App is een krachtige enterprise tool voor het behere
 ### Initial Setup / Eerste Setup
 
 1. **WordPress Configuration / WordPress Configuratie**
+
    - Ga naar Instellingen
    - Voer uw WordPress site URL in
    - Voer authenticatie gegevens in
    - Test de verbinding
 
 2. **Google Ads Configuration / Google Ads Configuratie**
+
    - Configureer uw Google Ads API toegang
    - Verbind uw account
    - Verifieer de connectie
 
 3. **Optimization Settings / Optimalisatie Instellingen**
+
    - Stel content lengte eisen in
    - Configureer keyword density ranges
    - Definieer leesbaarheid doelen
@@ -111,6 +121,7 @@ De SEO & SEA Automation Web App is een krachtige enterprise tool voor het behere
 ## Features / Functionaliteiten
 
 ### Automated SEO Optimization / Geautomatiseerde SEO Optimalisatie
+
 - Dagelijkse content analyse en optimalisatie
 - Keyword density optimalisatie
 - Meta description verbeteringen
@@ -118,12 +129,14 @@ De SEO & SEA Automation Web App is een krachtige enterprise tool voor het behere
 - Interne linking optimalisatie
 
 ### Competitor Analysis / Concurrent Analyse
+
 - Real-time concurrent tracking
 - Content vergelijking
 - Keyword gap analyse
 - Performance benchmarking
 
 ### Content Management / Content Management
+
 - Post optimalisatie
 - Pagina optimalisatie
 - Product optimalisatie (WooCommerce)
@@ -132,18 +145,21 @@ De SEO & SEA Automation Web App is een krachtige enterprise tool voor het behere
 ## Dashboard
 
 ### Dashboard Overview / Dashboard Overzicht
+
 - Totaal aantal content items
 - Aantal geoptimaliseerde items
 - Gemiddelde SEO score
 - Volgende geplande optimalisatie
 
 ### Performance Charts / Performance Grafieken
+
 - SEO score trends
 - Content distributie
 - Optimalisatie succesratio
 - Concurrent rankings
 
 ### Recent Activity / Recente Activiteit
+
 - Laatste optimalisaties
 - Succes/faal status
 - Content wijzigingen
@@ -152,9 +168,11 @@ De SEO & SEA Automation Web App is een krachtige enterprise tool voor het behere
 ## Content Optimization / Content Optimalisatie
 
 ### Automated Optimization / Automatische Optimalisatie
+
 Het systeem voert twee belangrijke optimalisatie cycli uit:
 
 1. **Dagelijkse Optimalisatie (2:00)**
+
    - Content analyse
    - Meta description updates
    - Keyword optimalisatie
@@ -183,6 +201,7 @@ Om handmatig content te optimaliseren:
 ## Competitor Analysis / Concurrent Analyse
 
 ### Features / Functionaliteiten
+
 - Top 10 concurrent tracking
 - Content structuur analyse
 - Keyword gebruik vergelijking
@@ -190,12 +209,15 @@ Om handmatig content te optimaliseren:
 - Leesbaarheid scoring
 
 ### Analysis Tools / Analyse Tools
+
 1. **Concurrent Rankings**
+
    - Positie tracking
    - Historische data
    - Trend analyse
 
 2. **Content Comparison**
+
    - Lengte analyse
    - Keyword dichtheid
    - Structuur vergelijking
@@ -209,12 +231,14 @@ Om handmatig content te optimaliseren:
 ## Settings / Instellingen
 
 ### WordPress Configuration / WordPress Configuratie
+
 - Site URL instellingen
 - Authenticatie
 - API endpoint configuratie
 - Beveiligingsinstellingen
 
 ### Optimization Parameters / Optimalisatie Parameters
+
 - Content lengte vereisten
 - Keyword dichtheid ranges
 - Leesbaarheid doelen
@@ -222,6 +246,7 @@ Om handmatig content te optimaliseren:
 - Image optimalisatie instellingen
 
 ### Scheduling Settings / Planning Instellingen
+
 - Dagelijkse optimalisatie tijd
 - Wekelijkse analyse dag
 - Gelijktijdige taak limieten
@@ -230,13 +255,16 @@ Om handmatig content te optimaliseren:
 ## Monitoring & Logs
 
 ### Activity Monitoring / Activiteit Monitoring
+
 - Real-time optimalisatie tracking
 - Succes/faal ratio's
 - Performance metrics
 - Resource gebruik
 
 ### Log Management / Log Beheer
+
 1. **Logs Bekijken**
+
    - Filter op niveau
    - Zoekfunctionaliteit
    - Datum bereik selectie
@@ -251,12 +279,14 @@ Om handmatig content te optimaliseren:
 ### Error Resolution / Error Resolution
 
 1. **API Errors**
+
    ```
    Fout: Kan geen verbinding maken met WordPress API
    Oplossing: Controleer credentials en API endpoint
    ```
 
 2. **Optimization Errors**
+
    ```
    Fout: Content optimalisatie mislukt
    Oplossing: Verifieer content rechten en API toegang
@@ -273,12 +303,14 @@ Om handmatig content te optimaliseren:
 ### Common Issues / Veelvoorkomende Problemen
 
 1. **Connection Problems**
+
    - Check WordPress credentials
    - Verify API endpoints
    - Confirm REST API status
    - Test network connectivity
 
 2. **Optimization Failures**
+
    - Review API rate limits
    - Check content permissions
    - Verify user capabilities
@@ -293,12 +325,14 @@ Om handmatig content te optimaliseren:
 ### Error Resolution / Error Resolution
 
 1. **API Errors**
+
    ```
    Error: Unable to connect to WordPress API
    Solution: Check credentials and API endpoint
    ```
 
 2. **Optimization Errors**
+
    ```
    Error: Content optimization failed
    Solution: Verify content permissions and API access
@@ -313,12 +347,15 @@ Om handmatig content te optimaliseren:
 ## Best Practices
 
 ### Content Optimization / Content Optimalisatie
+
 1. **Content Length**
+
    - Minimum: 300 woorden
    - Optimaal: 1500+ woorden
    - Product beschrijvingen: 200+ woorden
 
 2. **Keyword Usage**
+
    - Dichtheid: 0.5% - 2.5%
    - Natuurlijke plaatsing
    - Relevante variaties
@@ -331,13 +368,16 @@ Om handmatig content te optimaliseren:
    - Relevante afbeeldingen
 
 ### Monitoring
+
 1. **Daily Checks**
+
    - Dashboard review
    - Optimalisatie status
    - Error logs
    - Performance metrics
 
 2. **Weekly Analysis**
+
    - Concurrent vergelijking
    - Content performance
    - Keyword rankings
@@ -350,7 +390,9 @@ Om handmatig content te optimaliseren:
    - Resource allocatie
 
 ### Security
+
 1. **Credentials**
+
    - Regelmatige wachtwoord updates
    - Veilige API key opslag
    - Beperkte toegang delen
@@ -365,6 +407,7 @@ Om handmatig content te optimaliseren:
 ## Docker Installation / Docker Installatie
 
 ### Prerequisites / Voorwaarden
+
 - Docker Engine
 - Docker Compose
 - Git (voor repository clonen)
@@ -373,6 +416,7 @@ Om handmatig content te optimaliseren:
 
 1. **Environment Configuration / Environment Configuratie**
    Maak een `.env` bestand in de root directory met de volgende configuratie:
+
    ```env
    # WordPress Configuratie
    WORDPRESS_URL=http://localhost:8080
@@ -396,6 +440,7 @@ Om handmatig content te optimaliseren:
    ```
 
 2. **Start the Application / Start de Applicatie**
+
    ```bash
    # Build en start alle containers
    docker-compose up --build
@@ -412,6 +457,7 @@ Om handmatig content te optimaliseren:
 ### WordPress Initial Setup / WordPress Initiële Setup
 
 1. **WordPress Installation Completion / WordPress Installatie Voltooien**
+
    - Bezoek `http://localhost:8080`
    - Volg de installatie wizard
    - Gebruik credentials uit `.env` bestand
@@ -424,6 +470,7 @@ Om handmatig content te optimaliseren:
 ### Docker Commands Reference / Docker Commando's Referentie
 
 1. **Container Management / Container Management**
+
    ```bash
    # Start containers
    docker-compose up
@@ -442,6 +489,7 @@ Om handmatig content te optimaliseren:
    ```
 
 2. **Logs and Monitoring / Logs en Monitoring**
+
    ```bash
    # Bekijk alle logs
    docker-compose logs -f
@@ -453,6 +501,7 @@ Om handmatig content te optimaliseren:
    ```
 
 3. **Container Shell Access / Container Shell Toegang**
+
    ```bash
    # Toegang tot app container
    docker-compose exec app sh
@@ -467,12 +516,14 @@ Om handmatig content te optimaliseren:
 ### Docker Troubleshooting / Docker Troubleshooting
 
 1. **Port Conflicts / Poort Conflicten**
+
    ```bash
    Error: port is already allocated
    Oplossing: Verander poorten in docker-compose.yml of stop conflicterende services
    ```
 
 2. **Permission Issues / Permissie Issues**
+
    ```bash
    Error: permission denied
    Oplossing: Zorg voor juiste bestandsrechten of gebruik sudo (Linux/Mac)
@@ -487,11 +538,13 @@ Om handmatig content te optimaliseren:
 ### Docker Best Practices / Docker Best Practices
 
 1. **Volume Management / Volume Management**
+
    - Gebruik named volumes voor persistentie
    - Regelmatige backup van volumes
    - Opruimen ongebruikte volumes
 
 2. **Security / Beveiliging**
+
    - Commit nooit het `.env` bestand
    - Gebruik sterke wachtwoorden
    - Regelmatige security updates
@@ -508,11 +561,13 @@ Om handmatig content te optimaliseren:
 Voor lokale ontwikkeling gebruiken we mkcert voor veilige SSL certificaten:
 
 1. **Installeer mkcert / Installeer mkcert**
+
    ```bash
    choco install mkcert
    ```
 
 2. **Genereer lokale certificaten / Genereer lokale certificaten**
+
    ```bash
    mkdir -p traefik/certificates
    cd traefik/certificates
@@ -522,6 +577,7 @@ Voor lokale ontwikkeling gebruiken we mkcert voor veilige SSL certificaten:
 3. **Configureer hosts bestand / Configureer hosts bestand**
    Open als administrator: `C:\Windows\System32\drivers\etc\hosts`
    Voeg toe:
+
    ```
    127.0.0.1 app.localhost
    127.0.0.1 wordpress.localhost
@@ -536,6 +592,7 @@ Voor lokale ontwikkeling gebruiken we mkcert voor veilige SSL certificaten:
 Voor productie gebruiken we Let's Encrypt voor automatische SSL certificaten:
 
 1. **DNS Configuratie / DNS Configuratie**
+
    - Configureer A-records voor je domeinen:
      ```
      app.jouwdomein.nl  -> Server IP
@@ -544,16 +601,18 @@ Voor productie gebruiken we Let's Encrypt voor automatische SSL certificaten:
 
 2. **Environment Variables / Environment Variables**
    In je `.env` bestand:
+
    ```env
    DOMAIN=jouwdomein.nl
    SSL_EMAIL=jouw@email.nl
    ```
 
 3. **Production Configuration / Productie Configuratie**
+
    ```bash
    # Kopieer productie configuratie
    cp docker-compose.prod.yml docker-compose.override.yml
-   
+
    # Start de services
    docker-compose up -d
    ```
@@ -566,6 +625,7 @@ Voor productie gebruiken we Let's Encrypt voor automatische SSL certificaten:
 ### SSL Troubleshooting / SSL Troubleshooting
 
 1. **Development SSL Issues / Development SSL Problemen**
+
    - Herstart Docker Desktop
    - Vernieuw mkcert certificaten:
      ```bash
@@ -586,17 +646,20 @@ Voor productie gebruiken we Let's Encrypt voor automatische SSL certificaten:
 ## License Management / Licentie Beheer
 
 ### License Activation / Licentie Activatie
+
 1. Log in to the dashboard / Log in op het dashboard
 2. Go to Settings > License / Ga naar Instellingen > Licentie
 3. Enter your license key / Voer uw licentiesleutel in
 4. Click Activate / Klik op Activeren
 
 ### License Types / Licentie Types
+
 - **Basic / Basis**: Single domain, basic features / Enkele domain, basis features
 - **Professional / Professioneel**: Multiple domains, advanced features / Meerdere domains, geavanceerde features
 - **Enterprise / Enterprise**: Custom solutions, priority support / Maatwerk oplossingen, priority support
 
 ### Support / Ondersteuning
+
 - Premium email support / Premium email ondersteuning
 - Priority ticket handling / Priority ticket afhandeling
 - Custom feature development / Custom feature development
@@ -605,24 +668,29 @@ Voor productie gebruiken we Let's Encrypt voor automatische SSL certificaten:
 ## Licentie Server Setup
 
 ### Vereisten
+
 - Node.js 18 of hoger
 - Docker Desktop
 - PostgreSQL 15 of hoger
 - npm of yarn
 
 ### Installatie
+
 1. Clone de repository:
+
 ```bash
 git clone [repository-url]
 cd seo-sea-automation/license-server
 ```
 
 2. Installeer dependencies:
+
 ```bash
 npm install
 ```
 
 3. Maak een `.env` bestand aan met de volgende variabelen:
+
 ```env
 NODE_ENV=development
 DATABASE_URL=postgres://postgres:your_password@localhost:5432/license_db
@@ -631,11 +699,13 @@ LICENSE_SERVER_PORT=3001
 ```
 
 4. Start de database met Docker:
+
 ```bash
 docker run --name license-db -e POSTGRES_PASSWORD=your_password -e POSTGRES_DB=license_db -p 5432:5432 -d postgres:15-alpine
 ```
 
 5. Start de server:
+
 ```bash
 npm run dev
 ```
@@ -643,18 +713,22 @@ npm run dev
 ### API Endpoints
 
 #### Licentie Verificatie
+
 - **POST** `/api/v1/licenses/verify`
 - Verifieert een licentie key
 - Body: `{ "key": "your-license-key" }`
 
 #### Licentie Status
+
 - **GET** `/api/v1/licenses/status/:key`
 - Haalt de status van een licentie op
 
 #### Licentie Activatie
+
 - **POST** `/api/v1/licenses/activate`
 - Activeert een nieuwe licentie
-- Body: 
+- Body:
+
 ```json
 {
   "key": "new-license-key",
@@ -664,14 +738,17 @@ npm run dev
 ```
 
 #### Licentie Deactivatie
+
 - **PUT** `/api/v1/licenses/deactivate`
 - Deactiveert een bestaande licentie
 - Body: `{ "key": "your-license-key" }`
 
 #### Licentie Upgrade
+
 - **POST** `/api/v1/licenses/upgrade`
 - Upgradet een licentie naar een hoger plan
 - Body:
+
 ```json
 {
   "key": "your-license-key",
@@ -680,6 +757,7 @@ npm run dev
 ```
 
 ### Beveiliging
+
 - Alle endpoints zijn beveiligd met JWT authenticatie
 - Rate limiting is ingeschakeld (100 requests per 15 minuten)
 - Wachtwoorden worden gehasht met Argon2
@@ -687,7 +765,9 @@ npm run dev
 - Helmet middleware is ingeschakeld voor extra beveiliging
 
 ### Testen
+
 1. Maak een `.env.test` bestand aan:
+
 ```env
 NODE_ENV=test
 DATABASE_URL=postgres://postgres:test@localhost:5432/license_test_db
@@ -696,11 +776,13 @@ LICENSE_SERVER_PORT=3001
 ```
 
 2. Start de test database:
+
 ```bash
 docker run --name license-test-db -e POSTGRES_PASSWORD=test -e POSTGRES_DB=license_test_db -p 5432:5432 -d postgres:15-alpine
 ```
 
 3. Run de tests:
+
 ```bash
 npm test
 ```
@@ -718,6 +800,6 @@ Voor technische ondersteuning:
 
 ---
 
-*Laatst bijgewerkt: 31 december 2024*
+_Laatst bijgewerkt: 31 december 2024_
 
- 2024 SEO & SEA Automation Web App. Alle rechten voorbehouden.
+2024 SEO & SEA Automation Web App. Alle rechten voorbehouden.

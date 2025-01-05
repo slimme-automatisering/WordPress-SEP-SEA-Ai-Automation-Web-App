@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 /**
  * Genereert een JWT token voor een licentie
@@ -8,13 +8,13 @@ function generateToken(license) {
     {
       id: license.id,
       type: license.type,
-      features: license.features
+      features: license.features,
     },
     process.env.JWT_SECRET,
-    { expiresIn: '24h' }
+    { expiresIn: "24h" },
   );
 }
 
 module.exports = {
-  generateToken
+  generateToken,
 };

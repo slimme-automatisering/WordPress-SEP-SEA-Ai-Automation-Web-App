@@ -1,396 +1,458 @@
-import mongoose from 'mongoose';
-import { BaseModel } from './baseModel.js';
+import mongoose from "mongoose";
+import { BaseModel } from "./baseModel.js";
 
 const keywordSchema = new mongoose.Schema({
   text: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   matchType: {
     type: String,
-    enum: ['exact', 'phrase', 'broad'],
-    required: true
+    enum: ["exact", "phrase", "broad"],
+    required: true,
   },
   bid: {
     amount: {
       type: Number,
       required: true,
-      min: 0
+      min: 0,
     },
     currency: {
       type: String,
-      default: 'EUR'
+      default: "EUR",
     },
     strategy: {
       type: String,
-      enum: ['manual', 'auto'],
-      default: 'manual'
-    }
+      enum: ["manual", "auto"],
+      default: "manual",
+    },
   },
   performance: {
     impressions: {
       type: Number,
-      default: 0
+      default: 0,
     },
     clicks: {
       type: Number,
-      default: 0
+      default: 0,
     },
     cost: {
       type: Number,
-      default: 0
+      default: 0,
     },
     conversions: {
       type: Number,
-      default: 0
+      default: 0,
     },
     revenue: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   status: {
     type: String,
-    enum: ['active', 'paused', 'removed'],
-    default: 'active'
-  }
+    enum: ["active", "paused", "removed"],
+    default: "active",
+  },
 });
 
 const adSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ['text', 'responsive', 'image'],
-    required: true
+    enum: ["text", "responsive", "image"],
+    required: true,
   },
   headline: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   description: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   path: {
     type: String,
-    trim: true
+    trim: true,
   },
   finalUrl: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   assets: {
-    images: [{
-      url: String,
-      size: String
-    }],
-    videos: [{
-      url: String,
-      duration: Number
-    }]
+    images: [
+      {
+        url: String,
+        size: String,
+      },
+    ],
+    videos: [
+      {
+        url: String,
+        duration: Number,
+      },
+    ],
   },
   performance: {
     impressions: {
       type: Number,
-      default: 0
+      default: 0,
     },
     clicks: {
       type: Number,
-      default: 0
+      default: 0,
     },
     cost: {
       type: Number,
-      default: 0
+      default: 0,
     },
     conversions: {
       type: Number,
-      default: 0
+      default: 0,
     },
     revenue: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   status: {
     type: String,
-    enum: ['active', 'paused', 'removed'],
-    default: 'active'
+    enum: ["active", "paused", "removed"],
+    default: "active",
   },
   schedule: {
     startDate: Date,
     endDate: Date,
-    dayParting: [{
-      day: {
-        type: String,
-        enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    dayParting: [
+      {
+        day: {
+          type: String,
+          enum: [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+          ],
+        },
+        hours: [
+          {
+            start: String,
+            end: String,
+          },
+        ],
       },
-      hours: [{
-        start: String,
-        end: String
-      }]
-    }]
-  }
+    ],
+  },
 });
 
 const adGroupSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   status: {
     type: String,
-    enum: ['active', 'paused', 'removed'],
-    default: 'active'
+    enum: ["active", "paused", "removed"],
+    default: "active",
   },
   keywords: [keywordSchema],
   ads: [adSchema],
   targeting: {
-    locations: [{
-      type: String,
-      trim: true
-    }],
-    languages: [{
-      type: String,
-      trim: true
-    }],
-    devices: [{
-      type: String,
-      enum: ['mobile', 'tablet', 'desktop']
-    }],
-    audiences: [{
-      type: String,
-      trim: true
-    }]
+    locations: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    languages: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    devices: [
+      {
+        type: String,
+        enum: ["mobile", "tablet", "desktop"],
+      },
+    ],
+    audiences: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
   },
   bidding: {
     strategy: {
       type: String,
-      enum: ['manual', 'maximize_clicks', 'maximize_conversions', 'target_roas'],
-      default: 'manual'
+      enum: [
+        "manual",
+        "maximize_clicks",
+        "maximize_conversions",
+        "target_roas",
+      ],
+      default: "manual",
     },
     adjustments: {
-      device: [{
-        type: String,
-        modifier: Number
-      }],
-      location: [{
-        type: String,
-        modifier: Number
-      }],
-      audience: [{
-        type: String,
-        modifier: Number
-      }]
-    }
+      device: [
+        {
+          type: String,
+          modifier: Number,
+        },
+      ],
+      location: [
+        {
+          type: String,
+          modifier: Number,
+        },
+      ],
+      audience: [
+        {
+          type: String,
+          modifier: Number,
+        },
+      ],
+    },
   },
   performance: {
     impressions: {
       type: Number,
-      default: 0
+      default: 0,
     },
     clicks: {
       type: Number,
-      default: 0
+      default: 0,
     },
     cost: {
       type: Number,
-      default: 0
+      default: 0,
     },
     conversions: {
       type: Number,
-      default: 0
+      default: 0,
     },
     revenue: {
       type: Number,
-      default: 0
-    }
-  }
+      default: 0,
+    },
+  },
 });
 
 const campaignSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   type: {
     type: String,
-    enum: ['search', 'display', 'shopping'],
-    required: true
+    enum: ["search", "display", "shopping"],
+    required: true,
   },
   status: {
     type: String,
-    enum: ['active', 'paused', 'removed'],
-    default: 'active'
+    enum: ["active", "paused", "removed"],
+    default: "active",
   },
   budget: {
     amount: {
       type: Number,
       required: true,
-      min: 0
+      min: 0,
     },
     currency: {
       type: String,
-      default: 'EUR'
+      default: "EUR",
     },
     type: {
       type: String,
-      enum: ['daily', 'monthly'],
-      default: 'daily'
-    }
+      enum: ["daily", "monthly"],
+      default: "daily",
+    },
   },
   bidding: {
     strategy: {
       type: String,
-      enum: ['manual', 'maximize_clicks', 'maximize_conversions', 'target_roas'],
-      default: 'manual'
+      enum: [
+        "manual",
+        "maximize_clicks",
+        "maximize_conversions",
+        "target_roas",
+      ],
+      default: "manual",
     },
     targetRoas: Number,
-    maxCpc: Number
+    maxCpc: Number,
   },
   targeting: {
     network: {
       search: Boolean,
       display: Boolean,
-      partner: Boolean
+      partner: Boolean,
     },
-    locations: [{
-      type: String,
-      trim: true
-    }],
-    languages: [{
-      type: String,
-      trim: true
-    }],
+    locations: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    languages: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
     schedule: {
       startDate: Date,
       endDate: Date,
       timezone: String,
-      dayParting: [{
-        day: {
-          type: String,
-          enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+      dayParting: [
+        {
+          day: {
+            type: String,
+            enum: [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday",
+              "saturday",
+              "sunday",
+            ],
+          },
+          hours: [
+            {
+              start: String,
+              end: String,
+            },
+          ],
         },
-        hours: [{
-          start: String,
-          end: String
-        }]
-      }]
-    }
+      ],
+    },
   },
   tracking: {
-    urlParameters: [{
-      key: String,
-      value: String
-    }],
+    urlParameters: [
+      {
+        key: String,
+        value: String,
+      },
+    ],
     conversionTracking: {
       enabled: Boolean,
-      id: String
-    }
+      id: String,
+    },
   },
   adGroups: [adGroupSchema],
   performance: {
     impressions: {
       type: Number,
-      default: 0
+      default: 0,
     },
     clicks: {
       type: Number,
-      default: 0
+      default: 0,
     },
     cost: {
       type: Number,
-      default: 0
+      default: 0,
     },
     conversions: {
       type: Number,
-      default: 0
+      default: 0,
     },
     revenue: {
       type: Number,
-      default: 0
-    }
-  }
+      default: 0,
+    },
+  },
 });
 
 // Schema definitie
 const schema = new mongoose.Schema({
   projectId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Project',
-    required: true
+    ref: "Project",
+    required: true,
   },
   platform: {
     type: String,
-    enum: ['google', 'bing', 'facebook'],
-    required: true
+    enum: ["google", "bing", "facebook"],
+    required: true,
   },
   accountId: {
     type: String,
-    required: true
+    required: true,
   },
   campaigns: [campaignSchema],
   settings: {
     budget: {
       monthly: {
         amount: Number,
-        currency: String
+        currency: String,
       },
       alerts: {
         threshold: Number,
-        email: String
-      }
+        email: String,
+      },
     },
     automation: {
       bidding: {
         enabled: Boolean,
         strategy: String,
-        rules: [{
-          condition: String,
-          action: String,
-          value: Number
-        }]
+        rules: [
+          {
+            condition: String,
+            action: String,
+            value: Number,
+          },
+        ],
       },
       scheduling: {
         enabled: Boolean,
         timezone: String,
-        rules: [{
-          type: String,
-          schedule: String,
-          action: String
-        }]
-      }
+        rules: [
+          {
+            type: String,
+            schedule: String,
+            action: String,
+          },
+        ],
+      },
     },
     notifications: {
       performance: {
         type: Boolean,
-        default: true
+        default: true,
       },
       budget: {
         type: Boolean,
-        default: true
+        default: true,
       },
       changes: {
         type: Boolean,
-        default: true
-      }
-    }
-  }
+        default: true,
+      },
+    },
+  },
 });
 
 // Indexes
 schema.index({ projectId: 1, platform: 1, accountId: 1 }, { unique: true });
-schema.index({ 'campaigns.name': 1 });
-schema.index({ 'campaigns.adGroups.name': 1 });
-schema.index({ 'campaigns.adGroups.keywords.text': 1 });
+schema.index({ "campaigns.name": 1 });
+schema.index({ "campaigns.adGroups.name": 1 });
+schema.index({ "campaigns.adGroups.keywords.text": 1 });
 
 export class SeaModel extends BaseModel {
   constructor() {
-    super('Sea', schema);
+    super("Sea", schema);
   }
 
   /**
@@ -409,8 +471,8 @@ export class SeaModel extends BaseModel {
    */
   async updateCampaignStatus(projectId, campaignId, status) {
     return this.model.updateOne(
-      { projectId, 'campaigns._id': campaignId },
-      { $set: { 'campaigns.$.status': status } }
+      { projectId, "campaigns._id": campaignId },
+      { $set: { "campaigns.$.status": status } },
     );
   }
 
@@ -419,8 +481,8 @@ export class SeaModel extends BaseModel {
    */
   async addAdGroup(projectId, campaignId, adGroup) {
     return this.model.updateOne(
-      { projectId, 'campaigns._id': campaignId },
-      { $push: { 'campaigns.$.adGroups': adGroup } }
+      { projectId, "campaigns._id": campaignId },
+      { $push: { "campaigns.$.adGroups": adGroup } },
     );
   }
 
@@ -429,12 +491,12 @@ export class SeaModel extends BaseModel {
    */
   async updateAdGroupStatus(projectId, campaignId, adGroupId, status) {
     return this.model.updateOne(
-      { 
-        projectId, 
-        'campaigns._id': campaignId,
-        'campaigns.adGroups._id': adGroupId 
+      {
+        projectId,
+        "campaigns._id": campaignId,
+        "campaigns.adGroups._id": adGroupId,
       },
-      { $set: { 'campaigns.$.adGroups.$.status': status } }
+      { $set: { "campaigns.$.adGroups.$.status": status } },
     );
   }
 
@@ -442,10 +504,10 @@ export class SeaModel extends BaseModel {
    * Voeg advertentie toe aan adgroup
    */
   async addAd(projectId, campaignId, adGroupId, ad) {
-    const doc = await this.model.findOne({ 
+    const doc = await this.model.findOne({
       projectId,
-      'campaigns._id': campaignId,
-      'campaigns.adGroups._id': adGroupId
+      "campaigns._id": campaignId,
+      "campaigns.adGroups._id": adGroupId,
     });
     if (!doc) return null;
 
@@ -466,7 +528,7 @@ export class SeaModel extends BaseModel {
     const campaign = doc.campaigns.id(campaignId);
     const adGroup = campaign.adGroups.id(adGroupId);
     const ad = adGroup.ads.id(adId);
-    
+
     ad.status = status;
     return doc.save();
   }
@@ -476,8 +538,8 @@ export class SeaModel extends BaseModel {
    */
   async updatePerformance(projectId, campaignId, metrics) {
     return this.model.updateOne(
-      { projectId, 'campaigns._id': campaignId },
-      { $set: { 'campaigns.$.performance': metrics } }
+      { projectId, "campaigns._id": campaignId },
+      { $set: { "campaigns.$.performance": metrics } },
     );
   }
 }

@@ -1,6 +1,9 @@
-const express = require('express');
-const seoController = require('../controllers/seoController.js');
-const { analysisLimiter, suggestionsLimiter } = require('../middleware/rateLimiter.js');
+const express = require("express");
+const seoController = require("../controllers/seoController.js");
+const {
+  analysisLimiter,
+  suggestionsLimiter,
+} = require("../middleware/rateLimiter.js");
 
 const router = express.Router();
 
@@ -46,7 +49,11 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/analyze', analysisLimiter, seoController.analyzeKeywords.bind(seoController));
+router.post(
+  "/analyze",
+  analysisLimiter,
+  seoController.analyzeKeywords.bind(seoController),
+);
 
 /**
  * @swagger
@@ -84,6 +91,10 @@ router.post('/analyze', analysisLimiter, seoController.analyzeKeywords.bind(seoC
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/suggestions', suggestionsLimiter, seoController.getKeywordSuggestions.bind(seoController));
+router.get(
+  "/suggestions",
+  suggestionsLimiter,
+  seoController.getKeywordSuggestions.bind(seoController),
+);
 
 module.exports = router;

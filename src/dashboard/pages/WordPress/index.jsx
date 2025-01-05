@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -26,8 +26,8 @@ import {
   Tabs,
   Tab,
   Tooltip,
-  Link
-} from '@mui/material';
+  Link,
+} from "@mui/material";
 import {
   Add as AddIcon,
   Edit as EditIcon,
@@ -37,9 +37,9 @@ import {
   Category as CategoryIcon,
   LocalOffer as TagIcon,
   Comment as CommentIcon,
-  Refresh as RefreshIcon
-} from '@mui/icons-material';
-import { Editor } from '@tinymce/tinymce-react';
+  Refresh as RefreshIcon,
+} from "@mui/icons-material";
+import { Editor } from "@tinymce/tinymce-react";
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -52,11 +52,7 @@ const TabPanel = (props) => {
       aria-labelledby={`wordpress-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 };
@@ -74,16 +70,16 @@ const WordPressIntegration = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState(false);
-  const [dialogType, setDialogType] = useState('');
+  const [dialogType, setDialogType] = useState("");
   const [editItem, setEditItem] = useState(null);
 
   // Form states
-  const [siteUrl, setSiteUrl] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [postTitle, setPostTitle] = useState('');
-  const [postContent, setPostContent] = useState('');
-  const [postStatus, setPostStatus] = useState('draft');
+  const [siteUrl, setSiteUrl] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [postTitle, setPostTitle] = useState("");
+  const [postContent, setPostContent] = useState("");
+  const [postStatus, setPostStatus] = useState("draft");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -96,20 +92,20 @@ const WordPressIntegration = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/wordpress/connect', {
-        method: 'POST',
+      const response = await fetch("/api/wordpress/connect", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           siteUrl,
           username,
-          password
+          password,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Verbinding mislukt');
+        throw new Error("Verbinding mislukt");
       }
 
       const data = await response.json();
@@ -130,10 +126,12 @@ const WordPressIntegration = () => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/wordpress/${selectedSite}/posts?page=${page + 1}&perPage=${rowsPerPage}`);
-      
+      const response = await fetch(
+        `/api/wordpress/${selectedSite}/posts?page=${page + 1}&perPage=${rowsPerPage}`,
+      );
+
       if (!response.ok) {
-        throw new Error('Kon posts niet ophalen');
+        throw new Error("Kon posts niet ophalen");
       }
 
       const data = await response.json();
@@ -150,9 +148,9 @@ const WordPressIntegration = () => {
 
     try {
       const response = await fetch(`/api/wordpress/${selectedSite}/categories`);
-      
+
       if (!response.ok) {
-        throw new Error('Kon categorieën niet ophalen');
+        throw new Error("Kon categorieën niet ophalen");
       }
 
       const data = await response.json();
@@ -167,9 +165,9 @@ const WordPressIntegration = () => {
 
     try {
       const response = await fetch(`/api/wordpress/${selectedSite}/tags`);
-      
+
       if (!response.ok) {
-        throw new Error('Kon tags niet ophalen');
+        throw new Error("Kon tags niet ophalen");
       }
 
       const data = await response.json();
@@ -184,9 +182,9 @@ const WordPressIntegration = () => {
 
     try {
       const response = await fetch(`/api/wordpress/${selectedSite}/media`);
-      
+
       if (!response.ok) {
-        throw new Error('Kon media niet ophalen');
+        throw new Error("Kon media niet ophalen");
       }
 
       const data = await response.json();
@@ -202,21 +200,21 @@ const WordPressIntegration = () => {
 
     try {
       const response = await fetch(`/api/wordpress/${selectedSite}/posts`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           title: postTitle,
           content: postContent,
           status: postStatus,
           categories: selectedCategories,
-          tags: selectedTags
+          tags: selectedTags,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Kon post niet aanmaken');
+        throw new Error("Kon post niet aanmaken");
       }
 
       await fetchPosts();
@@ -236,22 +234,25 @@ const WordPressIntegration = () => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/wordpress/${selectedSite}/posts/${editItem.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `/api/wordpress/${selectedSite}/posts/${editItem.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: postTitle,
+            content: postContent,
+            status: postStatus,
+            categories: selectedCategories,
+            tags: selectedTags,
+          }),
         },
-        body: JSON.stringify({
-          title: postTitle,
-          content: postContent,
-          status: postStatus,
-          categories: selectedCategories,
-          tags: selectedTags
-        }),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error('Kon post niet bijwerken');
+        throw new Error("Kon post niet bijwerken");
       }
 
       await fetchPosts();
@@ -265,7 +266,7 @@ const WordPressIntegration = () => {
   };
 
   const handleDeletePost = async (id) => {
-    if (!window.confirm('Weet je zeker dat je deze post wilt verwijderen?')) {
+    if (!window.confirm("Weet je zeker dat je deze post wilt verwijderen?")) {
       return;
     }
 
@@ -273,12 +274,15 @@ const WordPressIntegration = () => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/wordpress/${selectedSite}/posts/${id}`, {
-        method: 'DELETE'
-      });
+      const response = await fetch(
+        `/api/wordpress/${selectedSite}/posts/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
-        throw new Error('Kon post niet verwijderen');
+        throw new Error("Kon post niet verwijderen");
       }
 
       await fetchPosts();
@@ -290,9 +294,9 @@ const WordPressIntegration = () => {
   };
 
   const resetForm = () => {
-    setPostTitle('');
-    setPostContent('');
-    setPostStatus('draft');
+    setPostTitle("");
+    setPostContent("");
+    setPostStatus("draft");
     setSelectedCategories([]);
     setSelectedTags([]);
     setEditItem(null);
@@ -305,7 +309,7 @@ const WordPressIntegration = () => {
     setPostStatus(post.status);
     setSelectedCategories(post.categories);
     setSelectedTags(post.tags);
-    setDialogType('editPost');
+    setDialogType("editPost");
     setOpenDialog(true);
   };
 
@@ -339,7 +343,7 @@ const WordPressIntegration = () => {
                 select
                 fullWidth
                 label="WordPress Site"
-                value={selectedSite || ''}
+                value={selectedSite || ""}
                 onChange={(e) => setSelectedSite(e.target.value)}
                 SelectProps={{
                   native: true,
@@ -356,7 +360,7 @@ const WordPressIntegration = () => {
                 variant="contained"
                 startIcon={<AddIcon />}
                 onClick={() => {
-                  setDialogType('connect');
+                  setDialogType("connect");
                   setOpenDialog(true);
                 }}
               >
@@ -389,7 +393,7 @@ const WordPressIntegration = () => {
                     variant="contained"
                     startIcon={<AddIcon />}
                     onClick={() => {
-                      setDialogType('createPost');
+                      setDialogType("createPost");
                       setOpenDialog(true);
                     }}
                   >
@@ -415,7 +419,11 @@ const WordPressIntegration = () => {
                           <TableCell>
                             <Chip
                               label={post.status}
-                              color={post.status === 'publish' ? 'success' : 'default'}
+                              color={
+                                post.status === "publish"
+                                  ? "success"
+                                  : "default"
+                              }
                               size="small"
                             />
                           </TableCell>
@@ -512,11 +520,11 @@ const WordPressIntegration = () => {
                     <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
                       <Card>
                         <CardContent>
-                          {item.media_type === 'image' ? (
+                          {item.media_type === "image" ? (
                             <img
                               src={item.source_url}
                               alt={item.alt_text}
-                              style={{ width: '100%', height: 'auto' }}
+                              style={{ width: "100%", height: "auto" }}
                             />
                           ) : (
                             <Box
@@ -554,12 +562,12 @@ const WordPressIntegration = () => {
         fullWidth
       >
         <DialogTitle>
-          {dialogType === 'connect' && 'Nieuwe WordPress Site Verbinden'}
-          {dialogType === 'createPost' && 'Nieuwe Post Aanmaken'}
-          {dialogType === 'editPost' && 'Post Bewerken'}
+          {dialogType === "connect" && "Nieuwe WordPress Site Verbinden"}
+          {dialogType === "createPost" && "Nieuwe Post Aanmaken"}
+          {dialogType === "editPost" && "Post Bewerken"}
         </DialogTitle>
         <DialogContent>
-          {dialogType === 'connect' && (
+          {dialogType === "connect" && (
             <Box display="flex" flexDirection="column" gap={2} pt={2}>
               <TextField
                 label="Site URL"
@@ -583,7 +591,7 @@ const WordPressIntegration = () => {
             </Box>
           )}
 
-          {(dialogType === 'createPost' || dialogType === 'editPost') && (
+          {(dialogType === "createPost" || dialogType === "editPost") && (
             <Box display="flex" flexDirection="column" gap={2} pt={2}>
               <TextField
                 label="Titel"
@@ -599,14 +607,30 @@ const WordPressIntegration = () => {
                   height: 400,
                   menubar: false,
                   plugins: [
-                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "image",
+                    "charmap",
+                    "preview",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "code",
+                    "fullscreen",
+                    "insertdatetime",
+                    "media",
+                    "table",
+                    "code",
+                    "help",
+                    "wordcount",
                   ],
-                  toolbar: 'undo redo | blocks | ' +
-                    'bold italic forecolor | alignleft aligncenter ' +
-                    'alignright alignjustify | bullist numlist outdent indent | ' +
-                    'removeformat | help'
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic forecolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help",
                 }}
               />
               <TextField
@@ -635,13 +659,13 @@ const WordPressIntegration = () => {
           <Button
             variant="contained"
             onClick={() => {
-              if (dialogType === 'connect') handleConnect();
-              if (dialogType === 'createPost') handleCreatePost();
-              if (dialogType === 'editPost') handleUpdatePost();
+              if (dialogType === "connect") handleConnect();
+              if (dialogType === "createPost") handleCreatePost();
+              if (dialogType === "editPost") handleUpdatePost();
             }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Opslaan'}
+            {loading ? <CircularProgress size={24} /> : "Opslaan"}
           </Button>
         </DialogActions>
       </Dialog>

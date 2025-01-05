@@ -11,7 +11,9 @@
     "lint": "eslint ."
   },
   "jest": {
-    "setupFilesAfterEnv": ["<rootDir>/src/tests/setup.js"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/tests/setup.js"
+    ],
     "testEnvironment": "node"
   },
   "dependencies": {

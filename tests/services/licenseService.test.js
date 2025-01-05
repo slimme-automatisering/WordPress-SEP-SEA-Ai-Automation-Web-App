@@ -1,7 +1,7 @@
-const { describe, it, expect, beforeEach, jest } = require('@jest/globals');
-const LicenseService = require('../../src/services/licenseService');
+const { describe, it, expect, beforeEach, jest } = require("@jest/globals");
+const LicenseService = require("../../src/services/licenseService");
 
-describe('LicenseService', () => {
+describe("LicenseService", () => {
   let licenseService;
   let mockDb;
 
@@ -13,14 +13,14 @@ describe('LicenseService', () => {
     licenseService = new LicenseService(mockDb);
   });
 
-  describe('validateLicense', () => {
-    it('moet een geldige licentie valideren', async () => {
+  describe("validateLicense", () => {
+    it("moet een geldige licentie valideren", async () => {
       mockDb.query.mockResolvedValue({ rows: [{ is_active: true }] });
-      
-      const result = await licenseService.validateLicense('test-key');
+
+      const result = await licenseService.validateLicense("test-key");
       expect(result).toBeTruthy();
     });
-    
+
     // ... meer test cases
   });
-}); 
+});

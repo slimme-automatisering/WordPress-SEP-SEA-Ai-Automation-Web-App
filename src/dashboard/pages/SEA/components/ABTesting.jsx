@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -24,30 +24,30 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel
-} from '@mui/material';
+  InputLabel,
+} from "@mui/material";
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
   PlayArrow as StartIcon,
   Stop as StopIcon,
-  TrendingUp as TrendingUpIcon
-} from '@mui/icons-material';
-import { Bar } from 'react-chartjs-2';
-import { useTheme } from '@mui/material/styles';
+  TrendingUp as TrendingUpIcon,
+} from "@mui/icons-material";
+import { Bar } from "react-chartjs-2";
+import { useTheme } from "@mui/material/styles";
 
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'currency',
-    currency: 'EUR'
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
   }).format(amount / 1000000);
 };
 
 const formatPercentage = (value) => {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'percent',
+  return new Intl.NumberFormat("nl-NL", {
+    style: "percent",
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
   }).format(value);
 };
 
@@ -59,12 +59,12 @@ const ABTesting = ({ accountId }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedExperiment, setSelectedExperiment] = useState(null);
   const [formData, setFormData] = useState({
-    name: '',
-    type: 'SEARCH_CUSTOM',
-    status: 'ENABLED',
-    startDate: '',
-    endDate: '',
-    description: ''
+    name: "",
+    type: "SEARCH_CUSTOM",
+    status: "ENABLED",
+    startDate: "",
+    endDate: "",
+    description: "",
   });
 
   const fetchExperiments = async () => {
@@ -77,7 +77,7 @@ const ABTesting = ({ accountId }) => {
       const response = await fetch(`/api/google-ads/${accountId}/experiments`);
 
       if (!response.ok) {
-        throw new Error('Kon experimenten niet ophalen');
+        throw new Error("Kon experimenten niet ophalen");
       }
 
       const data = await response.json();
@@ -99,15 +99,15 @@ const ABTesting = ({ accountId }) => {
 
     try {
       const response = await fetch(`/api/google-ads/${accountId}/experiments`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error('Kon experiment niet aanmaken');
+        throw new Error("Kon experiment niet aanmaken");
       }
 
       await fetchExperiments();
@@ -122,12 +122,12 @@ const ABTesting = ({ accountId }) => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      type: 'SEARCH_CUSTOM',
-      status: 'ENABLED',
-      startDate: '',
-      endDate: '',
-      description: ''
+      name: "",
+      type: "SEARCH_CUSTOM",
+      status: "ENABLED",
+      startDate: "",
+      endDate: "",
+      description: "",
     });
     setSelectedExperiment(null);
   };
@@ -141,23 +141,23 @@ const ABTesting = ({ accountId }) => {
   }
 
   const experimentPerformanceData = {
-    labels: experiments.map(exp => exp.name),
+    labels: experiments.map((exp) => exp.name),
     datasets: [
       {
-        label: 'CTR',
-        data: experiments.map(exp => 
-          exp.metrics.clicks / exp.metrics.impressions
+        label: "CTR",
+        data: experiments.map(
+          (exp) => exp.metrics.clicks / exp.metrics.impressions,
         ),
-        backgroundColor: theme.palette.primary.main
+        backgroundColor: theme.palette.primary.main,
       },
       {
-        label: 'Conversie Ratio',
-        data: experiments.map(exp => 
-          exp.metrics.conversions / exp.metrics.clicks
+        label: "Conversie Ratio",
+        data: experiments.map(
+          (exp) => exp.metrics.conversions / exp.metrics.clicks,
         ),
-        backgroundColor: theme.palette.secondary.main
-      }
-    ]
+        backgroundColor: theme.palette.secondary.main,
+      },
+    ],
   };
 
   const chartOptions = {
@@ -167,18 +167,21 @@ const ABTesting = ({ accountId }) => {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Ratio'
-        }
-      }
-    }
+          text: "Ratio",
+        },
+      },
+    },
   };
 
   return (
     <Box>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h5">
-          A/B Tests
-        </Typography>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
+        <Typography variant="h5">A/B Tests</Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
@@ -228,7 +231,11 @@ const ABTesting = ({ accountId }) => {
                         <TableCell>
                           <Chip
                             label={experiment.status}
-                            color={experiment.status === 'ENABLED' ? 'success' : 'default'}
+                            color={
+                              experiment.status === "ENABLED"
+                                ? "success"
+                                : "default"
+                            }
                             size="small"
                           />
                         </TableCell>
@@ -236,38 +243,41 @@ const ABTesting = ({ accountId }) => {
                           {new Date(experiment.start_date).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
-                          {experiment.end_date ? 
-                            new Date(experiment.end_date).toLocaleDateString() : 
-                            '-'
-                          }
+                          {experiment.end_date
+                            ? new Date(experiment.end_date).toLocaleDateString()
+                            : "-"}
                         </TableCell>
                         <TableCell align="right">
                           {experiment.metrics.impressions.toLocaleString()}
                         </TableCell>
                         <TableCell align="right">
                           {formatPercentage(
-                            experiment.metrics.clicks / experiment.metrics.impressions
+                            experiment.metrics.clicks /
+                              experiment.metrics.impressions,
                           )}
                         </TableCell>
                         <TableCell align="right">
                           {formatPercentage(
-                            experiment.metrics.conversions / experiment.metrics.clicks
+                            experiment.metrics.conversions /
+                              experiment.metrics.clicks,
                           )}
                         </TableCell>
                         <TableCell align="right">
                           <IconButton
                             size="small"
-                            color={experiment.status === 'ENABLED' ? 'error' : 'success'}
-                          >
-                            {experiment.status === 'ENABLED' ? 
-                              <StopIcon /> : 
-                              <StartIcon />
+                            color={
+                              experiment.status === "ENABLED"
+                                ? "error"
+                                : "success"
                             }
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            color="error"
                           >
+                            {experiment.status === "ENABLED" ? (
+                              <StopIcon />
+                            ) : (
+                              <StartIcon />
+                            )}
+                          </IconButton>
+                          <IconButton size="small" color="error">
                             <DeleteIcon />
                           </IconButton>
                         </TableCell>
@@ -306,21 +316,25 @@ const ABTesting = ({ accountId }) => {
         fullWidth
       >
         <DialogTitle>
-          {selectedExperiment ? 'Experiment Bewerken' : 'Nieuw Experiment'}
+          {selectedExperiment ? "Experiment Bewerken" : "Nieuw Experiment"}
         </DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2} pt={2}>
             <TextField
               label="Naam"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               fullWidth
             />
             <FormControl fullWidth>
               <InputLabel>Type</InputLabel>
               <Select
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
                 label="Type"
               >
                 <MenuItem value="SEARCH_CUSTOM">Zoeken - Custom</MenuItem>
@@ -332,7 +346,9 @@ const ABTesting = ({ accountId }) => {
               <InputLabel>Status</InputLabel>
               <Select
                 value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
                 label="Status"
               >
                 <MenuItem value="ENABLED">Actief</MenuItem>
@@ -343,7 +359,9 @@ const ABTesting = ({ accountId }) => {
               label="Start Datum"
               type="date"
               value={formData.startDate}
-              onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, startDate: e.target.value })
+              }
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -353,7 +371,9 @@ const ABTesting = ({ accountId }) => {
               label="Eind Datum"
               type="date"
               value={formData.endDate}
-              onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, endDate: e.target.value })
+              }
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -362,7 +382,9 @@ const ABTesting = ({ accountId }) => {
             <TextField
               label="Beschrijving"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               fullWidth
               multiline
               rows={4}
@@ -378,12 +400,8 @@ const ABTesting = ({ accountId }) => {
           >
             Annuleren
           </Button>
-          <Button
-            variant="contained"
-            onClick={handleCreate}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : 'Opslaan'}
+          <Button variant="contained" onClick={handleCreate} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : "Opslaan"}
           </Button>
         </DialogActions>
       </Dialog>

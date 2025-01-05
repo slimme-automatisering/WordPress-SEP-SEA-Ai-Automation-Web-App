@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   AppBar,
   Toolbar,
@@ -6,13 +6,13 @@ import {
   IconButton,
   Badge,
   Box,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Notifications as NotificationsIcon,
   Settings as SettingsIcon,
   Person as PersonIcon,
-} from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+} from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -21,9 +21,9 @@ function Navbar() {
     <AppBar
       position="fixed"
       sx={{
-        zIndex: theme => theme.zIndex.drawer + 1,
-        backgroundColor: 'background.paper',
-        color: 'text.primary',
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        backgroundColor: "background.paper",
+        color: "text.primary",
         boxShadow: 1,
       }}
     >
@@ -32,22 +32,19 @@ function Navbar() {
           variant="h6"
           noWrap
           component="div"
-          sx={{ flexGrow: 1, fontWeight: 'bold' }}
+          sx={{ flexGrow: 1, fontWeight: "bold" }}
         >
           SEO & SEA Automation
         </Typography>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="error">
               <NotificationsIcon />
             </Badge>
           </IconButton>
 
-          <IconButton
-            color="inherit"
-            onClick={() => navigate('/settings')}
-          >
+          <IconButton color="inherit" onClick={() => navigate("/settings")}>
             <SettingsIcon />
           </IconButton>
 

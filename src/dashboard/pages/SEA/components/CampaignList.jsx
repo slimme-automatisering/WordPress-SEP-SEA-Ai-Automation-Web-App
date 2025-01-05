@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -21,24 +21,24 @@ import {
   FormControl,
   InputLabel,
   Typography,
-  Alert
-} from '@mui/material';
+  Alert,
+} from "@mui/material";
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Add as AddIcon,
-  TrendingUp as TrendingUpIcon
-} from '@mui/icons-material';
+  TrendingUp as TrendingUpIcon,
+} from "@mui/icons-material";
 
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'currency',
-    currency: 'EUR'
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
   }).format(amount / 1000000); // Convert from micros
 };
 
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('nl-NL');
+  return new Date(dateString).toLocaleDateString("nl-NL");
 };
 
 const CampaignList = ({ accountId, onError }) => {
@@ -47,12 +47,12 @@ const CampaignList = ({ accountId, onError }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [formData, setFormData] = useState({
-    name: '',
-    status: 'ENABLED',
-    budget: '',
-    channelType: 'SEARCH',
-    startDate: '',
-    endDate: ''
+    name: "",
+    status: "ENABLED",
+    budget: "",
+    channelType: "SEARCH",
+    startDate: "",
+    endDate: "",
   });
 
   const fetchCampaigns = async () => {
@@ -62,9 +62,9 @@ const CampaignList = ({ accountId, onError }) => {
 
     try {
       const response = await fetch(`/api/google-ads/${accountId}/campaigns`);
-      
+
       if (!response.ok) {
-        throw new Error('Kon campagnes niet ophalen');
+        throw new Error("Kon campagnes niet ophalen");
       }
 
       const data = await response.json();
@@ -85,15 +85,15 @@ const CampaignList = ({ accountId, onError }) => {
 
     try {
       const response = await fetch(`/api/google-ads/${accountId}/campaigns`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error('Kon campagne niet aanmaken');
+        throw new Error("Kon campagne niet aanmaken");
       }
 
       await fetchCampaigns();
@@ -112,16 +112,19 @@ const CampaignList = ({ accountId, onError }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/campaigns/${selectedCampaign.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `/api/google-ads/${accountId}/campaigns/${selectedCampaign.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error('Kon campagne niet bijwerken');
+        throw new Error("Kon campagne niet bijwerken");
       }
 
       await fetchCampaigns();
@@ -135,19 +138,24 @@ const CampaignList = ({ accountId, onError }) => {
   };
 
   const handleDelete = async (campaignId) => {
-    if (!window.confirm('Weet je zeker dat je deze campagne wilt verwijderen?')) {
+    if (
+      !window.confirm("Weet je zeker dat je deze campagne wilt verwijderen?")
+    ) {
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/campaigns/${campaignId}`, {
-        method: 'DELETE'
-      });
+      const response = await fetch(
+        `/api/google-ads/${accountId}/campaigns/${campaignId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
-        throw new Error('Kon campagne niet verwijderen');
+        throw new Error("Kon campagne niet verwijderen");
       }
 
       await fetchCampaigns();
@@ -160,12 +168,12 @@ const CampaignList = ({ accountId, onError }) => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      status: 'ENABLED',
-      budget: '',
-      channelType: 'SEARCH',
-      startDate: '',
-      endDate: ''
+      name: "",
+      status: "ENABLED",
+      budget: "",
+      channelType: "SEARCH",
+      startDate: "",
+      endDate: "",
     });
     setSelectedCampaign(null);
   };
@@ -178,7 +186,7 @@ const CampaignList = ({ accountId, onError }) => {
       budget: campaign.budget_amount_micros,
       channelType: campaign.advertising_channel_type,
       startDate: campaign.start_date,
-      endDate: campaign.end_date || ''
+      endDate: campaign.end_date || "",
     });
     setOpenDialog(true);
   };
@@ -228,7 +236,9 @@ const CampaignList = ({ accountId, onError }) => {
                 <TableCell>
                   <Chip
                     label={campaign.status}
-                    color={campaign.status === 'ENABLED' ? 'success' : 'default'}
+                    color={
+                      campaign.status === "ENABLED" ? "success" : "default"
+                    }
                     size="small"
                   />
                 </TableCell>
@@ -237,7 +247,7 @@ const CampaignList = ({ accountId, onError }) => {
                 </TableCell>
                 <TableCell>{formatDate(campaign.start_date)}</TableCell>
                 <TableCell>
-                  {campaign.end_date ? formatDate(campaign.end_date) : '-'}
+                  {campaign.end_date ? formatDate(campaign.end_date) : "-"}
                 </TableCell>
                 <TableCell align="right">
                   {campaign.metrics.impressions.toLocaleString()}
@@ -249,10 +259,7 @@ const CampaignList = ({ accountId, onError }) => {
                   {formatCurrency(campaign.metrics.cost_micros)}
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton
-                    onClick={() => handleEdit(campaign)}
-                    size="small"
-                  >
+                  <IconButton onClick={() => handleEdit(campaign)} size="small">
                     <EditIcon />
                   </IconButton>
                   <IconButton
@@ -279,21 +286,25 @@ const CampaignList = ({ accountId, onError }) => {
         fullWidth
       >
         <DialogTitle>
-          {selectedCampaign ? 'Campagne Bewerken' : 'Nieuwe Campagne'}
+          {selectedCampaign ? "Campagne Bewerken" : "Nieuwe Campagne"}
         </DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2} pt={2}>
             <TextField
               label="Naam"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               fullWidth
             />
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
               <Select
                 value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
                 label="Status"
               >
                 <MenuItem value="ENABLED">Actief</MenuItem>
@@ -305,20 +316,24 @@ const CampaignList = ({ accountId, onError }) => {
               label="Budget (€)"
               type="number"
               value={formData.budget / 1000000}
-              onChange={(e) => setFormData({
-                ...formData,
-                budget: Math.round(parseFloat(e.target.value) * 1000000)
-              })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  budget: Math.round(parseFloat(e.target.value) * 1000000),
+                })
+              }
               fullWidth
               InputProps={{
-                startAdornment: '€'
+                startAdornment: "€",
               }}
             />
             <FormControl fullWidth>
               <InputLabel>Campagne Type</InputLabel>
               <Select
                 value={formData.channelType}
-                onChange={(e) => setFormData({ ...formData, channelType: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, channelType: e.target.value })
+                }
                 label="Campagne Type"
               >
                 <MenuItem value="SEARCH">Zoeken</MenuItem>
@@ -331,7 +346,9 @@ const CampaignList = ({ accountId, onError }) => {
               label="Start Datum"
               type="date"
               value={formData.startDate}
-              onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, startDate: e.target.value })
+              }
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -341,7 +358,9 @@ const CampaignList = ({ accountId, onError }) => {
               label="Eind Datum"
               type="date"
               value={formData.endDate}
-              onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, endDate: e.target.value })
+              }
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -363,7 +382,7 @@ const CampaignList = ({ accountId, onError }) => {
             onClick={selectedCampaign ? handleUpdate : handleCreate}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Opslaan'}
+            {loading ? <CircularProgress size={24} /> : "Opslaan"}
           </Button>
         </DialogActions>
       </Dialog>

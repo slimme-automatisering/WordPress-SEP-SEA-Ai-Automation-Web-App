@@ -1,7 +1,7 @@
-const { describe, it, expect, beforeEach, jest } = require('@jest/globals');
-const WooCommerceService = require('../../src/services/wooCommerceService');
+const { describe, it, expect, beforeEach, jest } = require("@jest/globals");
+const WooCommerceService = require("../../src/services/wooCommerceService");
 
-describe('WooCommerceService', () => {
+describe("WooCommerceService", () => {
   let wooCommerceService;
   let mockWooApi;
 
@@ -13,13 +13,13 @@ describe('WooCommerceService', () => {
     wooCommerceService = new WooCommerceService(mockWooApi);
   });
 
-  describe('getOrders', () => {
-    it('moet orders ophalen', async () => {
+  describe("getOrders", () => {
+    it("moet orders ophalen", async () => {
       const mockOrders = [{ id: 1 }];
       mockWooApi.get.mockResolvedValue({ data: mockOrders });
-      
+
       const result = await wooCommerceService.getOrders();
       expect(result).toEqual(mockOrders);
     });
   });
-}); 
+});

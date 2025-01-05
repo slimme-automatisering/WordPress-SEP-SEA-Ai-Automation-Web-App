@@ -1,37 +1,39 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require('cors');
-const helmet = require('helmet');
-const winston = require('winston');
-const { MongoClient } = require('mongodb');
-const rateLimit = require('express-rate-limit');
-require('dotenv').config();
+const express = require("express");
+const axios = require("axios");
+const cors = require("cors");
+const helmet = require("helmet");
+const winston = require("winston");
+const { MongoClient } = require("mongodb");
+const rateLimit = require("express-rate-limit");
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3005;
 
 // Logger configuratie
 const logger = winston.createLogger({
-  level: 'info',
+  level: "info",
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
   ),
   transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' })
-  ]
+    new winston.transports.File({ filename: "error.log", level: "error" }),
+    new winston.transports.File({ filename: "combined.log" }),
+  ],
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }));
+if (process.env.NODE_ENV !== "production") {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    }),
+  );
 }
 
 // MongoDB connectie
-const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const dbName = 'wordpress_integration';
+const mongoUrl = process.env.MONGODB_URI || "mongodb://localhost:27017";
+const dbName = "wordpress_integration";
 let db;
 
 // Middleware
@@ -42,7 +44,7 @@ app.use(express.json());
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minuten
-  max: 100 // limiet per IP
+  max: 100, // limiet per IP
 });
 app.use(limiter);
 
@@ -52,7 +54,7 @@ class WordPressClient {
     this.baseUrl = `${siteUrl}/wp-json/wp/v2`;
     this.auth = {
       username: username,
-      password: password
+      password: password,
     };
   }
 
@@ -61,13 +63,13 @@ class WordPressClient {
       const response = await axios.get(`${this.baseUrl}/posts`, {
         params: {
           page,
-          per_page: perPage
+          per_page: perPage,
         },
-        auth: this.auth
+        auth: this.auth,
       });
       return response.data;
     } catch (error) {
-      logger.error('Error fetching posts:', error);
+      logger.error("Error fetching posts:", error);
       throw error;
     }
   }
@@ -75,7 +77,7 @@ class WordPressClient {
   async getPost(id) {
     try {
       const response = await axios.get(`${this.baseUrl}/posts/${id}`, {
-        auth: this.auth
+        auth: this.auth,
       });
       return response.data;
     } catch (error) {
@@ -87,11 +89,11 @@ class WordPressClient {
   async createPost(data) {
     try {
       const response = await axios.post(`${this.baseUrl}/posts`, data, {
-        auth: this.auth
+        auth: this.auth,
       });
       return response.data;
     } catch (error) {
-      logger.error('Error creating post:', error);
+      logger.error("Error creating post:", error);
       throw error;
     }
   }
@@ -99,7 +101,7 @@ class WordPressClient {
   async updatePost(id, data) {
     try {
       const response = await axios.put(`${this.baseUrl}/posts/${id}`, data, {
-        auth: this.auth
+        auth: this.auth,
       });
       return response.data;
     } catch (error) {
@@ -111,7 +113,7 @@ class WordPressClient {
   async deletePost(id) {
     try {
       const response = await axios.delete(`${this.baseUrl}/posts/${id}`, {
-        auth: this.auth
+        auth: this.auth,
       });
       return response.data;
     } catch (error) {
@@ -123,11 +125,11 @@ class WordPressClient {
   async getCategories() {
     try {
       const response = await axios.get(`${this.baseUrl}/categories`, {
-        auth: this.auth
+        auth: this.auth,
       });
       return response.data;
     } catch (error) {
-      logger.error('Error fetching categories:', error);
+      logger.error("Error fetching categories:", error);
       throw error;
     }
   }
@@ -135,11 +137,11 @@ class WordPressClient {
   async getTags() {
     try {
       const response = await axios.get(`${this.baseUrl}/tags`, {
-        auth: this.auth
+        auth: this.auth,
       });
       return response.data;
     } catch (error) {
-      logger.error('Error fetching tags:', error);
+      logger.error("Error fetching tags:", error);
       throw error;
     }
   }
@@ -147,11 +149,11 @@ class WordPressClient {
   async getMedia() {
     try {
       const response = await axios.get(`${this.baseUrl}/media`, {
-        auth: this.auth
+        auth: this.auth,
       });
       return response.data;
     } catch (error) {
-      logger.error('Error fetching media:', error);
+      logger.error("Error fetching media:", error);
       throw error;
     }
   }
@@ -159,7 +161,7 @@ class WordPressClient {
   async uploadMedia(file, data = {}) {
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
       Object.entries(data).forEach(([key, value]) => {
         formData.append(key, value);
       });
@@ -167,12 +169,12 @@ class WordPressClient {
       const response = await axios.post(`${this.baseUrl}/media`, formData, {
         auth: this.auth,
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
       return response.data;
     } catch (error) {
-      logger.error('Error uploading media:', error);
+      logger.error("Error uploading media:", error);
       throw error;
     }
   }
@@ -180,11 +182,11 @@ class WordPressClient {
   async getUsers() {
     try {
       const response = await axios.get(`${this.baseUrl}/users`, {
-        auth: this.auth
+        auth: this.auth,
       });
       return response.data;
     } catch (error) {
-      logger.error('Error fetching users:', error);
+      logger.error("Error fetching users:", error);
       throw error;
     }
   }
@@ -193,9 +195,9 @@ class WordPressClient {
     try {
       const response = await axios.get(`${this.baseUrl}/comments`, {
         params: {
-          post: postId
+          post: postId,
         },
-        auth: this.auth
+        auth: this.auth,
       });
       return response.data;
     } catch (error) {
@@ -206,214 +208,262 @@ class WordPressClient {
 }
 
 // Routes
-app.post('/api/wordpress/connect', async (req, res) => {
+app.post("/api/wordpress/connect", async (req, res) => {
   try {
     const { siteUrl, username, password } = req.body;
-    
+
     const client = new WordPressClient(siteUrl, username, password);
-    
+
     // Test de connectie door posts op te halen
     await client.getPosts(1, 1);
-    
+
     // Sla de connectie gegevens op in MongoDB
-    await db.collection('wordpress_connections').updateOne(
+    await db.collection("wordpress_connections").updateOne(
       { siteUrl },
       {
         $set: {
           username,
           password: password, // In productie zou je dit moeten encrypten
-          lastConnected: new Date()
-        }
+          lastConnected: new Date(),
+        },
       },
-      { upsert: true }
+      { upsert: true },
     );
 
-    res.json({ success: true, message: 'Verbinding succesvol' });
+    res.json({ success: true, message: "Verbinding succesvol" });
   } catch (error) {
-    logger.error('Connection error:', error);
+    logger.error("Connection error:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
-app.get('/api/wordpress/:site/posts', async (req, res) => {
+app.get("/api/wordpress/:site/posts", async (req, res) => {
   try {
     const { site } = req.params;
     const { page = 1, perPage = 10 } = req.query;
-    
+
     // Haal connectie gegevens op uit MongoDB
-    const connection = await db.collection('wordpress_connections').findOne({ siteUrl: site });
+    const connection = await db
+      .collection("wordpress_connections")
+      .findOne({ siteUrl: site });
     if (!connection) {
-      return res.status(404).json({ error: 'Site niet gevonden' });
+      return res.status(404).json({ error: "Site niet gevonden" });
     }
 
-    const client = new WordPressClient(site, connection.username, connection.password);
+    const client = new WordPressClient(
+      site,
+      connection.username,
+      connection.password,
+    );
     const posts = await client.getPosts(page, perPage);
-    
+
     res.json(posts);
   } catch (error) {
-    logger.error('Error fetching posts:', error);
+    logger.error("Error fetching posts:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.post('/api/wordpress/:site/posts', async (req, res) => {
+app.post("/api/wordpress/:site/posts", async (req, res) => {
   try {
     const { site } = req.params;
     const postData = req.body;
-    
-    const connection = await db.collection('wordpress_connections').findOne({ siteUrl: site });
+
+    const connection = await db
+      .collection("wordpress_connections")
+      .findOne({ siteUrl: site });
     if (!connection) {
-      return res.status(404).json({ error: 'Site niet gevonden' });
+      return res.status(404).json({ error: "Site niet gevonden" });
     }
 
-    const client = new WordPressClient(site, connection.username, connection.password);
+    const client = new WordPressClient(
+      site,
+      connection.username,
+      connection.password,
+    );
     const post = await client.createPost(postData);
-    
+
     res.json(post);
   } catch (error) {
-    logger.error('Error creating post:', error);
+    logger.error("Error creating post:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.put('/api/wordpress/:site/posts/:id', async (req, res) => {
+app.put("/api/wordpress/:site/posts/:id", async (req, res) => {
   try {
     const { site, id } = req.params;
     const postData = req.body;
-    
-    const connection = await db.collection('wordpress_connections').findOne({ siteUrl: site });
+
+    const connection = await db
+      .collection("wordpress_connections")
+      .findOne({ siteUrl: site });
     if (!connection) {
-      return res.status(404).json({ error: 'Site niet gevonden' });
+      return res.status(404).json({ error: "Site niet gevonden" });
     }
 
-    const client = new WordPressClient(site, connection.username, connection.password);
+    const client = new WordPressClient(
+      site,
+      connection.username,
+      connection.password,
+    );
     const post = await client.updatePost(id, postData);
-    
+
     res.json(post);
   } catch (error) {
-    logger.error('Error updating post:', error);
+    logger.error("Error updating post:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.delete('/api/wordpress/:site/posts/:id', async (req, res) => {
+app.delete("/api/wordpress/:site/posts/:id", async (req, res) => {
   try {
     const { site, id } = req.params;
-    
-    const connection = await db.collection('wordpress_connections').findOne({ siteUrl: site });
+
+    const connection = await db
+      .collection("wordpress_connections")
+      .findOne({ siteUrl: site });
     if (!connection) {
-      return res.status(404).json({ error: 'Site niet gevonden' });
+      return res.status(404).json({ error: "Site niet gevonden" });
     }
 
-    const client = new WordPressClient(site, connection.username, connection.password);
+    const client = new WordPressClient(
+      site,
+      connection.username,
+      connection.password,
+    );
     const result = await client.deletePost(id);
-    
+
     res.json(result);
   } catch (error) {
-    logger.error('Error deleting post:', error);
+    logger.error("Error deleting post:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.get('/api/wordpress/:site/categories', async (req, res) => {
+app.get("/api/wordpress/:site/categories", async (req, res) => {
   try {
     const { site } = req.params;
-    
-    const connection = await db.collection('wordpress_connections').findOne({ siteUrl: site });
+
+    const connection = await db
+      .collection("wordpress_connections")
+      .findOne({ siteUrl: site });
     if (!connection) {
-      return res.status(404).json({ error: 'Site niet gevonden' });
+      return res.status(404).json({ error: "Site niet gevonden" });
     }
 
-    const client = new WordPressClient(site, connection.username, connection.password);
+    const client = new WordPressClient(
+      site,
+      connection.username,
+      connection.password,
+    );
     const categories = await client.getCategories();
-    
+
     res.json(categories);
   } catch (error) {
-    logger.error('Error fetching categories:', error);
+    logger.error("Error fetching categories:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.get('/api/wordpress/:site/tags', async (req, res) => {
+app.get("/api/wordpress/:site/tags", async (req, res) => {
   try {
     const { site } = req.params;
-    
-    const connection = await db.collection('wordpress_connections').findOne({ siteUrl: site });
+
+    const connection = await db
+      .collection("wordpress_connections")
+      .findOne({ siteUrl: site });
     if (!connection) {
-      return res.status(404).json({ error: 'Site niet gevonden' });
+      return res.status(404).json({ error: "Site niet gevonden" });
     }
 
-    const client = new WordPressClient(site, connection.username, connection.password);
+    const client = new WordPressClient(
+      site,
+      connection.username,
+      connection.password,
+    );
     const tags = await client.getTags();
-    
+
     res.json(tags);
   } catch (error) {
-    logger.error('Error fetching tags:', error);
+    logger.error("Error fetching tags:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.get('/api/wordpress/:site/media', async (req, res) => {
+app.get("/api/wordpress/:site/media", async (req, res) => {
   try {
     const { site } = req.params;
-    
-    const connection = await db.collection('wordpress_connections').findOne({ siteUrl: site });
+
+    const connection = await db
+      .collection("wordpress_connections")
+      .findOne({ siteUrl: site });
     if (!connection) {
-      return res.status(404).json({ error: 'Site niet gevonden' });
+      return res.status(404).json({ error: "Site niet gevonden" });
     }
 
-    const client = new WordPressClient(site, connection.username, connection.password);
+    const client = new WordPressClient(
+      site,
+      connection.username,
+      connection.password,
+    );
     const media = await client.getMedia();
-    
+
     res.json(media);
   } catch (error) {
-    logger.error('Error fetching media:', error);
+    logger.error("Error fetching media:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.post('/api/wordpress/:site/media', async (req, res) => {
+app.post("/api/wordpress/:site/media", async (req, res) => {
   try {
     const { site } = req.params;
     const { file, ...data } = req.body;
-    
-    const connection = await db.collection('wordpress_connections').findOne({ siteUrl: site });
+
+    const connection = await db
+      .collection("wordpress_connections")
+      .findOne({ siteUrl: site });
     if (!connection) {
-      return res.status(404).json({ error: 'Site niet gevonden' });
+      return res.status(404).json({ error: "Site niet gevonden" });
     }
 
-    const client = new WordPressClient(site, connection.username, connection.password);
+    const client = new WordPressClient(
+      site,
+      connection.username,
+      connection.password,
+    );
     const media = await client.uploadMedia(file, data);
-    
+
     res.json(media);
   } catch (error) {
-    logger.error('Error uploading media:', error);
+    logger.error("Error uploading media:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
 // Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
 });
 
 // MongoDB connectie en server start
 MongoClient.connect(mongoUrl)
-  .then(client => {
+  .then((client) => {
     db = client.db(dbName);
-    logger.info('Connected to MongoDB');
-    
+    logger.info("Connected to MongoDB");
+
     app.listen(port, () => {
       logger.info(`WordPress integration service running on port ${port}`);
     });
   })
-  .catch(error => {
-    logger.error('MongoDB connection error:', error);
+  .catch((error) => {
+    logger.error("MongoDB connection error:", error);
     process.exit(1);
   });
 
 // Error handling
 app.use((err, req, res, next) => {
-  logger.error('Unhandled error:', err);
-  res.status(500).json({ error: 'Internal server error' });
+  logger.error("Unhandled error:", err);
+  res.status(500).json({ error: "Internal server error" });
 });

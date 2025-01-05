@@ -1,22 +1,16 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Tabs,
-  Tab,
-  Typography,
-  Paper
-} from '@mui/material';
+import React, { useState } from "react";
+import { Box, Tabs, Tab, Typography, Paper } from "@mui/material";
 import {
   Search as SearchIcon,
   Link as LinkIcon,
   SiteMap as SiteMapIcon,
-  TrendingUp as TrendingUpIcon
-} from '@mui/icons-material';
+  TrendingUp as TrendingUpIcon,
+} from "@mui/icons-material";
 
-import KeywordResearch from './KeywordResearch';
-import SEOAnalyzer from './SEOAnalyzer';
-import BacklinkMonitor from './BacklinkMonitor';
-import SitemapGenerator from './SitemapGenerator';
+import KeywordResearch from "./KeywordResearch";
+import SEOAnalyzer from "./SEOAnalyzer";
+import BacklinkMonitor from "./BacklinkMonitor";
+import SitemapGenerator from "./SitemapGenerator";
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -29,11 +23,7 @@ const TabPanel = (props) => {
       aria-labelledby={`seo-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 };
@@ -51,7 +41,7 @@ const SEODashboard = () => {
         SEO Dashboard
       </Typography>
 
-      <Paper sx={{ width: '100%' }}>
+      <Paper sx={{ width: "100%" }}>
         <Tabs
           value={activeTab}
           onChange={handleTabChange}

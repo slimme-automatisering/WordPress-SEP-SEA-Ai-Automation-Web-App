@@ -1,4 +1,4 @@
-import { useMediaQuery } from 'react-responsive';
+import { useMediaQuery } from "react-responsive";
 
 export const useResponsive = () => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -9,12 +9,12 @@ export const useResponsive = () => {
     isMobile,
     isTablet,
     isDesktop,
-    deviceType: isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop'
+    deviceType: isMobile ? "mobile" : isTablet ? "tablet" : "desktop",
   };
 };
 
 export const breakpoints = {
-  mobile: '320px',
-  tablet: '768px',
-  desktop: '1024px'
-}; 
+  mobile: "320px",
+  tablet: "768px",
+  desktop: "1024px",
+};

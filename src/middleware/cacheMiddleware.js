@@ -1,5 +1,5 @@
-import { BaseMiddleware } from './baseMiddleware.js';
-import { AppError } from '../utils/errorHandler.js';
+import { BaseMiddleware } from "./baseMiddleware.js";
+import { AppError } from "../utils/errorHandler.js";
 
 export class CacheMiddleware extends BaseMiddleware {
   constructor() {
@@ -12,13 +12,13 @@ export class CacheMiddleware extends BaseMiddleware {
   cacheRoute(options = {}) {
     const {
       ttl = 3600, // 1 uur
-      prefix = 'route',
-      condition = () => true // Standaard altijd cachen
+      prefix = "route",
+      condition = () => true, // Standaard altijd cachen
     } = options;
 
     return async (req, res, next) => {
       // Skip cache voor non-GET requests
-      if (req.method !== 'GET') {
+      if (req.method !== "GET") {
         return next();
       }
 
@@ -29,7 +29,7 @@ export class CacheMiddleware extends BaseMiddleware {
 
       const key = this.createCacheKey(prefix, {
         url: req.originalUrl,
-        auth: req.user?.id || 'anonymous'
+        auth: req.user?.id || "anonymous",
       });
 
       try {
@@ -47,8 +47,9 @@ export class CacheMiddleware extends BaseMiddleware {
           res.json = originalJson;
 
           // Cache response
-          this.cache.setex(key, ttl, JSON.stringify(body))
-            .catch(error => this.logger.error('Cache error:', error));
+          this.cache
+            .setex(key, ttl, JSON.stringify(body))
+            .catch((error) => this.logger.error("Cache error:", error));
 
           // Stuur response
           return res.json(body);
@@ -56,7 +57,7 @@ export class CacheMiddleware extends BaseMiddleware {
 
         next();
       } catch (error) {
-        this.logger.error('Cache middleware error:', error);
+        this.logger.error("Cache middleware error:", error);
         next();
       }
     };
@@ -68,19 +69,19 @@ export class CacheMiddleware extends BaseMiddleware {
   cacheApi(options = {}) {
     const {
       ttl = 300, // 5 minuten
-      prefix = 'api',
-      keyGenerator = (req) => req.originalUrl
+      prefix = "api",
+      keyGenerator = (req) => req.originalUrl,
     } = options;
 
     return async (req, res, next) => {
       // Skip cache voor non-GET requests
-      if (req.method !== 'GET') {
+      if (req.method !== "GET") {
         return next();
       }
 
       const key = this.createCacheKey(prefix, {
         key: keyGenerator(req),
-        auth: req.user?.id || 'anonymous'
+        auth: req.user?.id || "anonymous",
       });
 
       try {
@@ -97,8 +98,9 @@ export class CacheMiddleware extends BaseMiddleware {
 
           // Alleen succesvolle responses cachen
           if (res.statusCode === 200) {
-            this.cache.setex(key, ttl, JSON.stringify(body))
-              .catch(error => this.logger.error('Cache error:', error));
+            this.cache
+              .setex(key, ttl, JSON.stringify(body))
+              .catch((error) => this.logger.error("Cache error:", error));
           }
 
           return res.json(body);
@@ -106,7 +108,7 @@ export class CacheMiddleware extends BaseMiddleware {
 
         next();
       } catch (error) {
-        this.logger.error('API cache error:', error);
+        this.logger.error("API cache error:", error);
         next();
       }
     };
@@ -123,17 +125,23 @@ export class CacheMiddleware extends BaseMiddleware {
         res.json = originalJson;
 
         // Alleen bij succesvolle mutaties cache invalideren
-        if (res.statusCode === 200 && ['POST', 'PUT', 'DELETE'].includes(req.method)) {
+        if (
+          res.statusCode === 200 &&
+          ["POST", "PUT", "DELETE"].includes(req.method)
+        ) {
           try {
             for (const pattern of patterns) {
               const keys = await this.cache.keys(pattern);
               if (keys.length > 0) {
                 await this.cache.del(keys);
-                this.logger.debug('Cache geïnvalideerd:', { pattern, count: keys.length });
+                this.logger.debug("Cache geïnvalideerd:", {
+                  pattern,
+                  count: keys.length,
+                });
               }
             }
           } catch (error) {
-            this.logger.error('Cache invalidatie error:', error);
+            this.logger.error("Cache invalidatie error:", error);
           }
         }
 
@@ -151,7 +159,7 @@ export class CacheMiddleware extends BaseMiddleware {
     const {
       urls = [],
       interval = 3600000, // 1 uur
-      concurrency = 5
+      concurrency = 5,
     } = options;
 
     // Start warmup proces
@@ -168,30 +176,34 @@ export class CacheMiddleware extends BaseMiddleware {
    */
   async startWarmup(urls, interval, concurrency) {
     const warmup = async () => {
-      this.logger.info('Cache warmup gestart');
-      
+      this.logger.info("Cache warmup gestart");
+
       // Verwerk URLs in batches
       for (let i = 0; i < urls.length; i += concurrency) {
         const batch = urls.slice(i, i + concurrency);
-        
+
         await Promise.all(
           batch.map(async (url) => {
             try {
               const response = await fetch(url);
               const data = await response.json();
-              
-              const key = this.createCacheKey('warmup', { url });
-              await this.cache.setex(key, interval / 1000, JSON.stringify(data));
-              
-              this.logger.debug('URL gecached:', { url });
+
+              const key = this.createCacheKey("warmup", { url });
+              await this.cache.setex(
+                key,
+                interval / 1000,
+                JSON.stringify(data),
+              );
+
+              this.logger.debug("URL gecached:", { url });
             } catch (error) {
-              this.logger.error('Warmup error:', { url, error: error.message });
+              this.logger.error("Warmup error:", { url, error: error.message });
             }
-          })
+          }),
         );
       }
 
-      this.logger.info('Cache warmup voltooid');
+      this.logger.info("Cache warmup voltooid");
     };
 
     // Start initial warmup
@@ -207,20 +219,20 @@ export class CacheMiddleware extends BaseMiddleware {
   monitorCache() {
     return async (req, res, next) => {
       const start = Date.now();
-      
+
       // Vervang cache operaties met gemonitorde versies
       const originalGet = this.cache.get.bind(this.cache);
       const originalSet = this.cache.set.bind(this.cache);
 
       this.cache.get = async (...args) => {
         const result = await originalGet(...args);
-        this.recordCacheMetric('get', result != null, Date.now() - start);
+        this.recordCacheMetric("get", result != null, Date.now() - start);
         return result;
       };
 
       this.cache.set = async (...args) => {
         const result = await originalSet(...args);
-        this.recordCacheMetric('set', true, Date.now() - start);
+        this.recordCacheMetric("set", true, Date.now() - start);
         return result;
       };
 
@@ -232,11 +244,11 @@ export class CacheMiddleware extends BaseMiddleware {
    * Record cache metrics
    */
   recordCacheMetric(operation, hit, duration) {
-    this.logger.info('Cache metric:', {
+    this.logger.info("Cache metric:", {
       operation,
       hit,
       duration,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 }

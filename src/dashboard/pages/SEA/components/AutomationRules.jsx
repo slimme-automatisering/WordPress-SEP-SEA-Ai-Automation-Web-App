@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -30,16 +30,16 @@ import {
   FormControlLabel,
   Accordion,
   AccordionSummary,
-  AccordionDetails
-} from '@mui/material';
+  AccordionDetails,
+} from "@mui/material";
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
   PlayArrow as RunIcon,
   Edit as EditIcon,
   ExpandMore as ExpandMoreIcon,
-  Schedule as ScheduleIcon
-} from '@mui/icons-material';
+  Schedule as ScheduleIcon,
+} from "@mui/icons-material";
 
 const AutomationRules = ({ accountId }) => {
   const [rules, setRules] = useState([]);
@@ -48,25 +48,25 @@ const AutomationRules = ({ accountId }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedRule, setSelectedRule] = useState(null);
   const [formData, setFormData] = useState({
-    name: '',
+    name: "",
     conditions: [
       {
-        metric: 'CPC',
-        operator: 'GREATER_THAN',
-        value: ''
-      }
+        metric: "CPC",
+        operator: "GREATER_THAN",
+        value: "",
+      },
     ],
     actions: [
       {
-        type: 'ADJUST_BUDGET',
-        value: ''
-      }
+        type: "ADJUST_BUDGET",
+        value: "",
+      },
     ],
     schedule: {
-      frequency: 'DAILY',
-      time: '09:00',
-      daysOfWeek: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
-    }
+      frequency: "DAILY",
+      time: "09:00",
+      daysOfWeek: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
+    },
   });
 
   const fetchRules = async () => {
@@ -76,10 +76,12 @@ const AutomationRules = ({ accountId }) => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/automation/rules`);
+      const response = await fetch(
+        `/api/google-ads/${accountId}/automation/rules`,
+      );
 
       if (!response.ok) {
-        throw new Error('Kon automatiseringsregels niet ophalen');
+        throw new Error("Kon automatiseringsregels niet ophalen");
       }
 
       const data = await response.json();
@@ -100,16 +102,19 @@ const AutomationRules = ({ accountId }) => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/google-ads/${accountId}/automation/rules`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `/api/google-ads/${accountId}/automation/rules`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error('Kon automatiseringsregel niet aanmaken');
+        throw new Error("Kon automatiseringsregel niet aanmaken");
       }
 
       await fetchRules();
@@ -130,16 +135,16 @@ const AutomationRules = ({ accountId }) => {
       const response = await fetch(
         `/api/google-ads/${accountId}/automation/rules/${ruleId}/execute`,
         {
-          method: 'POST'
-        }
+          method: "POST",
+        },
       );
 
       if (!response.ok) {
-        throw new Error('Kon automatiseringsregel niet uitvoeren');
+        throw new Error("Kon automatiseringsregel niet uitvoeren");
       }
 
       // Toon success message
-      alert('Regel succesvol uitgevoerd');
+      alert("Regel succesvol uitgevoerd");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -149,25 +154,25 @@ const AutomationRules = ({ accountId }) => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
+      name: "",
       conditions: [
         {
-          metric: 'CPC',
-          operator: 'GREATER_THAN',
-          value: ''
-        }
+          metric: "CPC",
+          operator: "GREATER_THAN",
+          value: "",
+        },
       ],
       actions: [
         {
-          type: 'ADJUST_BUDGET',
-          value: ''
-        }
+          type: "ADJUST_BUDGET",
+          value: "",
+        },
       ],
       schedule: {
-        frequency: 'DAILY',
-        time: '09:00',
-        daysOfWeek: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
-      }
+        frequency: "DAILY",
+        time: "09:00",
+        daysOfWeek: ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
+      },
     });
     setSelectedRule(null);
   };
@@ -178,11 +183,11 @@ const AutomationRules = ({ accountId }) => {
       conditions: [
         ...formData.conditions,
         {
-          metric: 'CPC',
-          operator: 'GREATER_THAN',
-          value: ''
-        }
-      ]
+          metric: "CPC",
+          operator: "GREATER_THAN",
+          value: "",
+        },
+      ],
     });
   };
 
@@ -192,10 +197,10 @@ const AutomationRules = ({ accountId }) => {
       actions: [
         ...formData.actions,
         {
-          type: 'ADJUST_BUDGET',
-          value: ''
-        }
-      ]
+          type: "ADJUST_BUDGET",
+          value: "",
+        },
+      ],
     });
   };
 
@@ -209,10 +214,13 @@ const AutomationRules = ({ accountId }) => {
 
   return (
     <Box>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h5">
-          Automatiseringsregels
-        </Typography>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
+        <Typography variant="h5">Automatiseringsregels</Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
@@ -237,10 +245,13 @@ const AutomationRules = ({ accountId }) => {
           <Grid item xs={12} key={rule._id}>
             <Card>
               <CardContent>
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                  <Typography variant="h6">
-                    {rule.name}
-                  </Typography>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mb={2}
+                >
+                  <Typography variant="h6">{rule.name}</Typography>
                   <Box>
                     <IconButton
                       onClick={() => handleRunRule(rule._id)}
@@ -256,7 +267,7 @@ const AutomationRules = ({ accountId }) => {
                           name: rule.name,
                           conditions: rule.conditions,
                           actions: rule.actions,
-                          schedule: rule.schedule
+                          schedule: rule.schedule,
                         });
                         setOpenDialog(true);
                       }}
@@ -264,10 +275,7 @@ const AutomationRules = ({ accountId }) => {
                     >
                       <EditIcon />
                     </IconButton>
-                    <IconButton
-                      size="small"
-                      color="error"
-                    >
+                    <IconButton size="small" color="error">
                       <DeleteIcon />
                     </IconButton>
                   </Box>
@@ -280,7 +288,8 @@ const AutomationRules = ({ accountId }) => {
                   <AccordionDetails>
                     {rule.conditions.map((condition, index) => (
                       <Typography key={index}>
-                        {condition.metric} {condition.operator} {condition.value}
+                        {condition.metric} {condition.operator}{" "}
+                        {condition.value}
                       </Typography>
                     ))}
                   </AccordionDetails>
@@ -322,14 +331,16 @@ const AutomationRules = ({ accountId }) => {
         fullWidth
       >
         <DialogTitle>
-          {selectedRule ? 'Regel Bewerken' : 'Nieuwe Regel'}
+          {selectedRule ? "Regel Bewerken" : "Nieuwe Regel"}
         </DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2} pt={2}>
             <TextField
               label="Naam"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               fullWidth
             />
 
@@ -384,9 +395,7 @@ const AutomationRules = ({ accountId }) => {
                 />
               </Box>
             ))}
-            <Button onClick={addCondition}>
-              Voorwaarde Toevoegen
-            </Button>
+            <Button onClick={addCondition}>Voorwaarde Toevoegen</Button>
 
             {/* Actions */}
             <Typography variant="h6" gutterBottom>
@@ -407,8 +416,12 @@ const AutomationRules = ({ accountId }) => {
                   >
                     <MenuItem value="ADJUST_BUDGET">Budget Aanpassen</MenuItem>
                     <MenuItem value="ADJUST_BID">Bod Aanpassen</MenuItem>
-                    <MenuItem value="PAUSE_CAMPAIGN">Campagne Pauzeren</MenuItem>
-                    <MenuItem value="ENABLE_CAMPAIGN">Campagne Activeren</MenuItem>
+                    <MenuItem value="PAUSE_CAMPAIGN">
+                      Campagne Pauzeren
+                    </MenuItem>
+                    <MenuItem value="ENABLE_CAMPAIGN">
+                      Campagne Activeren
+                    </MenuItem>
                   </Select>
                 </FormControl>
                 <TextField
@@ -423,9 +436,7 @@ const AutomationRules = ({ accountId }) => {
                 />
               </Box>
             ))}
-            <Button onClick={addAction}>
-              Actie Toevoegen
-            </Button>
+            <Button onClick={addAction}>Actie Toevoegen</Button>
 
             {/* Schedule */}
             <Typography variant="h6" gutterBottom>
@@ -435,10 +446,15 @@ const AutomationRules = ({ accountId }) => {
               <InputLabel>Frequentie</InputLabel>
               <Select
                 value={formData.schedule.frequency}
-                onChange={(e) => setFormData({
-                  ...formData,
-                  schedule: { ...formData.schedule, frequency: e.target.value }
-                })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    schedule: {
+                      ...formData.schedule,
+                      frequency: e.target.value,
+                    },
+                  })
+                }
                 label="Frequentie"
               >
                 <MenuItem value="HOURLY">Elk uur</MenuItem>
@@ -450,18 +466,28 @@ const AutomationRules = ({ accountId }) => {
               label="Tijd"
               type="time"
               value={formData.schedule.time}
-              onChange={(e) => setFormData({
-                ...formData,
-                schedule: { ...formData.schedule, time: e.target.value }
-              })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  schedule: { ...formData.schedule, time: e.target.value },
+                })
+              }
               fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
             />
-            {formData.schedule.frequency === 'WEEKLY' && (
+            {formData.schedule.frequency === "WEEKLY" && (
               <FormGroup>
-                {['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'].map((day) => (
+                {[
+                  "MONDAY",
+                  "TUESDAY",
+                  "WEDNESDAY",
+                  "THURSDAY",
+                  "FRIDAY",
+                  "SATURDAY",
+                  "SUNDAY",
+                ].map((day) => (
                   <FormControlLabel
                     key={day}
                     control={
@@ -470,10 +496,15 @@ const AutomationRules = ({ accountId }) => {
                         onChange={(e) => {
                           const newDays = e.target.checked
                             ? [...formData.schedule.daysOfWeek, day]
-                            : formData.schedule.daysOfWeek.filter(d => d !== day);
+                            : formData.schedule.daysOfWeek.filter(
+                                (d) => d !== day,
+                              );
                           setFormData({
                             ...formData,
-                            schedule: { ...formData.schedule, daysOfWeek: newDays }
+                            schedule: {
+                              ...formData.schedule,
+                              daysOfWeek: newDays,
+                            },
                           });
                         }}
                       />
@@ -494,12 +525,8 @@ const AutomationRules = ({ accountId }) => {
           >
             Annuleren
           </Button>
-          <Button
-            variant="contained"
-            onClick={handleCreate}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : 'Opslaan'}
+          <Button variant="contained" onClick={handleCreate} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : "Opslaan"}
           </Button>
         </DialogActions>
       </Dialog>

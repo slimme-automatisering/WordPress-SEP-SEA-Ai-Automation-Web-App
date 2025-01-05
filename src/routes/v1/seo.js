@@ -1,6 +1,6 @@
-import express from 'express';
-import { authenticateUser } from '../../middleware/auth.js';
-import * as seoController from '../../controllers/seoController.js';
+import express from "express";
+import { authenticateUser } from "../../middleware/auth.js";
+import * as seoController from "../../controllers/seoController.js";
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ const router = express.Router();
  *       401:
  *         description: Niet geautoriseerd
  */
-router.get('/audit', authenticateUser, seoController.runAudit);
+router.get("/audit", authenticateUser, seoController.runAudit);
 
 /**
  * @swagger
@@ -34,7 +34,7 @@ router.get('/audit', authenticateUser, seoController.runAudit);
  *       401:
  *         description: Niet geautoriseerd
  */
-router.get('/keywords', authenticateUser, seoController.analyzeKeywords);
+router.get("/keywords", authenticateUser, seoController.analyzeKeywords);
 
 /**
  * @swagger
@@ -61,7 +61,11 @@ router.get('/keywords', authenticateUser, seoController.analyzeKeywords);
  *       401:
  *         description: Niet geautoriseerd
  */
-router.post('/content/optimize', authenticateUser, seoController.optimizeContent);
+router.post(
+  "/content/optimize",
+  authenticateUser,
+  seoController.optimizeContent,
+);
 
 /**
  * @swagger
@@ -77,6 +81,10 @@ router.post('/content/optimize', authenticateUser, seoController.optimizeContent
  *       401:
  *         description: Niet geautoriseerd
  */
-router.get('/performance', authenticateUser, seoController.getPerformanceMetrics);
+router.get(
+  "/performance",
+  authenticateUser,
+  seoController.getPerformanceMetrics,
+);
 
 export default router;

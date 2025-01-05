@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Grid,
   Paper,
@@ -11,29 +11,29 @@ import {
   List,
   ListItem,
   ListItemText,
-  CircularProgress
-} from '@mui/material';
+  CircularProgress,
+} from "@mui/material";
 
 export default function Seo() {
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [auditResults, setAuditResults] = useState(null);
 
   const handleAudit = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/seo/audit', {
-        method: 'POST',
+      const response = await fetch("/api/seo/audit", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ url }),
       });
-      
+
       const data = await response.json();
       setAuditResults(data);
     } catch (error) {
-      console.error('Error during audit:', error);
+      console.error("Error during audit:", error);
     } finally {
       setLoading(false);
     }
@@ -74,21 +74,27 @@ export default function Seo() {
                   <Typography variant="h6">Audit Resultaten</Typography>
                   <List>
                     <ListItem>
-                      <ListItemText 
-                        primary="Meta Tags" 
-                        secondary={auditResults.metaTagsScore || 'Nog niet gecontroleerd'} 
+                      <ListItemText
+                        primary="Meta Tags"
+                        secondary={
+                          auditResults.metaTagsScore || "Nog niet gecontroleerd"
+                        }
                       />
                     </ListItem>
                     <ListItem>
-                      <ListItemText 
-                        primary="Content Kwaliteit" 
-                        secondary={auditResults.contentScore || 'Nog niet gecontroleerd'} 
+                      <ListItemText
+                        primary="Content Kwaliteit"
+                        secondary={
+                          auditResults.contentScore || "Nog niet gecontroleerd"
+                        }
                       />
                     </ListItem>
                     <ListItem>
-                      <ListItemText 
-                        primary="Laadsnelheid" 
-                        secondary={auditResults.speedScore || 'Nog niet gecontroleerd'} 
+                      <ListItemText
+                        primary="Laadsnelheid"
+                        secondary={
+                          auditResults.speedScore || "Nog niet gecontroleerd"
+                        }
                       />
                     </ListItem>
                   </List>

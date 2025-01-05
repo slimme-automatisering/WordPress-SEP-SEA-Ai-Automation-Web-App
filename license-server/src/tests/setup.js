@@ -1,5 +1,5 @@
-require('dotenv').config({ path: '.env.test' });
-const { pool, setupDatabase } = require('../database');
+require("dotenv").config({ path: ".env.test" });
+const { pool, setupDatabase } = require("../database");
 
 beforeAll(async () => {
   await setupDatabase();

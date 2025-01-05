@@ -1,6 +1,6 @@
-import express from 'express';
-import { authenticateUser, validateLicense } from '../../middleware/auth.js';
-import * as wooController from '../../controllers/wooCommerceController.js';
+import express from "express";
+import { authenticateUser, validateLicense } from "../../middleware/auth.js";
+import * as wooController from "../../controllers/wooCommerceController.js";
 
 const router = express.Router();
 
@@ -21,7 +21,11 @@ const router = express.Router();
  *       403:
  *         description: Pro licentie vereist
  */
-router.get('/products', [authenticateUser, validateLicense], wooController.getProducts);
+router.get(
+  "/products",
+  [authenticateUser, validateLicense],
+  wooController.getProducts,
+);
 
 /**
  * @swagger
@@ -40,7 +44,11 @@ router.get('/products', [authenticateUser, validateLicense], wooController.getPr
  *       403:
  *         description: Pro licentie vereist
  */
-router.get('/orders', [authenticateUser, validateLicense], wooController.getOrders);
+router.get(
+  "/orders",
+  [authenticateUser, validateLicense],
+  wooController.getOrders,
+);
 
 /**
  * @swagger
@@ -59,7 +67,11 @@ router.get('/orders', [authenticateUser, validateLicense], wooController.getOrde
  *       403:
  *         description: Pro licentie vereist
  */
-router.get('/customers', [authenticateUser, validateLicense], wooController.getCustomers);
+router.get(
+  "/customers",
+  [authenticateUser, validateLicense],
+  wooController.getCustomers,
+);
 
 /**
  * @swagger
@@ -92,6 +104,10 @@ router.get('/customers', [authenticateUser, validateLicense], wooController.getC
  *       403:
  *         description: Pro licentie vereist
  */
-router.post('/sync', [authenticateUser, validateLicense], wooController.syncData);
+router.post(
+  "/sync",
+  [authenticateUser, validateLicense],
+  wooController.syncData,
+);
 
 export default router;

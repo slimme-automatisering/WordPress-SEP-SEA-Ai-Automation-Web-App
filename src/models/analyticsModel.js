@@ -1,118 +1,128 @@
-import mongoose from 'mongoose';
-import { BaseModel } from './baseModel.js';
+import mongoose from "mongoose";
+import { BaseModel } from "./baseModel.js";
 
 const metricSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   value: {
     type: Number,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
-    required: true
+    required: true,
   },
   dimensions: {
     type: Map,
-    of: String
-  }
+    of: String,
+  },
 });
 
 const reportSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ['daily', 'weekly', 'monthly', 'custom'],
-    required: true
+    enum: ["daily", "weekly", "monthly", "custom"],
+    required: true,
   },
   startDate: {
     type: Date,
-    required: true
+    required: true,
   },
   endDate: {
     type: Date,
-    required: true
+    required: true,
   },
-  metrics: [{
-    name: String,
-    data: [metricSchema]
-  }],
+  metrics: [
+    {
+      name: String,
+      data: [metricSchema],
+    },
+  ],
   dimensions: [String],
-  filters: [{
-    dimension: String,
-    operator: String,
-    value: String
-  }],
-  segments: [{
-    name: String,
-    type: String,
-    conditions: [{
+  filters: [
+    {
       dimension: String,
       operator: String,
-      value: String
-    }]
-  }]
+      value: String,
+    },
+  ],
+  segments: [
+    {
+      name: String,
+      type: String,
+      conditions: [
+        {
+          dimension: String,
+          operator: String,
+          value: String,
+        },
+      ],
+    },
+  ],
 });
 
 const goalSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   type: {
     type: String,
-    enum: ['url', 'event', 'duration', 'pages'],
-    required: true
+    enum: ["url", "event", "duration", "pages"],
+    required: true,
   },
   value: {
     type: Number,
-    min: 0
+    min: 0,
   },
   active: {
     type: Boolean,
-    default: true
+    default: true,
   },
-  conditions: [{
-    metric: String,
-    operator: String,
-    value: String
-  }]
+  conditions: [
+    {
+      metric: String,
+      operator: String,
+      value: String,
+    },
+  ],
 });
 
 const eventSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   action: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   label: String,
   value: Number,
   date: {
     type: Date,
-    required: true
+    required: true,
   },
   dimensions: {
     type: Map,
-    of: String
-  }
+    of: String,
+  },
 });
 
 const sessionSchema = new mongoose.Schema({
   sessionId: {
     type: String,
-    required: true
+    required: true,
   },
   startTime: {
     type: Date,
-    required: true
+    required: true,
   },
   endTime: Date,
   duration: Number,
@@ -121,47 +131,51 @@ const sessionSchema = new mongoose.Schema({
   campaign: String,
   device: {
     type: String,
-    enum: ['desktop', 'mobile', 'tablet']
+    enum: ["desktop", "mobile", "tablet"],
   },
   browser: String,
   os: String,
   location: {
     country: String,
     region: String,
-    city: String
+    city: String,
   },
-  pageviews: [{
-    url: String,
-    title: String,
-    timestamp: Date,
-    duration: Number
-  }],
-  events: [eventSchema],
-  goals: [{
-    goalId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Goal'
+  pageviews: [
+    {
+      url: String,
+      title: String,
+      timestamp: Date,
+      duration: Number,
     },
-    completed: Boolean,
-    value: Number,
-    timestamp: Date
-  }]
+  ],
+  events: [eventSchema],
+  goals: [
+    {
+      goalId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Goal",
+      },
+      completed: Boolean,
+      value: Number,
+      timestamp: Date,
+    },
+  ],
 });
 
 // Schema definitie
 const schema = new mongoose.Schema({
   projectId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Project',
-    required: true
+    ref: "Project",
+    required: true,
   },
   propertyId: {
     type: String,
-    required: true
+    required: true,
   },
   viewId: {
     type: String,
-    required: true
+    required: true,
   },
   metrics: [metricSchema],
   reports: [reportSchema],
@@ -172,76 +186,86 @@ const schema = new mongoose.Schema({
     tracking: {
       enabled: {
         type: Boolean,
-        default: true
+        default: true,
       },
       anonymizeIp: {
         type: Boolean,
-        default: true
+        default: true,
       },
       demographics: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
     reporting: {
       timezone: {
         type: String,
-        default: 'Europe/Amsterdam'
+        default: "Europe/Amsterdam",
       },
       currency: {
         type: String,
-        default: 'EUR'
+        default: "EUR",
       },
-      emailReports: [{
-        type: String,
-        schedule: String,
-        recipients: [String]
-      }]
+      emailReports: [
+        {
+          type: String,
+          schedule: String,
+          recipients: [String],
+        },
+      ],
     },
-    filters: [{
-      name: String,
-      type: String,
-      conditions: [{
-        field: String,
-        operator: String,
-        value: String
-      }]
-    }],
-    customDimensions: [{
-      index: Number,
-      name: String,
-      active: Boolean,
-      scope: {
+    filters: [
+      {
+        name: String,
         type: String,
-        enum: ['hit', 'session', 'user']
-      }
-    }],
-    customMetrics: [{
-      index: Number,
-      name: String,
-      active: Boolean,
-      type: {
-        type: String,
-        enum: ['integer', 'currency', 'time']
+        conditions: [
+          {
+            field: String,
+            operator: String,
+            value: String,
+          },
+        ],
       },
-      scope: {
-        type: String,
-        enum: ['hit', 'session', 'user']
-      }
-    }]
-  }
+    ],
+    customDimensions: [
+      {
+        index: Number,
+        name: String,
+        active: Boolean,
+        scope: {
+          type: String,
+          enum: ["hit", "session", "user"],
+        },
+      },
+    ],
+    customMetrics: [
+      {
+        index: Number,
+        name: String,
+        active: Boolean,
+        type: {
+          type: String,
+          enum: ["integer", "currency", "time"],
+        },
+        scope: {
+          type: String,
+          enum: ["hit", "session", "user"],
+        },
+      },
+    ],
+  },
 });
 
 // Indexes
 schema.index({ projectId: 1, propertyId: 1 }, { unique: true });
-schema.index({ 'metrics.date': 1 });
-schema.index({ 'sessions.sessionId': 1 });
-schema.index({ 'events.date': 1 });
-schema.index({ 'reports.startDate': 1, 'reports.endDate': 1 });
+schema.index({ "metrics.date": 1 });
+schema.index({ "sessions.sessionId": 1 });
+schema.index({ "events.date": 1 });
+schema.index({ "reports.startDate": 1, "reports.endDate": 1 });
 
 export class AnalyticsModel extends BaseModel {
   constructor() {
-    super('Analytics', schema);
+    super("Analytics", schema);
   }
 
   /**
@@ -282,8 +306,8 @@ export class AnalyticsModel extends BaseModel {
    */
   async updateGoalStatus(projectId, goalId, active) {
     return this.model.updateOne(
-      { projectId, 'goals._id': goalId },
-      { $set: { 'goals.$.active': active } }
+      { projectId, "goals._id": goalId },
+      { $set: { "goals.$.active": active } },
     );
   }
 
@@ -314,8 +338,8 @@ export class AnalyticsModel extends BaseModel {
    */
   async updateSession(projectId, sessionId, update) {
     return this.model.updateOne(
-      { projectId, 'sessions.sessionId': sessionId },
-      { $set: { 'sessions.$': update } }
+      { projectId, "sessions.sessionId": sessionId },
+      { $set: { "sessions.$": update } },
     );
   }
 
@@ -326,10 +350,14 @@ export class AnalyticsModel extends BaseModel {
     const doc = await this.model.findOne({ projectId });
     if (!doc) return null;
 
-    return doc.metrics.filter(metric => {
+    return doc.metrics.filter((metric) => {
       const date = new Date(metric.date);
-      return date >= startDate && date <= endDate &&
-        (!dimensions.length || dimensions.every(d => metric.dimensions.has(d)));
+      return (
+        date >= startDate &&
+        date <= endDate &&
+        (!dimensions.length ||
+          dimensions.every((d) => metric.dimensions.has(d)))
+      );
     });
   }
 
@@ -350,10 +378,13 @@ export class AnalyticsModel extends BaseModel {
     const doc = await this.model.findOne({ projectId });
     if (!doc) return null;
 
-    return doc.sessions.filter(session => {
+    return doc.sessions.filter((session) => {
       const start = new Date(session.startTime);
-      return start >= startDate && start <= endDate &&
-        Object.entries(filters).every(([key, value]) => session[key] === value);
+      return (
+        start >= startDate &&
+        start <= endDate &&
+        Object.entries(filters).every(([key, value]) => session[key] === value)
+      );
     });
   }
 }

@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
-import { logger } from '../utils/logger.js';
+import mongoose from "mongoose";
+import { logger } from "../utils/logger.js";
 
 export class BaseModel {
   constructor(name, schema) {
     // Voeg timestamps toe
-    schema.set('timestamps', true);
+    schema.set("timestamps", true);
 
     // Voeg standaard indexes toe
     schema.index({ createdAt: 1 });
@@ -28,7 +28,7 @@ export class BaseModel {
     schema.add({ version: { type: Number, default: 1 } });
 
     // Increment version bij updates
-    schema.pre('save', function(next) {
+    schema.pre("save", function (next) {
       if (this.isModified() && !this.isNew) {
         this.version++;
       }
@@ -44,18 +44,22 @@ export class BaseModel {
     schema.add({
       deleted: { type: Boolean, default: false },
       deletedAt: { type: Date, default: null },
-      deletedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }
+      deletedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: null,
+      },
     });
 
     // Filter deleted documents uit queries
-    schema.pre(/^find/, function() {
+    schema.pre(/^find/, function () {
       if (!this.getQuery().includeDeleted) {
         this.where({ deleted: false });
       }
     });
 
     // Soft delete method
-    schema.methods.softDelete = async function(userId) {
+    schema.methods.softDelete = async function (userId) {
       this.deleted = true;
       this.deletedAt = new Date();
       this.deletedBy = userId;
@@ -63,7 +67,7 @@ export class BaseModel {
     };
 
     // Restore method
-    schema.methods.restore = async function() {
+    schema.methods.restore = async function () {
       this.deleted = false;
       this.deletedAt = null;
       this.deletedBy = null;
@@ -76,24 +80,24 @@ export class BaseModel {
    */
   addQueryHelpers(schema) {
     // Pagination helper
-    schema.query.paginate = function(page = 1, limit = 10) {
+    schema.query.paginate = function (page = 1, limit = 10) {
       const skip = (page - 1) * limit;
       return this.skip(skip).limit(limit);
     };
 
     // Search helper
-    schema.query.search = function(fields, searchTerm) {
+    schema.query.search = function (fields, searchTerm) {
       if (!searchTerm) return this;
 
-      const searchQuery = fields.map(field => ({
-        [field]: { $regex: searchTerm, $options: 'i' }
+      const searchQuery = fields.map((field) => ({
+        [field]: { $regex: searchTerm, $options: "i" },
       }));
 
       return this.or(searchQuery);
     };
 
     // Filter helper
-    schema.query.filterBy = function(filters = {}) {
+    schema.query.filterBy = function (filters = {}) {
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           this.where(key, value);
@@ -103,13 +107,13 @@ export class BaseModel {
     };
 
     // Sort helper
-    schema.query.sortBy = function(sortField, sortOrder = 'asc') {
+    schema.query.sortBy = function (sortField, sortOrder = "asc") {
       if (!sortField) return this;
       return this.sort({ [sortField]: sortOrder });
     };
 
     // Date range helper
-    schema.query.dateRange = function(field, startDate, endDate) {
+    schema.query.dateRange = function (field, startDate, endDate) {
       if (!startDate && !endDate) return this;
 
       const dateQuery = {};
@@ -127,12 +131,12 @@ export class BaseModel {
     try {
       const doc = new this.model(data);
       await doc.save();
-      
+
       this.logger.info(`${this.model.modelName} created:`, {
         id: doc._id,
-        data: doc.toObject()
+        data: doc.toObject(),
       });
-      
+
       return doc;
     } catch (error) {
       this.logger.error(`${this.model.modelName} creation error:`, error);
@@ -145,7 +149,8 @@ export class BaseModel {
    */
   async findById(id, options = {}) {
     try {
-      const doc = await this.model.findById(id)
+      const doc = await this.model
+        .findById(id)
         .select(options.select)
         .populate(options.populate);
 
@@ -177,12 +182,10 @@ export class BaseModel {
         startDate,
         endDate,
         select,
-        populate
+        populate,
       } = options;
 
-      let dbQuery = this.model.find(query)
-        .select(select)
-        .populate(populate);
+      let dbQuery = this.model.find(query).select(select).populate(populate);
 
       // Apply search
       if (search && searchFields) {
@@ -215,7 +218,7 @@ export class BaseModel {
         total,
         page: page || 1,
         limit: limit || docs.length,
-        totalPages: limit ? Math.ceil(total / limit) : 1
+        totalPages: limit ? Math.ceil(total / limit) : 1,
       };
     } catch (error) {
       this.logger.error(`${this.model.modelName} find error:`, error);
@@ -242,7 +245,7 @@ export class BaseModel {
 
       this.logger.info(`${this.model.modelName} updated:`, {
         id,
-        changes: data
+        changes: data,
       });
 
       return doc;
@@ -268,7 +271,7 @@ export class BaseModel {
 
       this.logger.info(`${this.model.modelName} deleted:`, {
         id,
-        deletedBy: userId
+        deletedBy: userId,
       });
 
       return doc;
@@ -311,7 +314,7 @@ export class BaseModel {
       this.logger.info(`${this.model.modelName} bulk write completed:`, {
         matched: result.matchedCount,
         modified: result.modifiedCount,
-        deleted: result.deletedCount
+        deleted: result.deletedCount,
       });
 
       return result;

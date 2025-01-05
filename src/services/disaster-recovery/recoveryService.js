@@ -1,24 +1,24 @@
-const AWS = require('aws-sdk');
-const { MongoClient } = require('mongodb');
-const backupService = require('../backup/backupService');
-const monitoringService = require('../monitoring/monitoringService');
-const { logger } = require('../../utils/logger');
-const config = require('../../config');
+const AWS = require("aws-sdk");
+const { MongoClient } = require("mongodb");
+const backupService = require("../backup/backupService");
+const monitoringService = require("../monitoring/monitoringService");
+const { logger } = require("../../utils/logger");
+const config = require("../../config");
 
 class RecoveryService {
   constructor() {
     this.s3 = new AWS.S3({
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      region: process.env.AWS_REGION
+      region: process.env.AWS_REGION,
     });
-    
+
     this.route53 = new AWS.Route53({
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      region: process.env.AWS_REGION
+      region: process.env.AWS_REGION,
     });
-    
+
     this.hostedZoneId = process.env.AWS_HOSTED_ZONE_ID;
     this.primaryDomain = process.env.PRIMARY_DOMAIN;
     this.backupDomain = process.env.BACKUP_DOMAIN;
@@ -30,42 +30,44 @@ class RecoveryService {
         database: await this.checkDatabaseHealth(),
         api: await this.checkApiHealth(),
         cache: await this.checkCacheHealth(),
-        storage: await this.checkStorageHealth()
+        storage: await this.checkStorageHealth(),
       };
-      
-      const isHealthy = Object.values(checks).every(check => check.status === 'healthy');
-      
+
+      const isHealthy = Object.values(checks).every(
+        (check) => check.status === "healthy",
+      );
+
       if (!isHealthy) {
-        logger.warn('System health check failed:', checks);
-        await this.notifyAdmins('System Health Alert', checks);
+        logger.warn("System health check failed:", checks);
+        await this.notifyAdmins("System Health Alert", checks);
       }
-      
+
       return {
         isHealthy,
-        checks
+        checks,
       };
     } catch (error) {
-      logger.error('Error checking system health:', error);
+      logger.error("Error checking system health:", error);
       throw error;
     }
   }
 
   async checkDatabaseHealth() {
     try {
-      const client = await MongoClient.connect(config.mongoUri, { 
-        serverSelectionTimeoutMS: 5000 
+      const client = await MongoClient.connect(config.mongoUri, {
+        serverSelectionTimeoutMS: 5000,
       });
       await client.db().admin().ping();
       await client.close();
-      
+
       return {
-        status: 'healthy',
-        latency: 0 // We zouden hier de echte latency kunnen meten
+        status: "healthy",
+        latency: 0, // We zouden hier de echte latency kunnen meten
       };
     } catch (error) {
       return {
-        status: 'unhealthy',
-        error: error.message
+        status: "unhealthy",
+        error: error.message,
       };
     }
   }
@@ -74,15 +76,15 @@ class RecoveryService {
     try {
       const metrics = await monitoringService.getMetrics();
       const errorRate = metrics.apiErrorsTotal / metrics.httpRequestTotal;
-      
+
       return {
-        status: errorRate < 0.05 ? 'healthy' : 'degraded',
-        errorRate
+        status: errorRate < 0.05 ? "healthy" : "degraded",
+        errorRate,
       };
     } catch (error) {
       return {
-        status: 'unhealthy',
-        error: error.message
+        status: "unhealthy",
+        error: error.message,
       };
     }
   }
@@ -91,28 +93,30 @@ class RecoveryService {
     try {
       // Redis health check zou hier moeten komen
       return {
-        status: 'healthy',
-        hitRate: 0.95
+        status: "healthy",
+        hitRate: 0.95,
       };
     } catch (error) {
       return {
-        status: 'unhealthy',
-        error: error.message
+        status: "unhealthy",
+        error: error.message,
       };
     }
   }
 
   async checkStorageHealth() {
     try {
-      await this.s3.headBucket({ Bucket: process.env.AWS_BACKUP_BUCKET }).promise();
-      
+      await this.s3
+        .headBucket({ Bucket: process.env.AWS_BACKUP_BUCKET })
+        .promise();
+
       return {
-        status: 'healthy'
+        status: "healthy",
       };
     } catch (error) {
       return {
-        status: 'unhealthy',
-        error: error.message
+        status: "unhealthy",
+        error: error.message,
       };
     }
   }
@@ -122,22 +126,22 @@ class RecoveryService {
       // 1. Maak laatste backup
       await backupService.createDatabaseBackup();
       await backupService.createFileBackup();
-      
+
       // 2. Update DNS
       await this.updateDNS(this.backupDomain);
-      
+
       // 3. Start backup services
       await this.startBackupServices();
-      
+
       // 4. Restore data
       const backups = await backupService.listBackups();
       const latestBackup = backups[0];
       await backupService.restoreFromBackup(latestBackup.id);
-      
-      logger.info('Successfully switched to DR environment');
+
+      logger.info("Successfully switched to DR environment");
       return true;
     } catch (error) {
-      logger.error('Error switching to DR:', error);
+      logger.error("Error switching to DR:", error);
       throw error;
     }
   }
@@ -147,19 +151,19 @@ class RecoveryService {
       // 1. Controleer of productie gezond is
       const healthCheck = await this.checkSystemHealth();
       if (!healthCheck.isHealthy) {
-        throw new Error('Production environment is not healthy');
+        throw new Error("Production environment is not healthy");
       }
-      
+
       // 2. Update DNS
       await this.updateDNS(this.primaryDomain);
-      
+
       // 3. Synchroniseer data
       await this.syncData();
-      
-      logger.info('Successfully switched back to production');
+
+      logger.info("Successfully switched back to production");
       return true;
     } catch (error) {
-      logger.error('Error switching to production:', error);
+      logger.error("Error switching to production:", error);
       throw error;
     }
   }
@@ -170,28 +174,28 @@ class RecoveryService {
         ChangeBatch: {
           Changes: [
             {
-              Action: 'UPSERT',
+              Action: "UPSERT",
               ResourceRecordSet: {
                 Name: this.primaryDomain,
-                Type: 'CNAME',
+                Type: "CNAME",
                 TTL: 60,
                 ResourceRecords: [
                   {
-                    Value: targetDomain
-                  }
-                ]
-              }
-            }
-          ]
+                    Value: targetDomain,
+                  },
+                ],
+              },
+            },
+          ],
         },
-        HostedZoneId: this.hostedZoneId
+        HostedZoneId: this.hostedZoneId,
       };
-      
+
       await this.route53.changeResourceRecordSets(params).promise();
       logger.info(`DNS updated to point to ${targetDomain}`);
       return true;
     } catch (error) {
-      logger.error('Error updating DNS:', error);
+      logger.error("Error updating DNS:", error);
       throw error;
     }
   }
@@ -200,10 +204,10 @@ class RecoveryService {
     try {
       // Hier zouden we Kubernetes/Docker commando's uitvoeren
       // om backup services te starten
-      logger.info('Backup services started');
+      logger.info("Backup services started");
       return true;
     } catch (error) {
-      logger.error('Error starting backup services:', error);
+      logger.error("Error starting backup services:", error);
       throw error;
     }
   }
@@ -215,14 +219,14 @@ class RecoveryService {
       const backups = await backupService.listBackups();
       const latestBackup = backups[0];
       await backupService.restoreFromBackup(latestBackup.id);
-      
+
       // Sync files
       await backupService.createFileBackup();
-      
-      logger.info('Data synchronized successfully');
+
+      logger.info("Data synchronized successfully");
       return true;
     } catch (error) {
-      logger.error('Error syncing data:', error);
+      logger.error("Error syncing data:", error);
       throw error;
     }
   }
@@ -233,7 +237,7 @@ class RecoveryService {
       logger.info(`Admin notification sent: ${subject}`, data);
       return true;
     } catch (error) {
-      logger.error('Error notifying admins:', error);
+      logger.error("Error notifying admins:", error);
       throw error;
     }
   }

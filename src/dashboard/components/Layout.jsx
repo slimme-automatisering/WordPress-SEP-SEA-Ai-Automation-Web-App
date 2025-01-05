@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
-import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
-  Drawer, 
-  List, 
-  ListItem, 
-  ListItemIcon, 
+import React, { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
   ListItemText,
   Container,
-  Box
-} from '@mui/material';
+  Box,
+} from "@mui/material";
 import {
   BarChart as StatsIcon,
   Search as SeoIcon,
   Campaign as SeaIcon,
-  Settings as SettingsIcon
-} from '@mui/icons-material';
-import { useNavigate, useLocation } from 'react-router-dom';
+  Settings as SettingsIcon,
+} from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
 const menuItems = [
-  { text: 'Statistieken', icon: <StatsIcon />, path: '/dashboard/stats' },
-  { text: 'SEO', icon: <SeoIcon />, path: '/dashboard/seo' },
-  { text: 'SEA', icon: <SeaIcon />, path: '/dashboard/sea' },
-  { text: 'Instellingen', icon: <SettingsIcon />, path: '/dashboard/settings' }
+  { text: "Statistieken", icon: <StatsIcon />, path: "/dashboard/stats" },
+  { text: "SEO", icon: <SeoIcon />, path: "/dashboard/seo" },
+  { text: "SEA", icon: <SeaIcon />, path: "/dashboard/sea" },
+  { text: "Instellingen", icon: <SettingsIcon />, path: "/dashboard/settings" },
 ];
 
 export default function Layout({ children }) {
@@ -33,8 +33,11 @@ export default function Layout({ children }) {
   const location = useLocation();
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+    <Box sx={{ display: "flex" }}>
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
             SEO & SEA Dashboard
@@ -46,18 +49,18 @@ export default function Layout({ children }) {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
           },
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
+        <Box sx={{ overflow: "auto" }}>
           <List>
             {menuItems.map((item) => (
-              <ListItem 
-                button 
+              <ListItem
+                button
                 key={item.text}
                 onClick={() => navigate(item.path)}
                 selected={location.pathname === item.path}
@@ -71,9 +74,7 @@ export default function Layout({ children }) {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        <Container maxWidth="lg">
-          {children}
-        </Container>
+        <Container maxWidth="lg">{children}</Container>
       </Box>
     </Box>
   );
