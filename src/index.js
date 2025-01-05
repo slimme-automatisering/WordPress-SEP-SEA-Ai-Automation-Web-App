@@ -7,7 +7,8 @@ try {
   console.log('NewRelic niet geconfigureerd, monitoring wordt overgeslagen');
 }
 
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';

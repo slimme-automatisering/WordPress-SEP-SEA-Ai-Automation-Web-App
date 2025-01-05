@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:23-alpine
 
 # Installeer Chrome dependencies
 RUN apk add --no-cache \
@@ -16,12 +16,11 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 
 WORKDIR /app
 
-# Kopieer package.json
-COPY package.json ./
+# Kopieer package.json en package-lock.json
+COPY package*.json ./
 
-# Schone installatie zonder package-lock
-RUN npm install --no-package-lock --production && \
-    npm install --no-package-lock --save-dev
+# Installeer dependencies
+RUN npm install
 
 # Kopieer de rest van de applicatie
 COPY . .

@@ -1,5 +1,5 @@
 # Base stage voor Node.js dependencies
-FROM node:20-alpine AS base
+FROM node:23-alpine AS base
 
 # Voeg build tools toe voor native modules
 RUN apk add --no-cache python3 make g++ git
@@ -59,7 +59,7 @@ EXPOSE 3000
 CMD ["nginx", "-g", "daemon off;"]
 
 # Production stage voor API
-FROM node:20-alpine AS api
+FROM node:23-alpine AS api
 
 # Voeg security updates en tools toe
 RUN apk add --no-cache dumb-init

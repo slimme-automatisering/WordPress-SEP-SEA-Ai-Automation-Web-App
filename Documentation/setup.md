@@ -66,7 +66,7 @@
 
 ### Services
 1. API Service
-   - Base: Node.js 20 Alpine
+   - Base: Node.js 23 Alpine
    - Production optimalisaties:
      - Multi-stage builds
      - npm ci voor exacte versies
@@ -74,7 +74,7 @@
      - Security hardening
      - Process management (dumb-init)
    - Environment variables:
-     - HOST=0.0.0.0
+     - HOST=localhost
    - Volumes:
      - /app/logs - Applicatie logs
      - /app/src - Source code (development)
@@ -93,8 +93,8 @@
 4. Frontend/Dashboard Services
    - Node.js 20 Alpine voor development
    - Environment variables:
-     - HOST=0.0.0.0
-     - VITE_HOST=0.0.0.0
+     - HOST=localhost
+     - VITE_HOST=localhost
    - Exposed ports: 
      - Frontend: 3000
      - Dashboard: 3001
