@@ -1,5 +1,5 @@
 # Base stage voor Node.js dependencies
-FROM node:23-alpine AS base
+FROM node:20-slim AS base
 
 # Voeg build tools toe voor native modules
 RUN apk add --no-cache python3 make g++ git
@@ -45,21 +45,21 @@ COPY . .
 RUN npm run build
 
 # Production stage voor frontend
-FROM nginx:alpine AS frontend
+FROM node:20-slim AS frontend
 COPY --from=build /app/dist/frontend /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 3000
 CMD ["nginx", "-g", "daemon off;"]
 
 # Production stage voor dashboard
-FROM nginx:alpine AS dashboard
+FROM node:20-slim AS dashboard
 COPY --from=build /app/dist/dashboard /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 3000
 CMD ["nginx", "-g", "daemon off;"]
 
 # Production stage voor API
-FROM node:23-alpine AS api
+FROM node:20-slim AS api
 
 # Voeg security updates en tools toe
 RUN apk add --no-cache dumb-init
