@@ -1,13 +1,11 @@
-import express from "express";
-import { GoogleAdsApi } from "google-ads-api";
-import cors from "cors";
-import helmet from "helmet";
-import winston from "winston";
-import { MongoClient } from "mongodb";
-import rateLimit from "express-rate-limit";
-import dotenv from "dotenv";
-
-dotenv.config();
+const express = require("express");
+const { GoogleAdsApi } = require("google-ads-api");
+const cors = require("cors");
+const helmet = require("helmet");
+const winston = require("winston");
+const { MongoClient } = require("mongodb");
+const rateLimit = require("express-rate-limit");
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3006;
