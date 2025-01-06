@@ -1,6 +1,6 @@
 import express from "express";
-import { authenticateUser, validateLicense } from "../../middleware/auth.js";
-import * as wooController from "../../controllers/wooCommerceController.js";
+import { authMiddleware, validateLicense } from "../../middleware/auth.js";
+import wooController from "../../controllers/wooCommerceController.js";
 
 const router = express.Router();
 
@@ -23,7 +23,7 @@ const router = express.Router();
  */
 router.get(
   "/products",
-  [authenticateUser, validateLicense],
+  [authMiddleware, validateLicense],
   wooController.getProducts,
 );
 
@@ -46,7 +46,7 @@ router.get(
  */
 router.get(
   "/orders",
-  [authenticateUser, validateLicense],
+  [authMiddleware, validateLicense],
   wooController.getOrders,
 );
 
@@ -69,7 +69,7 @@ router.get(
  */
 router.get(
   "/customers",
-  [authenticateUser, validateLicense],
+  [authMiddleware, validateLicense],
   wooController.getCustomers,
 );
 
@@ -106,7 +106,7 @@ router.get(
  */
 router.post(
   "/sync",
-  [authenticateUser, validateLicense],
+  [authMiddleware, validateLicense],
   wooController.syncData,
 );
 

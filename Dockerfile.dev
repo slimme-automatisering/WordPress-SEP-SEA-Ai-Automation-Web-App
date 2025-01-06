@@ -1,6 +1,6 @@
 FROM node:23-alpine
 
-# Installeer Chrome dependencies
+# Installeer Chrome dependencies en tools voor scripts
 RUN apk add --no-cache \
     chromium \
     nss \
@@ -8,7 +8,11 @@ RUN apk add --no-cache \
     freetype-dev \
     harfbuzz \
     ca-certificates \
-    ttf-freefont
+    ttf-freefont \
+    bash \
+    python3 \
+    py3-pip \
+    powershell
 
 # Zet Puppeteer om Chromium te gebruiken
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
@@ -24,6 +28,9 @@ RUN npm install
 
 # Kopieer de rest van de applicatie
 COPY . .
+
+# Maak scripts uitvoerbaar
+RUN chmod +x /app/scripts/*.sh /app/scripts/*.ps1
 
 # Start de applicatie
 CMD ["npm", "run", "dev"]

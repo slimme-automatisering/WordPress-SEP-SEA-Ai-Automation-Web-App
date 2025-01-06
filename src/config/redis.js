@@ -131,4 +131,5 @@ export const cache = {
   },
 };
 
-export default client;
+// Exporteer de Redis client
+export const redisClient = client;

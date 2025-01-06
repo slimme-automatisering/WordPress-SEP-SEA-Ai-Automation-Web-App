@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scripts Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .terminal {
+            background-color: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            height: 300px;
+            overflow-y: auto;
+        }
+        .terminal pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="login-screen" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h2 class="text-2xl mb-4">Login</h2>
+            <input type="password" id="password" placeholder="Wachtwoord" class="border p-2 mb-4 w-full">
+            <button onclick="login()" class="bg-blue-500 text-white px-4 py-2 rounded w-full">Login</button>
+        </div>
+    </div>
+
+    <div id="dashboard" class="container mx-auto px-4 py-8 hidden">
+        <h1 class="text-3xl font-bold mb-8">Scripts Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Test Connections -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Test Connections</h2>
+                <p class="text-gray-600 mb-4">Test de verbindingen met MongoDB en Redis. Controleert ook de environment variabelen.</p>
+                <div class="flex space-x-2">
+                    <button onclick="runScript('test-connections')" class="bg-green-500 text-white px-4 py-2 rounded mb-4">Run Script</button>
+                    <button onclick="toggleTerminal('test-connections')" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">Toggle Output</button>
+                </div>
+                <div class="terminal hidden" id="test-connections-output"></div>
+            </div>
+
+            <!-- Check Dependencies -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Check Dependencies</h2>
+                <p class="text-gray-600 mb-4">Controleert project dependencies op updates, security issues en ongebruikte packages.</p>
+                <div class="flex space-x-2">
+                    <button onclick="runScript('check-dependencies')" class="bg-green-500 text-white px-4 py-2 rounded mb-4">Run Script</button>
+                    <button onclick="toggleTerminal('check-dependencies')" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">Toggle Output</button>
+                </div>
+                <div class="terminal hidden" id="check-dependencies-output"></div>
+            </div>
+
+            <!-- Test CSRF -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Test CSRF Protection</h2>
+                <p class="text-gray-600 mb-4">Test de CSRF beveiliging configuratie en functionaliteit.</p>
+                <div class="flex space-x-2">
+                    <button onclick="runScript('test-csrf')" class="bg-green-500 text-white px-4 py-2 rounded mb-4">Run Script</button>
+                    <button onclick="toggleTerminal('test-csrf')" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">Toggle Output</button>
+                </div>
+                <div class="terminal hidden" id="test-csrf-output"></div>
+            </div>
+
+            <!-- Backup Database -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Backup Database</h2>
+                <p class="text-gray-600 mb-4">Maakt een backup van de MongoDB database.</p>
+                <div class="flex space-x-2">
+                    <button onclick="runScript('backup-database')" class="bg-green-500 text-white px-4 py-2 rounded mb-4">Run Script</button>
+                    <button onclick="toggleTerminal('backup-database')" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">Toggle Output</button>
+                </div>
+                <div class="terminal hidden" id="backup-database-output"></div>
+            </div>
+
+            <!-- Update Hosts -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Update Hosts File</h2>
+                <p class="text-gray-600 mb-4">Voegt lokale development URLs toe aan het Windows hosts bestand. Vereist administrator rechten.</p>
+                <div class="mb-4">
+                    <h3 class="font-semibold mb-2">URLs die worden toegevoegd:</h3>
+                    <ul class="list-disc list-inside text-gray-600">
+                        <li>app.localhost (Frontend applicatie)</li>
+                        <li>dashboard.localhost (Dashboard)</li>
+                        <li>api.localhost (API)</li>
+                        <li>traefik.localhost (Traefik Dashboard)</li>
+                    </ul>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="runScript('update-hosts')" class="bg-green-500 text-white px-4 py-2 rounded mb-4">Run Script</button>
+                    <button onclick="toggleTerminal('update-hosts')" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">Toggle Output</button>
+                </div>
+                <div class="terminal hidden" id="update-hosts-output"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DASHBOARD_PASSWORD = 'admin123'; // Dit moet je in productie veranderen!
+
+        function login() {
+            const password = document.getElementById('password').value;
+            if (password === DASHBOARD_PASSWORD) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+            } else {
+                alert('Incorrect wachtwoord');
+            }
+        }
+
+        function toggleTerminal(scriptName) {
+            const terminal = document.getElementById(`${scriptName}-output`);
+            terminal.classList.toggle('hidden');
+        }
+
+        async function runScript(scriptName) {
+            const terminal = document.getElementById(`${scriptName}-output`);
+            terminal.classList.remove('hidden');
+            terminal.innerHTML = '<pre>Script wordt uitgevoerd...</pre>';
+
+            try {
+                const response = await fetch(`/api/v1/scripts/${scriptName}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    
+                    const text = decoder.decode(value);
+                    terminal.innerHTML += `<pre>${text}</pre>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                }
+            } catch (error) {
+                terminal.innerHTML += `<pre class="text-red-500">Error: ${error.message}</pre>`;
+            }
+        }
+    </script>
+</body>
+</html>

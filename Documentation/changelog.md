@@ -3,7 +3,6 @@
 ## [Unreleased]
 
 ### Toegevoegd
-
 - Systeem configuratie geïntegreerd in .env en .env.prod
 - Uitgebreide .env.example met development en productie voorbeelden
 - Nieuwe gestructureerde test directory met Jest integratie tests
@@ -109,6 +108,10 @@
 - Memory optimalisaties voor Node.js
 - Betere error handling en logging
 - Uitgebreide security middleware stack
+- WordPress container met persistente volumes configuratie
+- WordPress database (MySQL 8.0) met persistent storage
+- WordPress Traefik integratie met SSL/TLS
+- WordPress backup en monitoring configuratie
 
 ### Gewijzigd
 
@@ -233,6 +236,27 @@
 - Cache strategieën functioneel
 - Cache warmup actief
 - Cache monitoring werkend
+
+## [2025-01-06]
+### Toegevoegd
+- Docker build optimalisatie suggesties gedocumenteerd
+- Nieuwe taken voor Docker performance verbetering
+- Build process documentatie uitgebreid
+- Image optimalisatie strategieën toegevoegd
+- Docker configuratie aangepast voor betere documentatie integratie
+- Documentation map toegevoegd aan Docker builds
+- Documentatie structuur verbeterd en gestandaardiseerd
+- Nieuwe documentatie secties voor Docker en volumes
+
+### Gewijzigd
+- .dockerignore volledig geherstructureerd voor optimale builds:
+  - Betere organisatie met duidelijke secties
+  - Expliciete includes voor development bestanden
+  - Specifieke regels voor node_modules en build artifacts
+  - Verbeterde environment en IDE bestandshandling
+  - Behoud van development essentials (tests/docs)
+- Build context management verbeterd
+- Documentation inclusie geoptimaliseerd
 
 ## [1.1.2] - 2025-01-02
 

@@ -2,7 +2,7 @@ import Joi from "joi";
 import { BaseController } from "./baseController.js";
 import { SeoAuditService } from "../services/seoAudit.js";
 import { KeywordService } from "../services/keywordResearch.js";
-import { ContentService } from "../services/contentOptimization.js";
+import { ContentOptimizationService } from "../services/contentOptimization.js";
 import OpenAI from "openai";
 import puppeteer from "puppeteer";
 import cheerio from "cheerio";
@@ -43,7 +43,7 @@ class SeoController extends BaseController {
     super();
     this.seoAudit = new SeoAuditService();
     this.keywordService = new KeywordService();
-    this.contentService = new ContentService();
+    this.contentService = new ContentOptimizationService();
   }
 
   /**

@@ -7,11 +7,30 @@ import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import { logger } from "./utils/logger";
 import { monitorDockerLogs } from "./utils/dockerErrorParser";
 import demoController from "./controllers/demoController";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
 // Security middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"],
+      imgSrc: ["'self'", "data:", "cdn.jsdelivr.net"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'", "cdn.jsdelivr.net"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'none'"],
+    },
+  },
+}));
 app.use(cors());
 
 // Body parsing
@@ -20,6 +39,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Compression
 app.use(compression());
+
+// Serve static files
+app.use('/dashboard', express.static(path.join(__dirname, 'dashboard')));
 
 // Docker error parsing
 if (process.env.ENABLE_ERROR_PARSING === "true") {

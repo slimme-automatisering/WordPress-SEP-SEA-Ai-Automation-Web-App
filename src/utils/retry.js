@@ -1,4 +1,4 @@
-import logger from "./logger";
+import logger from "./logger.js";
 
 /**
  * Voert een functie uit met automatische retry bij falen

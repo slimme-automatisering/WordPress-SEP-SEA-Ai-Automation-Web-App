@@ -1,6 +1,7 @@
 {
   "name": "seo-sea-automation-api",
   "version": "1.0.0",
+  "type": "module",
   "description": "API voor SEO en SEA automatisering",
   "main": "src/index.js",
   "scripts": {

@@ -1,6 +1,6 @@
 import express from "express";
-import { authenticateUser } from "../../middleware/auth.js";
-import * as seoController from "../../controllers/seoController.js";
+import { authMiddleware } from "../../middleware/auth.js";
+import seoController from "../../controllers/seoController.js";
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ const router = express.Router();
  *       401:
  *         description: Niet geautoriseerd
  */
-router.get("/audit", authenticateUser, seoController.runAudit);
+router.get("/audit", authMiddleware, seoController.runAudit);
 
 /**
  * @swagger
@@ -34,7 +34,7 @@ router.get("/audit", authenticateUser, seoController.runAudit);
  *       401:
  *         description: Niet geautoriseerd
  */
-router.get("/keywords", authenticateUser, seoController.analyzeKeywords);
+router.get("/keywords", authMiddleware, seoController.analyzeKeywords);
 
 /**
  * @swagger
@@ -63,7 +63,7 @@ router.get("/keywords", authenticateUser, seoController.analyzeKeywords);
  */
 router.post(
   "/content/optimize",
-  authenticateUser,
+  authMiddleware,
   seoController.optimizeContent,
 );
 
@@ -83,7 +83,7 @@ router.post(
  */
 router.get(
   "/performance",
-  authenticateUser,
+  authMiddleware,
   seoController.getPerformanceMetrics,
 );
 

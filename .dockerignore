@@ -1,16 +1,42 @@
+# Altijd uitsluiten (voor alle builds)
+.git
+.github
+.dockerignore
+coverage
+
+# Node.js specifiek
 node_modules
 npm-debug.log
-Dockerfile
-Dockerfile.cypress
-Dockerfile.dev
-frontend.Dockerfile.dev
-.dockerignore
-.git
-.gitignore
-README.md
-.env.example
+yarn-debug.log
+yarn-error.log
+
+# Build artifacts
+dist
+build
+.cache
+
+# Development bestanden (alleen includeren in dev builds)
+!Documentation
+!tests
+!*.test.js
+!*.spec.js
+
+# Environment bestanden
+.env
+.env.*
+!.env.example
+
+# IDE bestanden
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS bestanden
+.DS_Store
+Thumbs.db
+
+# Log bestanden (alleen includeren in dev builds)
+logs/*
+!logs/.gitkeep
 *.log
-coverage
-.github
-tests
-Documentation

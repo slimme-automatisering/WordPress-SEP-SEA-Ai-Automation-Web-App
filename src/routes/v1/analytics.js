@@ -1,6 +1,6 @@
 import express from "express";
-import { authenticateUser } from "../../middleware/auth.js";
-import * as analyticsController from "../../controllers/analyticsController.js";
+import { authMiddleware } from "../../middleware/auth.js";
+import analyticsController from "../../controllers/analyticsController.js";
 
 const router = express.Router();
 
@@ -31,7 +31,7 @@ const router = express.Router();
  */
 router.post(
   "/initialize",
-  authenticateUser,
+  authMiddleware,
   analyticsController.initializeAnalytics,
 );
 
@@ -49,7 +49,7 @@ router.post(
  *       401:
  *         description: Niet geautoriseerd
  */
-router.get("/realtime", authenticateUser, analyticsController.getRealtimeData);
+router.get("/realtime", authMiddleware, analyticsController.getRealtimeData);
 
 /**
  * @swagger
@@ -81,7 +81,7 @@ router.get("/realtime", authenticateUser, analyticsController.getRealtimeData);
  *       401:
  *         description: Niet geautoriseerd
  */
-router.post("/data", authenticateUser, analyticsController.getAnalyticsData);
+router.post("/data", authMiddleware, analyticsController.getAnalyticsData);
 
 /**
  * @swagger
@@ -111,7 +111,7 @@ router.post("/data", authenticateUser, analyticsController.getAnalyticsData);
  */
 router.post(
   "/export",
-  authenticateUser,
+  authMiddleware,
   analyticsController.exportAnalyticsData,
 );
 

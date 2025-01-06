@@ -1,7 +1,7 @@
 // keywordResearch.js
 import { logger } from "../utils/logger.js";
 
-export class KeywordResearchService {
+export class KeywordService {
   constructor() {
     this.isGoogleAdsEnabled = false;
   }

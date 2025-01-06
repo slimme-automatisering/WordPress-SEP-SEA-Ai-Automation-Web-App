@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    restart: unless-stopped
+    environment:
+      - WORDPRESS_DB_HOST=wordpress_db
+      - WORDPRESS_DB_USER=${WP_DB_USER:-wordpress}
+      - WORDPRESS_DB_PASSWORD=${WP_DB_PASSWORD:-wordpress_password}
+      - WORDPRESS_DB_NAME=${WP_DB_NAME:-wordpress}
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wp-content:/var/www/html/wp-content
+    networks:
+      - seo_sea_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wordpress.rule=Host(`wordpress.seo-sea.local`)"
+      - "traefik.http.services.wordpress.loadbalancer.server.port=80"
+      - "traefik.http.routers.wordpress.tls=true"
+    depends_on:
+      - wordpress_db
+
+  wordpress_db:
+    image: mysql:8.0
+    container_name: wordpress_db
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=${WP_DB_NAME:-wordpress}
+      - MYSQL_USER=${WP_DB_USER:-wordpress}
+      - MYSQL_PASSWORD=${WP_DB_PASSWORD:-wordpress_password}
+      - MYSQL_ROOT_PASSWORD=${WP_DB_ROOT_PASSWORD:-somewordpress}
+    volumes:
+      - wordpress_db_data:/var/lib/mysql
+    networks:
+      - seo_sea_network
+
+volumes:
+  wordpress_data:
+  wordpress_db_data:
+
+networks:
+  seo_sea_network:
+    external: true

@@ -1,6 +1,6 @@
 import express from "express";
-import { authenticateUser } from "../../middleware/auth.js";
-import * as seaController from "../../controllers/seaController.js";
+import { authMiddleware } from "../../middleware/auth.js";
+import seaController from "../../controllers/seaController.js";
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ const router = express.Router();
  *       401:
  *         description: Niet geautoriseerd
  */
-router.get("/campaigns", authenticateUser, seaController.getCampaigns);
+router.get("/campaigns", authMiddleware, seaController.getCampaigns);
 
 /**
  * @swagger
@@ -48,7 +48,7 @@ router.get("/campaigns", authenticateUser, seaController.getCampaigns);
  *       401:
  *         description: Niet geautoriseerd
  */
-router.post("/campaign", authenticateUser, seaController.createCampaign);
+router.post("/campaign", authMiddleware, seaController.createCampaign);
 
 /**
  * @swagger
@@ -64,6 +64,6 @@ router.post("/campaign", authenticateUser, seaController.createCampaign);
  *       401:
  *         description: Niet geautoriseerd
  */
-router.get("/metrics", authenticateUser, seaController.getMetrics);
+router.get("/metrics", authMiddleware, seaController.getMetrics);
 
 export default router;
