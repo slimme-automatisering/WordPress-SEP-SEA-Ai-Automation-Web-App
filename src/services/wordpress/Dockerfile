@@ -1,5 +1,5 @@
 # Gebruik een officiële Node.js runtime als basis image
-FROM node:18-alpine
+FROM node:23-alpine
 
 # Stel de werkdirectory in
 WORKDIR /usr/src/app

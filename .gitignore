@@ -5,17 +5,17 @@ yarn-debug.log*
 yarn-error.log*
 
 # Environment
-.env
-.env.prod
-.env.local
-.env.*.local
+!.env
+!.env.prod
+!.env.local
+!.env.*.local
 
 # Logs
-logs/*
+!logs/*
 !logs/.gitkeep
-*.log
-combined.log
-error.log
+!*.log
+!combined.log
+!error.log
 
 # Build
 dist/
@@ -23,8 +23,8 @@ build/
 coverage/
 
 # Docker
-.docker/
-docker-compose.override.yml
+!.docker/
+!docker-compose.override.yml
 
 # IDE
 .idea/
@@ -55,4 +55,4 @@ coverage/
 temp/
 
 #Windsurf files
-.windsurfrules
+!.windsurfrules

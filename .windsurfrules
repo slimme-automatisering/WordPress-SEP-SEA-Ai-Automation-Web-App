@@ -31,3 +31,5 @@ RMDIR_COMMAND=%WINDOWS_COMMANDS_PATH%\cmd.exe /c rd
 MKDIR_COMMAND=%WINDOWS_COMMANDS_PATH%\cmd.exe /c mkdir
 COPY_COMMAND=%WINDOWS_COMMANDS_PATH%\cmd.exe /c copy
 MOVE_COMMAND=%WINDOWS_COMMANDS_PATH%\cmd.exe /c move
+20. Gebruik mijn test en ontwikkel domein pieterkeuzenkamp.nl met Wordpress en WooCommerce als testomgeving. 
+21. Ik heb op pieterkeuzenkamp.nl geen Node.js en Python, dus de app zelf draait lokaal op mijn computer. Stel de configuratie in op de testomgeving die verbinding maakt met remote Wordpress en WooCommerce.

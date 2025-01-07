@@ -247,6 +247,13 @@
 - Documentation map toegevoegd aan Docker builds
 - Documentatie structuur verbeterd en gestandaardiseerd
 - Nieuwe documentatie secties voor Docker en volumes
+- Node.js versie bijgewerkt naar 23-alpine in WordPress service
+- Update-hosts.ps1 script geoptimaliseerd:
+  - Domeinen aangepast naar .seo-sea.local
+  - HTTPS ondersteuning toegevoegd
+  - Docker netwerk controle toegevoegd
+  - SSL certificaten controle toegevoegd
+  - Container status controle toegevoegd
 
 ### Gewijzigd
 - .dockerignore volledig geherstructureerd voor optimale builds:

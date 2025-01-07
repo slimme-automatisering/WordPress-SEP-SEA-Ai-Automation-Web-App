@@ -2,6 +2,11 @@
 
 ## Docker Optimalisatie
 - [x] Optimaliseer .dockerignore configuratie
+- [x] Update Node.js versie naar 23-alpine
+- [x] Update hosts script voor nieuwe domeinen
+- [ ] Test SSL certificaten generatie
+- [ ] Valideer HTTPS connecties
+- [ ] Test Docker netwerk configuratie
 - [ ] Implementeer verbeterde build caching
 - [ ] Test build performance met nieuwe configuratie
 - [ ] Valideer image sizes na optimalisatie

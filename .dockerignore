@@ -22,8 +22,8 @@ build
 !*.spec.js
 
 # Environment bestanden
-.env
-.env.*
+!.env
+!.env.*
 !.env.example
 
 # IDE bestanden
@@ -39,4 +39,4 @@ Thumbs.db
 # Log bestanden (alleen includeren in dev builds)
 logs/*
 !logs/.gitkeep
-*.log
+!*.log

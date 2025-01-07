@@ -1,56 +1,100 @@
-# Controleer of het script wordt uitgevoerd met administrator rechten
-$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+# Functie om domeinen toe te voegen
+function Add-HostsDomains {
+    param (
+        [string[]]$Domains,
+        [string]$HostsFile
+    )
+    
+    $hostsContent = Get-Content $HostsFile
+    foreach ($domain in $Domains) {
+        $entry = "127.0.0.1 $domain"
+        if (-not ($hostsContent -contains $entry)) {
+            Add-Content -Path $HostsFile -Value $entry
+            Write-Host "✓ Toegevoegd: $domain" -ForegroundColor Yellow
+        } else {
+            Write-Host "• Bestaat al: $domain" -ForegroundColor Gray
+        }
+    }
+}
 
-if (-not $isAdmin) {
+# Administrator rechten check
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "Je hebt administrator rechten nodig om het hosts bestand aan te passen!"
     Write-Warning "Het script wordt opnieuw gestart met administrator rechten..."
-    
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`""
     exit
 }
 
-# Pad naar het hosts bestand
+# Configuratie
 $hostsFile = "$env:SystemRoot\System32\drivers\etc\hosts"
-
-# Lijst met lokale domeinen die we willen toevoegen
-$localDomains = @(
-    "app.localhost",
-    "api.localhost",
-    "traefik.localhost",
-    "wordpress.localhost"
+$backupFile = "$hostsFile.backup"
+$certsPath = "./traefik/certificates"
+$domains = @(
+    "app.seo-sea.local",
+    "api.seo-sea.local",
+    "dashboard.seo-sea.local",
+    "traefik.seo-sea.local",
+    "wordpress.seo-sea.local",
+    "prometheus.seo-sea.local",
+    "grafana.seo-sea.local"
 )
 
-# Backup maken van het originele hosts bestand
-$backupFile = "$hostsFile.backup"
+# Start script
+Write-Host "`n=== SEO & SEA Automation Setup Script ===`n" -ForegroundColor Cyan
+
+# 1. Docker netwerk check
+Write-Host "1. Docker Netwerk Controle" -ForegroundColor Green
+$networkExists = docker network ls | Select-String "seo_sea_network"
+if (-not $networkExists) {
+    Write-Warning "Docker netwerk 'seo_sea_network' bestaat niet. Dit wordt nu aangemaakt..."
+    docker network create seo_sea_network
+    Write-Host "✓ Docker netwerk 'seo_sea_network' aangemaakt" -ForegroundColor Green
+} else {
+    Write-Host "✓ Docker netwerk 'seo_sea_network' bestaat al" -ForegroundColor Green
+}
+
+# 2. SSL certificaten check
+Write-Host "`n2. SSL Certificaten Controle" -ForegroundColor Green
+if (-not (Test-Path $certsPath)) {
+    Write-Warning "SSL certificaten map bestaat niet. Deze wordt nu aangemaakt..."
+    New-Item -ItemType Directory -Path $certsPath -Force | Out-Null
+    Write-Host "✓ SSL certificaten map aangemaakt: $certsPath" -ForegroundColor Green
+} else {
+    Write-Host "✓ SSL certificaten map bestaat al: $certsPath" -ForegroundColor Green
+}
+
+# 3. Hosts bestand backup
+Write-Host "`n3. Hosts Bestand Backup" -ForegroundColor Green
 if (-not (Test-Path $backupFile)) {
     Copy-Item $hostsFile $backupFile
-    Write-Host "Backup gemaakt van het hosts bestand: $backupFile"
+    Write-Host "✓ Backup gemaakt van het hosts bestand: $backupFile" -ForegroundColor Green
+} else {
+    Write-Host "✓ Backup bestaat al: $backupFile" -ForegroundColor Green
 }
 
-# Huidige inhoud van het hosts bestand inlezen
-$hostsContent = Get-Content $hostsFile
+# 4. Domeinen toevoegen
+Write-Host "`n4. Domeinen Configuratie" -ForegroundColor Green
+Add-HostsDomains -Domains $domains -HostsFile $hostsFile
 
-# Voor elk domein controleren of het al bestaat en zo niet toevoegen
-foreach ($domain in $localDomains) {
-    $domainEntry = "127.0.0.1 $domain"
-    if ($hostsContent -notcontains $domainEntry) {
-        Add-Content -Path $hostsFile -Value $domainEntry
-        Write-Host "Toegevoegd: $domainEntry"
-    } else {
-        Write-Host "Al aanwezig: $domainEntry"
-    }
-}
-
-Write-Host "`nHosts bestand is bijgewerkt met de lokale domeinen."
-Write-Host "Je kunt nu de volgende URLs gebruiken:"
-Write-Host "- http://app.localhost (Frontend applicatie)"
-Write-Host "- http://api.localhost (API endpoints)"
-Write-Host "- http://traefik.localhost (Traefik dashboard)"
-Write-Host "- http://wordpress.localhost (WordPress installatie)"
-
-# DNS cache legen om de wijzigingen direct door te voeren
+# 5. DNS cache verversen
+Write-Host "`n5. DNS Cache Vernieuwing" -ForegroundColor Green
 ipconfig /flushdns
-Write-Host "`nDNS cache is geleegd."
+Write-Host "✓ DNS cache is geleegd" -ForegroundColor Green
 
-Write-Host "`nDruk op een toets om het venster te sluiten..."
+# 6. Docker status
+Write-Host "`n6. Docker Container Status" -ForegroundColor Green
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+# Beschikbare URLs tonen
+Write-Host "`n=== Beschikbare URLs ===" -ForegroundColor Cyan
+Write-Host "Frontend:   https://app.seo-sea.local" -ForegroundColor Yellow
+Write-Host "Dashboard:  https://dashboard.seo-sea.local" -ForegroundColor Yellow
+Write-Host "API:       https://api.seo-sea.local" -ForegroundColor Yellow
+Write-Host "Traefik:   https://traefik.seo-sea.local" -ForegroundColor Yellow
+Write-Host "WordPress: https://wordpress.seo-sea.local" -ForegroundColor Yellow
+Write-Host "Metrics:   https://prometheus.seo-sea.local" -ForegroundColor Yellow
+Write-Host "Grafana:   https://grafana.seo-sea.local" -ForegroundColor Yellow
+
+Write-Host "`n=== Setup Voltooid ===" -ForegroundColor Cyan
+Write-Host "Druk op een toets om het venster te sluiten..."
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
