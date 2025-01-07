@@ -4,6 +4,13 @@
 
 Een geavanceerd automatiseringssysteem voor Search Engine Optimization (SEO) en Search Engine Advertising (SEA) dat uitgebreide tools biedt voor digitale marketing optimalisatie.
 
+## ⚙️ Configuratie
+
+### WooCommerce Integratie
+- Verbinding met externe WordPress/WooCommerce installatie op pieterkeuzenkamp.nl
+- Lokale ontwikkeling met externe API-verbinding
+- Geautomatiseerde product- en ordersynchronisatie
+
 ## 🔍 Kernfuncties
 
 ### 1. SEO Audit
