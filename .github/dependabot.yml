@@ -1,0 +1,328 @@
+version: 2
+updates:
+  # Root npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "root"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    groups:
+      dev-dependencies:
+        dependency-type: "development"
+      production-dependencies:
+        dependency-type: "production"
+    versioning-strategy: "increase-if-necessary"
+    reviewers:
+      - "PieterKeuzenkamp"
+
+  # Scripts npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/scripts"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "scripts"
+    commit-message:
+      prefix: "chore(deps-scripts)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # API npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/api"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "api"
+    commit-message:
+      prefix: "chore(deps-api)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # License Server npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/license-server"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "license-server"
+    commit-message:
+      prefix: "chore(deps-license)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Frontend npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "frontend"
+    commit-message:
+      prefix: "chore(deps-frontend)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Dashboard npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/dashboard"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "dashboard"
+    commit-message:
+      prefix: "chore(deps-dashboard)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # SEO Service npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/services/seo"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "seo-service"
+    commit-message:
+      prefix: "chore(deps-seo)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # WordPress Service npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/services/wordpress"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "wordpress-service"
+    commit-message:
+      prefix: "chore(deps-wordpress)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Google Ads Service npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/services/google-ads"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "google-ads-service"
+    commit-message:
+      prefix: "chore(deps-google-ads)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Backlink Monitor Service npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/services/backlink-monitor"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "backlink-monitor"
+    commit-message:
+      prefix: "chore(deps-backlink)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Sitemap Generator Service npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/services/sitemap-generator"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "sitemap-generator"
+    commit-message:
+      prefix: "chore(deps-sitemap)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Keyword Research Service npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/services/keyword-research"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "keyword-research"
+    commit-message:
+      prefix: "chore(deps-keyword)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Backup Service npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/services/backup"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "backup-service"
+    commit-message:
+      prefix: "chore(deps-backup)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Disaster Recovery Service npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/services/disaster-recovery"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "disaster-recovery"
+    commit-message:
+      prefix: "chore(deps-recovery)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Monitoring Service npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/services/monitoring"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "monitoring"
+    commit-message:
+      prefix: "chore(deps-monitoring)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Scaling Service npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/services/scaling"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "scaling"
+    commit-message:
+      prefix: "chore(deps-scaling)"
+      include: "scope"
+    versioning-strategy: "increase-if-necessary"
+
+  # Docker dependencies
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "chore(docker)"
+      include: "scope"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Amsterdam"
+    target-branch: "development"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(actions)"
+      include: "scope"
